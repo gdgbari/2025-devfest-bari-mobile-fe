@@ -12,11 +12,33 @@ dependencies:
   equatable: ^2.0.5
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
-  firebase_core: ^3.2.0
   go_router: ^14.2.1
+  firebase_core: ^3.2.0
 
 dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: Google Sans
+      fonts:
+        - asset: assets/fonts/GoogleSans-Bold-v1.27.ttf
+          weight: 700
+        - asset: assets/fonts/GoogleSans-BoldItalic-v1.27.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/GoogleSans-Medium-v1.27.ttf
+          weight: 500
+        - asset: assets/fonts/GoogleSans-MediumItalic-v1.27.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/GoogleSans-Regular-v1.27.ttf
+          weight: 400
+        - asset: assets/fonts/GoogleSans-RegularItalic-v1.27.ttf
+          weight: 400
+          style: italic
