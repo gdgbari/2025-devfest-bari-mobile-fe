@@ -16,7 +16,9 @@ void main() async {
       Bloc.observer = DebugBloc();
       runApp(const App());
     },
-    (error, stack) {},
+    (error, stack) {
+      // TODO: implement error handling
+    },
   );
 }
 

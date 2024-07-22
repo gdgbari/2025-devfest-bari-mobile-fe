@@ -31,7 +31,7 @@ final appRouter = GoRouter(
                 GoRoute(
                   name: RouteNames.quizRoute.name,
                   path: RouteNames.quizRoute.path,
-                  builder: (context, state) => const QuizPage(),
+                  builder: (context, state) => QuizPage(),
                 ),
               ],
             ),
