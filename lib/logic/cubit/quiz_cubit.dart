@@ -19,7 +19,7 @@ class QuizCubit extends Cubit<QuizState> {
       emit(
         state.copyWith(
           quizList: quizList,
-          selectedAnswers: List<Answer?>.generate(
+          selectedAnswers: List<String?>.generate(
             quizList.length,
             (index) => null,
           ),
@@ -33,17 +33,17 @@ class QuizCubit extends Cubit<QuizState> {
 
   void resetAnswers() => emit(
         state.copyWith(
-          selectedAnswers: List<Answer?>.generate(
+          selectedAnswers: List<String?>.generate(
             state.quizList.length,
             (index) => null,
           ),
         ),
       );
 
-  void selectAnswer(String quizId, Answer? answer) {
+  void selectAnswer(String quizId, String? answer) {
     emit(state.copyWith(status: QuizStatus.selectionInProgress));
     final index = state.quizList.indexWhere((quiz) => quiz.quizId == quizId);
-    final selectedAnswers = List<Answer?>.from(state.selectedAnswers) ;
+    final selectedAnswers = List<String?>.from(state.selectedAnswers);
     selectedAnswers[index] = answer;
     emit(
       state.copyWith(

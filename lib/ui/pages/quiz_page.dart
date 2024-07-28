@@ -42,7 +42,7 @@ class QuizPage extends StatelessWidget {
                                           .read<QuizCubit>()
                                           .selectAnswer(quiz.quizId, ans);
                                     },
-                                    title: answer.text,
+                                    title: answer,
                                   );
                                 },
                                 separatorBuilder: (context, index) =>

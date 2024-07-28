@@ -19,7 +19,11 @@ class App extends StatelessWidget {
   }
 }
 
-List<BlocProvider> _topLevelProviders = [
+List<BlocProvider> _topLevelProviders = <BlocProvider>[
+  BlocProvider<AuthenticationCubit>(
+    lazy: false,
+    create: (context) => AuthenticationCubit(),
+  ),
   BlocProvider<QuizCubit>(
     lazy: false,
     create: (context) => QuizCubit(),

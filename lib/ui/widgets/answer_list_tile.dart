@@ -1,10 +1,9 @@
-import 'package:devfest_bari_2024/data.dart';
 import 'package:flutter/material.dart';
 
 class AnswerListTile extends StatelessWidget {
-  final Answer value;
-  final Answer? groupValue;
-  final void Function(Answer?)? onChanged;
+  final String value;
+  final String? groupValue;
+  final void Function(String?)? onChanged;
   final String title;
   final Color color;
 
@@ -29,7 +28,7 @@ class AnswerListTile extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            Radio<Answer>(
+            Radio<String>(
               value: value,
               groupValue: groupValue,
               onChanged: onChanged,

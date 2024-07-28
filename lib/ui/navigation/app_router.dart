@@ -12,7 +12,7 @@ final appRouter = GoRouter(
     GoRoute(
       name: RouteNames.loginRoute.name,
       path: RouteNames.loginRoute.path,
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => LoginPage(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

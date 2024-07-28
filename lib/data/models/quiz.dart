@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:devfest_bari_2024/data.dart';
-
 class Quiz extends Equatable {
   final String quizId;
   final String question;
-  final List<Answer> answerList;
+  final List<String> answerList;
 
   const Quiz({
     this.quizId = '',
@@ -18,7 +16,7 @@ class Quiz extends Equatable {
   Quiz copyWith({
     String? quizId,
     String? question,
-    List<Answer>? answerList,
+    List<String>? answerList,
   }) {
     return Quiz(
       quizId: quizId ?? this.quizId,
@@ -29,21 +27,17 @@ class Quiz extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'quiz_id': quizId,
+      'quizId': quizId,
       'question': question,
-      'answer_list': answerList.map((x) => x.toMap()).toList(),
+      'answerList': answerList,
     };
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
     return Quiz(
-      quizId: map['quiz_id'] as String,
-      question: map['question'] as String,
-      answerList: List<Answer>.from(
-        (map['answer_list'] as List<int>).map<Answer>(
-          (x) => Answer.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      quizId: map['quizId'] as String? ?? '',
+      question: map['question'] as String? ?? '',
+      answerList: List<String>.from((map['answerList'] as List<String>? ?? [])),
     );
   }
 
