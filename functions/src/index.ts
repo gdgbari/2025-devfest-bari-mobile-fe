@@ -36,7 +36,7 @@ export const getTalkQuiz = functions.https.onCall(async (data, context) => {
             });
         }
 
-        return talkData;
+        return JSON.stringify(talkData);
     } catch (error) {
         throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
     }
@@ -92,9 +92,29 @@ export const submitQuizAnswer = functions.https.onCall(async (data, context) => 
 
         await db.collection('users').doc(uid).collection('talksQuizzes').doc(talkId).set(result);
 
-        return result;
+        return JSON.stringify(result);
     } catch (error) {
         throw new functions.https.HttpsError('internal', 'An error occurred while submitting the quiz answers.', error);
     }
 });
 
+export const getUserData = functions.https.onCall(async (data, context) => {
+
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+    }
+
+
+
+    try {
+        const usersDoc = await db.collection('users').doc(context.auth.uid).get();
+
+        if (!usersDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'User not found.');
+        }
+
+        return JSON.stringify(usersDoc.data());
+    } catch (error) {
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the user.', error);
+    }
+});
