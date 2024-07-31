@@ -18,8 +18,8 @@ class AuthenticationApi {
           .call<Map<String, dynamic>>();
 
       return result.data;
-    } on FirebaseFunctionsException catch (e) {
-      return {};
+    } on FirebaseFunctionsException {
+      rethrow;
     }
   }
 

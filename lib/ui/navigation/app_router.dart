@@ -49,9 +49,9 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           routes: <RouteBase>[
             GoRoute(
-              name: RouteNames.challengeRoute.name,
-              path: RouteNames.challengeRoute.path,
-              builder: (context, state) => const ChallengePage(),
+              name: RouteNames.profileRoute.name,
+              path: RouteNames.profileRoute.path,
+              builder: (context, state) => const ProfilePage(),
             ),
           ],
         ),

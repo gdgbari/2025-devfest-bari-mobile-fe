@@ -18,7 +18,16 @@ class NavigationBarPage extends StatelessWidget {
           'DevFest Bari 2024',
           style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true,
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.photo_camera_outlined,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
@@ -33,8 +42,8 @@ class NavigationBarPage extends StatelessWidget {
             label: 'Leaderboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Challenge',
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
         currentIndex: navigationShell.currentIndex,

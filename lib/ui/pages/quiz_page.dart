@@ -20,41 +20,43 @@ class QuizPage extends StatelessWidget {
                 Expanded(
                   child: PageView.builder(
                     controller: pageController,
-                    itemBuilder: (context, quizIndex) {
-                      final quiz = state.quizList[quizIndex];
+                    itemBuilder: (context, questionIndex) {
+                      final question = state.quiz.questionList[questionIndex];
                       return Padding(
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(quiz.question),
+                            Text(question.text),
                             const SizedBox(height: 20),
                             Expanded(
                               child: ListView.separated(
                                 itemBuilder: (context, answerIndex) {
-                                  final answer = quiz.answerList[answerIndex];
+                                  final answer =
+                                      question.answerList[answerIndex];
                                   return AnswerListTile(
-                                    value: quiz.answerList[answerIndex],
+                                    value: question.answerList[answerIndex],
                                     groupValue:
-                                        state.selectedAnswers[quizIndex],
-                                    onChanged: (ans) {
-                                      context
-                                          .read<QuizCubit>()
-                                          .selectAnswer(quiz.quizId, ans);
+                                        state.selectedAnswers[questionIndex],
+                                    onChanged: (selectedAnswer) {
+                                      context.read<QuizCubit>().selectAnswer(
+                                            question.questionId,
+                                            selectedAnswer,
+                                          );
                                     },
                                     title: answer,
                                   );
                                 },
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(height: 10),
-                                itemCount: quiz.answerList.length,
+                                itemCount: question.answerList.length,
                               ),
                             ),
                           ],
                         ),
                       );
                     },
-                    itemCount: state.quizList.length,
+                    itemCount: state.quiz.questionList.length,
                   ),
                 ),
                 Padding(
@@ -85,7 +87,7 @@ class QuizPage extends StatelessWidget {
                         child: TextButton(
                           onPressed: () {
                             pageController.page?.round() ==
-                                    state.quizList.length - 1
+                                    state.quiz.questionList.length - 1
                                 ? context
                                     .goNamed(RouteNames.dashboardRoute.name)
                                 : pageController.nextPage(

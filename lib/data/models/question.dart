@@ -37,7 +37,7 @@ class Question extends Equatable {
     return Question(
       questionId: map['questionId'] as String? ?? '',
       text: map['text'] as String? ?? '',
-      answerList: List<String>.from((map['answerList'] as List<String>? ?? [])),
+      answerList: List<String>.from((map['answerList'] ?? [])),
     );
   }
 

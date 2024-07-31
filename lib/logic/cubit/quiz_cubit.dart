@@ -7,20 +7,18 @@ part 'quiz_state.dart';
 class QuizCubit extends Cubit<QuizState> {
   final _quizRepo = QuizRepository();
 
-  QuizCubit() : super(const QuizState()) {
-    fetchQuizList();
-  }
+  QuizCubit() : super(const QuizState());
 
-  Future<void> fetchQuizList() async {
+  Future<void> getQuiz(String quizId) async {
     emit(state.copyWith(status: QuizStatus.fetchInProgress));
 
     try {
-      final quizList = await _quizRepo.fetchQuizList();
+      final quiz = await _quizRepo.getQuiz(quizId);
       emit(
         state.copyWith(
-          quizList: quizList,
+          quiz: quiz,
           selectedAnswers: List<String?>.generate(
-            quizList.length,
+            quiz.questionList.length,
             (index) => null,
           ),
           status: QuizStatus.fetchSuccess,
@@ -34,7 +32,7 @@ class QuizCubit extends Cubit<QuizState> {
   void resetAnswers() => emit(
         state.copyWith(
           selectedAnswers: List<String?>.generate(
-            state.quizList.length,
+            state.quiz.questionList.length,
             (index) => null,
           ),
         ),
@@ -42,7 +40,9 @@ class QuizCubit extends Cubit<QuizState> {
 
   void selectAnswer(String quizId, String? answer) {
     emit(state.copyWith(status: QuizStatus.selectionInProgress));
-    final index = state.quizList.indexWhere((quiz) => quiz.quizId == quizId);
+    final index = state.quiz.questionList.indexWhere(
+      (quiz) => quiz.questionId == quizId,
+    );
     final selectedAnswers = List<String?>.from(state.selectedAnswers);
     selectedAnswers[index] = answer;
     emit(

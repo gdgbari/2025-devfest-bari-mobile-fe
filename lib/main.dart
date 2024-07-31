@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:devfest_bari_2024/app.dart';
+import 'package:devfest_bari_2024/firebase_options.dart';
 import 'package:devfest_bari_2024/logic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
-import 'app.dart';
-import 'firebase_options.dart';
 
 void main() async {
   runZonedGuarded(

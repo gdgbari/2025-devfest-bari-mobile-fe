@@ -13,18 +13,20 @@ class AuthenticationRepository {
 
   Future<UserProfile> getInitialAuthState() async {
     final firebaseUser = await _authApi.getInitialAuthState();
-    if (firebaseUser == null) {
-      return const UserProfile();
-    } else {
+    if (firebaseUser != null) {
       return await getUserData(firebaseUser);
+    } else {
+      return const UserProfile();
     }
   }
 
   Future<UserProfile> getUserData(User user) async {
-    final userData = Map<String, dynamic>.from(
-      await _authApi.getUserData(user),
-    );
-    return UserProfile.fromMap(userData);
+    try {
+      final userData = await _authApi.getUserData(user);
+      return UserProfile.fromMap(userData);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<UserProfile> signInWithEmailAndPassword({

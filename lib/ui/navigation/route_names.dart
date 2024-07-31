@@ -2,7 +2,7 @@ enum RouteNames {
   loginRoute(path: '/login'),
   dashboardRoute(path: '/home/dashboard'),
   leaderboardRoute(path: '/home/leaderboard'),
-  challengeRoute(path: '/home/challenge'),
+  profileRoute(path: '/home/profile'),
   quizRoute(path: 'dashboard/quiz');
 
   final String path;
