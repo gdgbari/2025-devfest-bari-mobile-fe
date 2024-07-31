@@ -14,16 +14,16 @@ class AuthenticationRepository {
   Future<UserProfile> getInitialAuthState() async {
     final firebaseUser = await _authApi.getInitialAuthState();
     if (firebaseUser != null) {
-      return await getUserData(firebaseUser);
+      return await getUserProfile(firebaseUser);
     } else {
       return const UserProfile();
     }
   }
 
-  Future<UserProfile> getUserData(User user) async {
+  Future<UserProfile> getUserProfile(User user) async {
     try {
-      final userData = await _authApi.getUserData(user);
-      return UserProfile.fromMap(userData);
+      final rawUserProfile = await _authApi.getUserProfile(user);
+      return UserProfile.fromJson(rawUserProfile);
     } catch (e) {
       rethrow;
     }
@@ -39,7 +39,7 @@ class AuthenticationRepository {
         password: password,
       );
       return userCredential.user != null
-          ? await getUserData(userCredential.user!)
+          ? await getUserProfile(userCredential.user!)
           : const UserProfile();
     } catch (e) {
       rethrow;

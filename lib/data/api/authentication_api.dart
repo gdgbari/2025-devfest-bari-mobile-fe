@@ -11,11 +11,11 @@ class AuthenticationApi {
     return null;
   }
 
-  Future<Map<String, dynamic>> getUserData(User user) async {
+  Future<String> getUserProfile(User user) async {
     try {
       final result = await FirebaseFunctions.instance
-          .httpsCallable('getUserData')
-          .call<Map<String, dynamic>>();
+          .httpsCallable('getUserProfile')
+          .call<String>();
 
       return result.data;
     } on FirebaseFunctionsException {
