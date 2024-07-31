@@ -1,36 +1,49 @@
 import 'dart:convert';
 
-import 'package:devfest_bari_2024/data.dart';
 import 'package:equatable/equatable.dart';
+
+import 'package:devfest_bari_2024/data.dart';
 
 class Talk extends Equatable {
   final String talkId;
   final String title;
   final String description;
-  final List<Quiz> quizList;
-  final int maxScore;
+  final String track;
+  final String room;
+  final DateTime? startTime;
+  final DateTime? endTime;
+  final Quiz quiz;
 
   const Talk({
     this.talkId = '',
     this.title = '',
     this.description = '',
-    this.quizList = const [],
-    this.maxScore = 0,
+    this.track = '',
+    this.room = '',
+    this.startTime,
+    this.endTime,
+    this.quiz = const Quiz(),
   });
 
   Talk copyWith({
     String? talkId,
     String? title,
     String? description,
-    List<Quiz>? quizList,
-    int? maxScore,
+    String? track,
+    String? room,
+    DateTime? startTime,
+    DateTime? endTime,
+    Quiz? quiz,
   }) {
     return Talk(
       talkId: talkId ?? this.talkId,
       title: title ?? this.title,
       description: description ?? this.description,
-      quizList: quizList ?? this.quizList,
-      maxScore: maxScore ?? this.maxScore,
+      track: track ?? this.track,
+      room: room ?? this.room,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      quiz: quiz ?? this.quiz,
     );
   }
 
@@ -39,8 +52,11 @@ class Talk extends Equatable {
       'talkId': talkId,
       'title': title,
       'description': description,
-      'quizList': quizList.map((x) => x.toMap()).toList(),
-      'maxScore': maxScore,
+      'track': track,
+      'room': room,
+      'startTime': startTime?.millisecondsSinceEpoch,
+      'endTime': endTime?.millisecondsSinceEpoch,
+      'quiz': quiz.toMap(),
     };
   }
 
@@ -49,12 +65,15 @@ class Talk extends Equatable {
       talkId: map['talkId'] as String? ?? '',
       title: map['title'] as String? ?? '',
       description: map['description'] as String? ?? '',
-      quizList: List<Quiz>.from(
-        (map['quizList'] as List).map(
-          (x) => Quiz.fromMap(x as Map<String, dynamic>? ?? {}),
-        ),
+      track: map['track'] as String? ?? '',
+      room: map['room'] as String? ?? '',
+      startTime: DateTime.fromMillisecondsSinceEpoch(
+        map['startTime'] as int? ?? 0,
       ),
-      maxScore: map['maxScore'] as int? ?? 0,
+      endTime: DateTime.fromMillisecondsSinceEpoch(
+        map['endTime'] as int? ?? 0,
+      ),
+      quiz: Quiz.fromMap(map['quiz'] as Map<String, dynamic>),
     );
   }
 
@@ -67,13 +86,16 @@ class Talk extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       talkId,
       title,
       description,
-      quizList,
-      maxScore,
+      track,
+      room,
+      startTime,
+      endTime,
+      quiz,
     ];
   }
 }

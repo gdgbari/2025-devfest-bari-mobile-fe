@@ -1,43 +1,66 @@
 import 'dart:convert';
 
+import 'package:devfest_bari_2024/data/models.dart';
 import 'package:equatable/equatable.dart';
 
 class Quiz extends Equatable {
   final String quizId;
-  final String question;
-  final List<String> answerList;
+  final String type;
+  final String talkId;
+  final String sponsorId;
+  final int maxScore;
+  final List<Question> questionList;
 
   const Quiz({
     this.quizId = '',
-    this.question = '',
-    this.answerList = const [],
+    this.type = '',
+    this.talkId = '',
+    this.sponsorId = '',
+    this.maxScore = 0,
+    this.questionList = const [],
   });
 
   Quiz copyWith({
     String? quizId,
-    String? question,
-    List<String>? answerList,
+    String? type,
+    String? talkId,
+    String? sponsorId,
+    int? maxScore,
+    List<Question>? questionList,
   }) {
     return Quiz(
       quizId: quizId ?? this.quizId,
-      question: question ?? this.question,
-      answerList: answerList ?? this.answerList,
+      type: type ?? this.type,
+      talkId: talkId ?? this.talkId,
+      sponsorId: sponsorId ?? this.sponsorId,
+      maxScore: maxScore ?? this.maxScore,
+      questionList: questionList ?? this.questionList,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'quizId': quizId,
-      'question': question,
-      'answerList': answerList,
+      'type': type,
+      'talkId': talkId,
+      'sponsorId': sponsorId,
+      'maxScore': maxScore,
+      'questionList': questionList.map((x) => x.toMap()).toList(),
     };
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
     return Quiz(
       quizId: map['quizId'] as String? ?? '',
-      question: map['question'] as String? ?? '',
-      answerList: List<String>.from((map['answerList'] as List<String>? ?? [])),
+      type: map['type'] as String? ?? '',
+      talkId: map['talkId'] as String? ?? '',
+      sponsorId: map['sponsorId'] as String? ?? '',
+      maxScore: map['maxScore'] as int? ?? 0,
+      questionList: List<Question>.from(
+        List<Map<String, dynamic>>.from(
+          map['questionList'] ?? [],
+        ).map((x) => Question.fromMap(x)),
+      ),
     );
   }
 
@@ -50,5 +73,14 @@ class Quiz extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [quizId, question, answerList];
+  List<Object> get props {
+    return [
+      quizId,
+      type,
+      talkId,
+      sponsorId,
+      maxScore,
+      questionList,
+    ];
+  }
 }
