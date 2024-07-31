@@ -1,5 +1,9 @@
 require('module-alias/register');
 
+import { Group } from '@modelsGroup';
+import { Question } from '@modelsQuestion';
+import { Quiz } from '@modelsQuiz';
+import { UserProfile } from '@modelsUserProfile';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
@@ -7,9 +11,9 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
-// Authentication
+// Authentication section
 
-export const getUserData = functions.https.onCall(async (_, context) => {
+export const getUserProfile = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
     }
@@ -41,7 +45,7 @@ export const getUserData = functions.https.onCall(async (_, context) => {
             throw new functions.https.HttpsError('not-found', 'Group data not found.');
         }
 
-        return {
+        const userProfile: UserProfile = {
             userId: userDoc.id,
             email: userData.email,
             name: userData.name,
@@ -50,14 +54,16 @@ export const getUserData = functions.https.onCall(async (_, context) => {
                 groupId: groupDoc.id,
                 name: groupData.name,
                 imageUrl: groupData.imageUrl
-            }
+            } as Group
         };
+
+        return JSON.stringify(userProfile)
     } catch (error) {
         throw new functions.https.HttpsError('internal', 'An error occurred while fetching the user.', error);
     }
 });
 
-// Quiz
+// Quiz section
 
 export const getQuiz = functions.https.onCall(async (data, context) => {
     const { quizId } = data;
@@ -67,7 +73,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
     }
 
     if (!quizId) {
-        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid talkId.');
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid quizId.');
     }
 
     try {
@@ -83,17 +89,44 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.');
         }
 
-        return {
+        const questionListRef: FirebaseFirestore.DocumentReference[] = quizData.questionList;
+
+        const questionList: Question[] = await Promise.all(
+            questionListRef.map(async questionRef => {
+                const questionDoc = await questionRef.get();
+
+                if (questionDoc.exists) {
+                    const questionData = questionDoc.data();
+
+                    if (!questionData) {
+                        throw new functions.https.HttpsError('not-found', 'Question not found.');
+                    }
+
+                    return {
+                        questionId: questionDoc.id,
+                        text: questionData.text,
+                        answerList: questionData.answerList,
+                        correctAnswer: null,
+                        value: null
+                    } as Question;
+                } else {
+                    throw new functions.https.HttpsError('not-found', 'Question not found.');
+                }
+            })
+        );
+
+        const quiz: Quiz = {
             quizId: quizDoc.id,
-            questionList: quizData.questionList.map(
-                (question: { text: any; answerList: any; }) => ({
-                    text: question.text,
-                    answerList: question.answerList,
-                })
-            )
+            questionList: questionList,
+            type: quizData.type,
+            talkId: quizData.talkId,
+            sponsorId: quizData.sponsorId,
+            maxScore: quizData.maxScore
         };
+
+        return JSON.stringify(quiz);
     } catch (error) {
-        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the quiz.', error);
     }
 });
 
@@ -133,12 +166,12 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
         const maxScore = quizData.maxScore;
 
         if (answerList.length !== quizData.questionList.length) {
-            throw new functions.https.HttpsError('invalid-argument', 'The answerList must have the same length as the quiz list.');
+            throw new functions.https.HttpsError('invalid-argument', 'The answerList must have the same length as the questionList.');
         }
 
-        quizData.questionList.forEach((question: any, index: number) => {
+        quizData.questionList.forEach((question: Question, index: number) => {
             if (question.correctAnswer === answerList[index]) {
-                score += question.value;
+                score += question.value || 0;
             }
         });
 
@@ -149,85 +182,5 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
         return result;
     } catch (error) {
         throw new functions.https.HttpsError('internal', 'An error occurred while submitting the quiz answers.', error);
-    }
-});
-
-// Talks
-
-export const getTalkList = functions.https.onCall(async (_, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
-    }
-
-    const uid = context.auth.uid;
-
-    try {
-        const userDoc = await db.collection('users').doc(context.auth.uid).get();
-
-        if (!userDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'User not found.');
-        }
-
-        const userData = userDoc.data();
-
-        if (!userData) {
-            throw new functions.https.HttpsError('not-found', 'User data not found.');
-        }
-
-        const talksSnapshot = await db.collection('talks').get();
-
-        if (!talksSnapshot) {
-            throw new functions.https.HttpsError('not-found', 'Talks not found.');
-        }
-
-        const talkList = await Promise.all(
-            talksSnapshot.docs.map(
-                async talkDoc => {
-                    const talkData = talkDoc.data();
-
-                    const quizRef = talkData.quiz;
-
-                    const quizDoc = await quizRef.get()
-
-                    if (!quizDoc.exists) {
-                        throw new functions.https.HttpsError('not-found', 'Quiz not found.');
-                    }
-
-                    const quizData = quizDoc.data();
-
-                    const questionListRef = quizData.questionList;
-
-                    const questionListDoc = await questionListRef.get()
-
-                    if (!questionListDoc.exists) {
-                        throw new functions.https.HttpsError('not-found', 'Quiz not found.');
-                    }
-
-                    const questionListData = questionListDoc.data();
-
-                    const answerDoc = await db.collection('users').doc(uid).collection('quizzes').doc(quizDoc.id).get();
-
-                    const quiz = {
-                        quizId: quizDoc.id,
-                        questionList: questionListData
-                    };
-
-                    return {
-                        talkId: talkDoc.id,
-                        title: talkData.title,
-                        description: talkData.description,
-                        track: talkData.track,
-                        room: talkData.room,
-                        startTime: talkData.startTime,
-                        endTime: talkData.endTime,
-                        quiz: (answerDoc.exists) ? quiz : null,
-                    };
-                }
-            )
-        );
-
-        return talkList;
-    } catch (error) {
-        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
     }
 });
