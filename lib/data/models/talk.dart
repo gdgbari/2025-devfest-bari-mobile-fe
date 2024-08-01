@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-
 import 'package:devfest_bari_2024/data.dart';
+import 'package:equatable/equatable.dart';
 
 class Talk extends Equatable {
   final String talkId;
