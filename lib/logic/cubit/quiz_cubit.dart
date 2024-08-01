@@ -17,7 +17,7 @@ class QuizCubit extends Cubit<QuizState> {
       emit(
         state.copyWith(
           quiz: quiz,
-          selectedAnswers: List<String?>.generate(
+          selectedAnswers: List<int?>.generate(
             quiz.questionList.length,
             (index) => null,
           ),
@@ -31,25 +31,35 @@ class QuizCubit extends Cubit<QuizState> {
 
   void resetAnswers() => emit(
         state.copyWith(
-          selectedAnswers: List<String?>.generate(
+          selectedAnswers: List<int?>.generate(
             state.quiz.questionList.length,
             (index) => null,
           ),
         ),
       );
 
-  void selectAnswer(String quizId, String? answer) {
+  void selectAnswer(String quizId, int? answerIndex) {
     emit(state.copyWith(status: QuizStatus.selectionInProgress));
     final index = state.quiz.questionList.indexWhere(
       (quiz) => quiz.questionId == quizId,
     );
-    final selectedAnswers = List<String?>.from(state.selectedAnswers);
-    selectedAnswers[index] = answer;
+    final selectedAnswers = List<int?>.from(state.selectedAnswers);
+    selectedAnswers[index] = answerIndex;
     emit(
       state.copyWith(
         selectedAnswers: selectedAnswers,
         status: QuizStatus.selectionSuccess,
       ),
     );
+  }
+
+  Future<void> submitQuiz() async {
+    emit(state.copyWith(status: QuizStatus.submissionInProgress));
+    try {
+      await _quizRepo.submitQuiz(state.quiz.quizId, state.selectedAnswers);
+      emit(state.copyWith(status: QuizStatus.submissionSuccess));
+    } catch (e) {
+      emit(state.copyWith(status: QuizStatus.submissionFailure));
+    }
   }
 }

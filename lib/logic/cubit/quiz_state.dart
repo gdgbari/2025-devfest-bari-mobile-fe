@@ -7,11 +7,14 @@ enum QuizStatus {
   fetchFailure,
   selectionInProgress,
   selectionSuccess,
+  submissionInProgress,
+  submissionSuccess,
+  submissionFailure,
 }
 
 class QuizState extends Equatable {
   final Quiz quiz;
-  final List<String?> selectedAnswers;
+  final List<int?> selectedAnswers;
   final QuizStatus status;
 
   const QuizState({
@@ -22,7 +25,7 @@ class QuizState extends Equatable {
 
   QuizState copyWith({
     Quiz? quiz,
-    List<String?>? selectedAnswers,
+    List<int?>? selectedAnswers,
     QuizStatus? status,
   }) {
     return QuizState(

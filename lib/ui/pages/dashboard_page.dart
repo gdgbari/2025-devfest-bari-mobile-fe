@@ -19,7 +19,9 @@ class DashboardPage extends StatelessWidget {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                  context.read<QuizCubit>().resetAnswers();
+                  context.read<QuizCubit>()
+                    ..resetAnswers()
+                    ..getQuiz('osCBQg7hlgDI5ya2iz9l');
                   context.goNamed(RouteNames.quizRoute.name);
                 },
                 style: TextButton.styleFrom(backgroundColor: Colors.blue),

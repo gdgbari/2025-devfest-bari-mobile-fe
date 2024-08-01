@@ -35,7 +35,7 @@ class QuizPage extends StatelessWidget {
                                   final answer =
                                       question.answerList[answerIndex];
                                   return AnswerListTile(
-                                    value: question.answerList[answerIndex],
+                                    value: answerIndex,
                                     groupValue:
                                         state.selectedAnswers[questionIndex],
                                     onChanged: (selectedAnswer) {
@@ -86,14 +86,16 @@ class QuizPage extends StatelessWidget {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            pageController.page?.round() ==
-                                    state.quiz.questionList.length - 1
-                                ? context
-                                    .goNamed(RouteNames.dashboardRoute.name)
-                                : pageController.nextPage(
-                                    duration: const Duration(milliseconds: 200),
-                                    curve: Curves.linear,
-                                  );
+                            if (pageController.page?.round() ==
+                                state.quiz.questionList.length - 1) {
+                              context.read<QuizCubit>().submitQuiz();
+                              context.goNamed(RouteNames.dashboardRoute.name);
+                            } else {
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.linear,
+                              );
+                            }
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.blue,

@@ -12,4 +12,15 @@ class QuizApi {
       rethrow;
     }
   }
+
+  Future<void> submitQuiz(String quizId, List<int?> answerList) async {
+    try {
+      await FirebaseFunctions.instance.httpsCallable('submitQuiz').call({
+        'quizId': quizId,
+        'answerList': answerList,
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

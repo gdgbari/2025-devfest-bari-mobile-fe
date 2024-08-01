@@ -17,4 +17,12 @@ class QuizRepository {
       rethrow;
     }
   }
+
+  Future<void> submitQuiz(String quizId, List<int?> answerList) async {
+    try {
+      await _quizApi.submitQuiz(quizId, answerList);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
