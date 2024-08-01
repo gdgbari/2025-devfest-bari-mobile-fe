@@ -57,5 +57,10 @@ final appRouter = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      name: RouteNames.qrCodeRoute.name,
+      path: RouteNames.qrCodeRoute.path,
+      builder: (context, state) => QrCodePage(),
+    ),
   ],
 );

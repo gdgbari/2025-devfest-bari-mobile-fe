@@ -66,4 +66,7 @@ dependencies {
     // Add the dependency for the Cloud Functions library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-functions")
+
+    // Use this dependency to use the dynamically downloaded model in Google Play Services
+    implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0'
 }

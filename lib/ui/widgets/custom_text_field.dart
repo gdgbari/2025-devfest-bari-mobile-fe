@@ -60,7 +60,7 @@ class CustomTextField extends StatelessWidget {
     this.textAlignVertical = TextAlignVertical.center,
     this.textInputAction = TextInputAction.done,
     this.width,
-  })  : assert(initialValue == null || controller == null);
+  }) : assert(initialValue == null || controller == null);
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,7 +22,9 @@ class NavigationBarPage extends StatelessWidget {
         centerTitle: false,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pushNamed(RouteNames.qrCodeRoute.name);
+            },
             icon: const Icon(
               Icons.photo_camera_outlined,
               color: Colors.white,
