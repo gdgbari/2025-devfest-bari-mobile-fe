@@ -33,12 +33,11 @@ class QrCodePage extends StatelessWidget {
             MobileScanner(
               controller: controller,
               onDetect: (barcodes) {
-                if (barcodes.raw != null) {
-                  final rawList = List.from(barcodes.raw! as List);
-                  final rawMap = Map<String, dynamic>.from(
-                    rawList.firstOrNull as Map,
-                  );
-                  final rawValue = rawMap['rawValue'];
+                final qrData = barcodes.barcodes.first;
+                if (qrData.type == BarcodeType.text) {
+                  if (qrData.rawValue != null && qrData.rawValue!.isNotEmpty) {
+                    print('QR DATA:\n${qrData.rawValue!}');
+                  }
                 }
               },
             ),
