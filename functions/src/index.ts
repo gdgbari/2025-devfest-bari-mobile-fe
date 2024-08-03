@@ -5,6 +5,7 @@ import { Question } from '@modelsQuestion';
 import { Quiz } from '@modelsQuiz';
 import { UserProfile } from '@modelsUserProfile';
 import * as admin from 'firebase-admin';
+import { DocumentData } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 
 admin.initializeApp();
@@ -12,6 +13,28 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Authentication section
+
+async function getGroup(userData: DocumentData): Promise<Group> {
+    const groupDoc = await userData.group.get('group')
+
+    if (!groupDoc.exists) {
+        throw new functions.https.HttpsError('not-found', 'Group not found.');
+    }
+
+    const groupData = groupDoc.data();
+
+    if (!groupData) {
+        throw new functions.https.HttpsError('not-found', 'Group data not found.');
+    }
+
+    const group: Group = {
+        groupId: groupDoc.id,
+        name: groupData.name,
+        imageUrl: groupData.imageUrl
+    }
+
+    return group;
+}
 
 export const getUserProfile = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
@@ -31,30 +54,14 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
             throw new functions.https.HttpsError('not-found', 'User data not found.');
         }
 
-        const groupRef = userData.group;
-
-        const groupDoc = await groupRef.get('group')
-
-        if (!groupDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'Group not found.');
-        }
-
-        const groupData = groupDoc.data();
-
-        if (!groupData) {
-            throw new functions.https.HttpsError('not-found', 'Group data not found.');
-        }
+        const group: Group = await getGroup(userData);
 
         const userProfile: UserProfile = {
             userId: userDoc.id,
             email: userData.email,
             name: userData.name,
             surname: userData.surname,
-            group: {
-                groupId: groupDoc.id,
-                name: groupData.name,
-                imageUrl: groupData.imageUrl
-            } as Group
+            group: group
         };
 
         return JSON.stringify(userProfile)
@@ -64,6 +71,36 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
 });
 
 // Quiz section
+
+async function getQuestionList(quizData: DocumentData, hideData: boolean = true): Promise<Question[]> {
+    const questionListRef: FirebaseFirestore.DocumentReference[] = quizData.questionList;
+
+    const questionList: Question[] = await Promise.all(
+        questionListRef.map(async questionRef => {
+            const questionDoc = await questionRef.get();
+
+            if (!questionDoc.exists) {
+                throw new Error('Question not found');
+            }
+
+            const questionData = questionDoc.data();
+
+            if (!questionData) {
+                throw new Error('Question not found');
+            }
+
+            return {
+                questionId: questionDoc.id,
+                text: questionData.text,
+                answerList: questionData.answerList,
+                correctAnswer: !hideData ? questionData.correctAnswer : null,
+                value: !hideData ? questionData.value : null
+            } as Question;
+        })
+    );
+
+    return questionList;
+}
 
 export const getQuiz = functions.https.onCall(async (data, context) => {
     const { quizId } = data;
@@ -89,31 +126,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.');
         }
 
-        const questionListRef: FirebaseFirestore.DocumentReference[] = quizData.questionList;
-
-        const questionList: Question[] = await Promise.all(
-            questionListRef.map(async questionRef => {
-                const questionDoc = await questionRef.get();
-
-                if (questionDoc.exists) {
-                    const questionData = questionDoc.data();
-
-                    if (!questionData) {
-                        throw new functions.https.HttpsError('not-found', 'Question not found.');
-                    }
-
-                    return {
-                        questionId: questionDoc.id,
-                        text: questionData.text,
-                        answerList: questionData.answerList,
-                        correctAnswer: null,
-                        value: null
-                    } as Question;
-                } else {
-                    throw new functions.https.HttpsError('not-found', 'Question not found.');
-                }
-            })
-        );
+        const questionList: Question[] = await getQuestionList(quizData);
 
         const quiz: Quiz = {
             quizId: quizDoc.id,
@@ -169,7 +182,9 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('invalid-argument', 'The answerList must have the same length as the questionList.');
         }
 
-        quizData.questionList.forEach((question: Question, index: number) => {
+        const questionList: Question[] = await getQuestionList(quizData, false);
+
+        questionList.forEach((question: Question, index: number) => {
             if (question.correctAnswer === answerList[index]) {
                 score += question.value || 0;
             }
@@ -179,7 +194,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
 
         await db.collection('users').doc(uid).collection('quizzes').doc(quizId).set(result);
 
-        return result;
+        return JSON.stringify(result);
     } catch (error) {
         throw new functions.https.HttpsError('internal', 'An error occurred while submitting the quiz answers.', error);
     }
