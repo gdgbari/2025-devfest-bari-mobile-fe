@@ -5,7 +5,7 @@ import { Question } from '@modelsQuestion';
 import { Quiz } from '@modelsQuiz';
 import { UserProfile } from '@modelsUserProfile';
 import * as admin from 'firebase-admin';
-import { DocumentData } from 'firebase-admin/firestore';
+import { DocumentReference } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 
 admin.initializeApp();
@@ -14,8 +14,8 @@ const db = admin.firestore();
 
 // Authentication section
 
-async function getGroup(userData: DocumentData): Promise<Group> {
-    const groupDoc = await userData.group.get('group')
+async function parseGroupRef(groupRef: DocumentReference): Promise<Group> {
+    const groupDoc = await groupRef.get();
 
     if (!groupDoc.exists) {
         throw new functions.https.HttpsError('not-found', 'Group not found.');
@@ -54,7 +54,7 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
             throw new functions.https.HttpsError('not-found', 'User data not found.');
         }
 
-        const group: Group = await getGroup(userData);
+        const group: Group = await parseGroupRef(userData.group);
 
         const userProfile: UserProfile = {
             userId: userDoc.id,
@@ -72,9 +72,7 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
 
 // Quiz section
 
-async function getQuestionList(quizData: DocumentData, hideData: boolean = true): Promise<Question[]> {
-    const questionListRef: FirebaseFirestore.DocumentReference[] = quizData.questionList;
-
+async function parseQuestionListRef(questionListRef: DocumentReference[], hideData: boolean = true): Promise<Question[]> {
     const questionList: Question[] = await Promise.all(
         questionListRef.map(async questionRef => {
             const questionDoc = await questionRef.get();
@@ -126,7 +124,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.');
         }
 
-        const questionList: Question[] = await getQuestionList(quizData);
+        const questionList: Question[] = await parseQuestionListRef(quizData.questionList);
 
         const quiz: Quiz = {
             quizId: quizDoc.id,
@@ -182,7 +180,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('invalid-argument', 'The answerList must have the same length as the questionList.');
         }
 
-        const questionList: Question[] = await getQuestionList(quizData, false);
+        const questionList: Question[] = await parseQuestionListRef(quizData.questionList, false);
 
         questionList.forEach((question: Question, index: number) => {
             if (question.correctAnswer === answerList[index]) {
