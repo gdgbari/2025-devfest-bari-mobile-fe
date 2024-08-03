@@ -16,7 +16,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (user.userId.isNotEmpty) {
       emit(
         state.copyWith(
-          user: user,
+          userProfile: user,
           status: AuthenticationStatus.authenticationSuccess,
           isAuthenticated: true,
         ),
@@ -30,7 +30,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }) async {
     emit(
       state.copyWith(
-        user: const UserProfile(),
+        userProfile: const UserProfile(),
         status: AuthenticationStatus.authenticationInProgress,
         isAuthenticated: false,
       ),
@@ -44,7 +44,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       emit(
         state.copyWith(
-          user: user,
+          userProfile: user,
           status: AuthenticationStatus.authenticationSuccess,
           isAuthenticated: true,
         ),
@@ -59,7 +59,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     await _authRepo.signOut();
     emit(
       state.copyWith(
-        user: const UserProfile(),
+        userProfile: const UserProfile(),
         status: AuthenticationStatus.signOutSuccess,
         isAuthenticated: false,
       ),

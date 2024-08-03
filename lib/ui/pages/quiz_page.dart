@@ -75,6 +75,7 @@ class QuizPage extends StatelessWidget {
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.grey,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
                             'BACK',
@@ -99,6 +100,7 @@ class QuizPage extends StatelessWidget {
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.blue,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
                             'NEXT',

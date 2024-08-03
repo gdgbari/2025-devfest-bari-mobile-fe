@@ -51,6 +51,7 @@ class LoginPage extends StatelessWidget {
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.blue,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: const Text(
                     'LOGIN',

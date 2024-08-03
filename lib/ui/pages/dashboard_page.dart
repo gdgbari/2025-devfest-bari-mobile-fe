@@ -24,17 +24,34 @@ class DashboardPage extends StatelessWidget {
                     ..getQuiz('osCBQg7hlgDI5ya2iz9l');
                   context.goNamed(RouteNames.quizRoute.name);
                 },
-                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 child: const Text(
                   'QUIZ',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+              const SizedBox(height: 10),
               TextButton(
                 onPressed: () async {
                   // TODO: test something here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Ehi! Non hai completato il quiz!'),
+                      action: SnackBarAction(
+                        label: 'RIPRENDI',
+                        onPressed: () {},
+                      ),
+                      duration: const Duration(days: 2),
+                    ),
+                  );
                 },
-                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 child: const Text(
                   'TEST',
                   style: TextStyle(color: Colors.white),
