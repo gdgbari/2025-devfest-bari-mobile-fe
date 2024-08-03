@@ -1,7 +1,5 @@
-import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -18,33 +16,21 @@ class DashboardPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextButton(
-                onPressed: () {
-                  context.read<QuizCubit>()
-                    ..resetAnswers()
-                    ..getQuiz('osCBQg7hlgDI5ya2iz9l');
-                  context.goNamed(RouteNames.quizRoute.name);
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: const Text(
-                  'QUIZ',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextButton(
                 onPressed: () async {
                   // TODO: test something here
+                  ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Ehi! Non hai completato il quiz!'),
                       action: SnackBarAction(
                         label: 'RIPRENDI',
-                        onPressed: () {},
+                        textColor: Colors.white,
+                        onPressed: () {
+                          context.pushNamed(RouteNames.quizRoute.name);
+                        },
                       ),
-                      duration: const Duration(days: 2),
+                      backgroundColor: Colors.blue.shade800,
+                      duration: const Duration(seconds: 30),
                     ),
                   );
                 },

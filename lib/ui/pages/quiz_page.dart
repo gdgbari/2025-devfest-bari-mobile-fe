@@ -12,6 +12,29 @@ class QuizPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Quiz',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        actions: const <Widget>[
+          Icon(
+            Icons.timer_outlined,
+            color: Colors.white,
+          ),
+          SizedBox(width: 5),
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: Text(
+              '3:00',
+              style: PresetTextStyle.white17w400,
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: BlocBuilder<QuizCubit, QuizState>(
           builder: (context, state) {
@@ -52,6 +75,12 @@ class QuizPage extends StatelessWidget {
                                 itemCount: question.answerList.length,
                               ),
                             ),
+                            Center(
+                              child: Text(
+                                '${questionIndex + 1}/${state.quiz.questionList.length}',
+                                style: PresetTextStyle.black13w400,
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -78,7 +107,7 @@ class QuizPage extends StatelessWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
-                            'BACK',
+                            'INDIETRO',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -103,7 +132,7 @@ class QuizPage extends StatelessWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
-                            'NEXT',
+                            'AVANTI',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

@@ -63,8 +63,8 @@ void _authListener(
       break;
     case AuthenticationStatus.authenticationFailure:
       context.loaderOverlay.hide();
+      // TODO: show error message
       break;
-    // TODO: show error message
     case AuthenticationStatus.signOutSuccess:
       context.loaderOverlay.hide();
       appRouter.goNamed(RouteNames.loginRoute.name);
