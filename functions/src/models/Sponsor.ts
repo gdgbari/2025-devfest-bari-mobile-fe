@@ -5,6 +5,5 @@ export interface Sponsor {
     name: string;
     description: string;
     websiteUrl: string;
-    // location: string;
     quiz: Quiz | null;
 }
