@@ -1,4 +1,3 @@
-import { Quiz } from "@modelsQuiz";
 import { Timestamp } from "firebase-admin/firestore";
 
 export interface Talk {
@@ -7,7 +6,6 @@ export interface Talk {
     description: string;
     track: string;
     room: string;
-    startTime: Timestamp;
-    endTime: Timestamp;
-    quiz: Quiz | null;
+    startTime: number;
+    endTime: number;
 }

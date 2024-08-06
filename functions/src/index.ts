@@ -3,9 +3,11 @@ require('module-alias/register');
 import { Group } from '@modelsGroup';
 import { Question } from '@modelsQuestion';
 import { Quiz } from '@modelsQuiz';
+import { QuizResult } from '@modelsQuizResult';
+import { Talk } from '@modelsTalk';
 import { UserProfile } from '@modelsUserProfile';
 import * as admin from 'firebase-admin';
-import { DocumentReference } from 'firebase-admin/firestore';
+import { DocumentReference, Timestamp } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 
 admin.initializeApp();
@@ -72,7 +74,7 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
 
 // Quiz section
 
-async function parseQuestionListRef(questionListRef: DocumentReference[], hideData: boolean = true): Promise<Question[]> {
+async function parseQuestionListRef(questionListRef: DocumentReference[], hideData: boolean): Promise<Question[]> {
     const questionList: Question[] = await Promise.all(
         questionListRef.map(async questionRef => {
             const questionDoc = await questionRef.get();
@@ -124,15 +126,16 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.');
         }
 
-        const questionList: Question[] = await parseQuestionListRef(quizData.questionList);
+        const questionList: Question[] = await parseQuestionListRef(quizData.questionList, true);
 
         const quiz: Quiz = {
             quizId: quizDoc.id,
-            questionList: questionList,
             type: quizData.type,
             talkId: quizData.talkId,
             sponsorId: quizData.sponsorId,
-            maxScore: quizData.maxScore
+            maxScore: quizData.maxScore,
+            isOpen: null,
+            questionList: questionList,
         };
 
         return JSON.stringify(quiz);
@@ -188,7 +191,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             }
         });
 
-        const result = { score, maxScore };
+        const result: QuizResult = { score, maxScore };
 
         await db.collection('users').doc(uid).collection('quizzes').doc(quizId).set(result);
 
@@ -197,3 +200,102 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('internal', 'An error occurred while submitting the quiz answers.', error);
     }
 });
+
+// Talk section
+
+// TODO: fix error 500 (?)
+export const createTalk = functions.https.onCall(async (data, context) => {
+    const { title, description, track, room, startTime, endTime } = data;
+
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+    }
+
+    // TODO: check user authorization (staff user)
+
+    try {
+        const talksRef = db.collection('talks');
+
+        const talkDoc = await talksRef.add({
+            title: title ?? '',
+            description: description ?? '',
+            track: track ?? '',
+            room: room ?? '',
+            startTime: Timestamp.fromMillis(startTime ?? 0),
+            endTime: Timestamp.fromMillis(endTime ?? 0)
+        });
+
+        return JSON.stringify({ talkId: talkDoc.id });
+    } catch (error) {
+        throw new functions.https.HttpsError('internal', 'An error occurred while creating the talk.', error);
+    }
+});
+
+export const getTalkList = functions.https.onCall(async (_, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+    }
+
+    try {
+        const talksSnapshot = await db.collection('talks').get();
+
+        if (!talksSnapshot) {
+            throw new functions.https.HttpsError('not-found', 'Talks not found.');
+        }
+
+        const talkList = await Promise.all(
+            talksSnapshot.docs.map(
+                async talkDoc => {
+                    const talkData = talkDoc.data();
+
+                    const talk: Talk = {
+                        talkId: talkDoc.id,
+                        title: talkData.title,
+                        description: talkData.description,
+                        track: talkData.track,
+                        room: talkData.room,
+                        startTime: talkData.startTime.toMillis(),
+                        endTime: talkData.endTime.toMillis(),
+                    }
+
+                    return talk;
+                }
+            )
+        );
+
+        return JSON.stringify(talkList);
+    } catch (error) {
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
+    }
+});
+
+async function parseQuizRef(
+    quizRef: DocumentReference,
+    hideData: boolean
+) {
+    const quizDoc = await quizRef.get();
+
+    if (!quizDoc.exists) {
+        throw new functions.https.HttpsError('not-found', 'Quiz not found.');
+    }
+
+    const quizData = quizDoc.data();
+
+    if (!quizData) {
+        throw new functions.https.HttpsError('not-found', 'Quiz data not found.');
+    }
+
+    const questionList: Question[] = await parseQuestionListRef(quizData.questionList, hideData);
+
+    const quiz: Quiz = {
+        quizId: quizDoc.id,
+        type: quizData.type,
+        talkId: quizData.talkId,
+        sponsorId: quizData.sponsorId,
+        maxScore: quizData.maxScore,
+        isOpen: quizData.isOpen,
+        questionList: questionList
+    }
+
+    return quiz;
+}

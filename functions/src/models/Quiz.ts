@@ -5,6 +5,7 @@ export interface Quiz {
     type: string;
     talkId: string | null;
     sponsorId: string | null;
-    maxScore: number;
-    questionList: Array<Question>;
+    maxScore: number | null;
+    isOpen: boolean | null;
+    questionList: Question[];
 }
