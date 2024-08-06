@@ -8,7 +8,6 @@ class Quiz extends Equatable {
   final String type;
   final String talkId;
   final String sponsorId;
-  final int maxScore;
   final List<Question> questionList;
 
   const Quiz({
@@ -16,7 +15,6 @@ class Quiz extends Equatable {
     this.type = '',
     this.talkId = '',
     this.sponsorId = '',
-    this.maxScore = 0,
     this.questionList = const [],
   });
 
@@ -33,7 +31,6 @@ class Quiz extends Equatable {
       type: type ?? this.type,
       talkId: talkId ?? this.talkId,
       sponsorId: sponsorId ?? this.sponsorId,
-      maxScore: maxScore ?? this.maxScore,
       questionList: questionList ?? this.questionList,
     );
   }
@@ -44,7 +41,6 @@ class Quiz extends Equatable {
       'type': type,
       'talkId': talkId,
       'sponsorId': sponsorId,
-      'maxScore': maxScore,
       'questionList': questionList.map((x) => x.toMap()).toList(),
     };
   }
@@ -55,7 +51,6 @@ class Quiz extends Equatable {
       type: map['type'] as String? ?? '',
       talkId: map['talkId'] as String? ?? '',
       sponsorId: map['sponsorId'] as String? ?? '',
-      maxScore: map['maxScore'] as int? ?? 0,
       questionList: List<Question>.from(
         List<Map<String, dynamic>>.from(
           map['questionList'] ?? [],
@@ -79,7 +74,6 @@ class Quiz extends Equatable {
       type,
       talkId,
       sponsorId,
-      maxScore,
       questionList,
     ];
   }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:devfest_bari_2024/data.dart';
 import 'package:equatable/equatable.dart';
 
 class Talk extends Equatable {
@@ -11,7 +10,6 @@ class Talk extends Equatable {
   final String room;
   final DateTime? startTime;
   final DateTime? endTime;
-  final Quiz quiz;
 
   const Talk({
     this.talkId = '',
@@ -21,7 +19,6 @@ class Talk extends Equatable {
     this.room = '',
     this.startTime,
     this.endTime,
-    this.quiz = const Quiz(),
   });
 
   Talk copyWith({
@@ -32,7 +29,6 @@ class Talk extends Equatable {
     String? room,
     DateTime? startTime,
     DateTime? endTime,
-    Quiz? quiz,
   }) {
     return Talk(
       talkId: talkId ?? this.talkId,
@@ -42,7 +38,6 @@ class Talk extends Equatable {
       room: room ?? this.room,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
-      quiz: quiz ?? this.quiz,
     );
   }
 
@@ -55,7 +50,6 @@ class Talk extends Equatable {
       'room': room,
       'startTime': startTime?.millisecondsSinceEpoch,
       'endTime': endTime?.millisecondsSinceEpoch,
-      'quiz': quiz.toMap(),
     };
   }
 
@@ -72,7 +66,6 @@ class Talk extends Equatable {
       endTime: DateTime.fromMillisecondsSinceEpoch(
         map['endTime'] as int? ?? 0,
       ),
-      quiz: Quiz.fromMap(map['quiz'] as Map<String, dynamic>),
     );
   }
 
@@ -94,7 +87,6 @@ class Talk extends Equatable {
       room,
       startTime,
       endTime,
-      quiz,
     ];
   }
 }

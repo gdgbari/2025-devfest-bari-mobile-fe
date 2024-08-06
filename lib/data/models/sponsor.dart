@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:devfest_bari_2024/data.dart';
 import 'package:equatable/equatable.dart';
 
 class Sponsor extends Equatable {
@@ -8,14 +7,12 @@ class Sponsor extends Equatable {
   final String name;
   final String description;
   final String websiteUrl;
-  final Quiz quiz;
 
   const Sponsor({
     this.sponsorId = '',
     this.name = '',
     this.description = '',
     this.websiteUrl = '',
-    this.quiz = const Quiz(),
   });
 
   Sponsor copyWith({
@@ -23,14 +20,12 @@ class Sponsor extends Equatable {
     String? name,
     String? description,
     String? websiteUrl,
-    Quiz? quiz,
   }) {
     return Sponsor(
       sponsorId: sponsorId ?? this.sponsorId,
       name: name ?? this.name,
       description: description ?? this.description,
       websiteUrl: websiteUrl ?? this.websiteUrl,
-      quiz: quiz ?? this.quiz,
     );
   }
 
@@ -40,7 +35,6 @@ class Sponsor extends Equatable {
       'name': name,
       'description': description,
       'websiteUrl': websiteUrl,
-      'quiz': quiz.toMap(),
     };
   }
 
@@ -50,7 +44,6 @@ class Sponsor extends Equatable {
       name: map['name'] as String? ?? '',
       description: map['description'] as String? ?? '',
       websiteUrl: map['websiteUrl'] as String? ?? '',
-      quiz: Quiz.fromMap(Map<String, dynamic>.from(map['quiz'] ?? {})),
     );
   }
 
@@ -69,7 +62,6 @@ class Sponsor extends Equatable {
       name,
       description,
       websiteUrl,
-      quiz,
     ];
   }
 }

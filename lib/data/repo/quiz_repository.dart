@@ -11,8 +11,8 @@ class QuizRepository {
 
   Future<Quiz> getQuiz(String quizId) async {
     try {
-      final rawQuiz = await _quizApi.getQuiz(quizId);
-      return Quiz.fromJson(rawQuiz);
+      final jsonQuiz = await _quizApi.getQuiz(quizId);
+      return Quiz.fromJson(jsonQuiz);
     } catch (e) {
       rethrow;
     }
