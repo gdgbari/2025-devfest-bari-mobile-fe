@@ -4,6 +4,7 @@ import { Group } from '@modelsGroup';
 import { Question } from '@modelsQuestion';
 import { Quiz } from '@modelsQuiz';
 import { QuizResult } from '@modelsQuizResult';
+import { Sponsor } from '@modelsSponsor';
 import { Talk } from '@modelsTalk';
 import { UserProfile } from '@modelsUserProfile';
 import * as admin from 'firebase-admin';
@@ -282,33 +283,39 @@ export const getTalkList = functions.https.onCall(async (_, context) => {
     }
 });
 
-async function parseQuizRef(
-    quizRef: DocumentReference,
-    hideData: boolean
-) {
-    const quizDoc = await quizRef.get();
+// Sponsor section
 
-    if (!quizDoc.exists) {
-        throw new functions.https.HttpsError('not-found', 'Quiz not found.');
+export const getSponsorList = functions.https.onCall(async (_, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
     }
 
-    const quizData = quizDoc.data();
+    try {
+        const sponsorsSnapshot = await db.collection('sponsors').get();
 
-    if (!quizData) {
-        throw new functions.https.HttpsError('not-found', 'Quiz data not found.');
+        if (!sponsorsSnapshot) {
+            throw new functions.https.HttpsError('not-found', 'Sponsors not found.');
+        }
+
+        const sponsorList = await Promise.all(
+            sponsorsSnapshot.docs.map(
+                async sponsorDoc => {
+                    const sponsorData = sponsorDoc.data();
+
+                    const sponsor: Sponsor = {
+                        sponsorId: sponsorDoc.id,
+                        name: sponsorData.name,
+                        description: sponsorData.description,
+                        websiteUrl: sponsorData.websiteUrl
+                    }
+
+                    return sponsor;
+                }
+            )
+        );
+
+        return JSON.stringify(sponsorList);
+    } catch (error) {
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
     }
-
-    const questionList: Question[] = await parseQuestionListRef(quizData.questionList, hideData);
-
-    const quiz: Quiz = {
-        quizId: quizDoc.id,
-        type: quizData.type,
-        talkId: quizData.talkId,
-        sponsorId: quizData.sponsorId,
-        maxScore: quizData.maxScore,
-        isOpen: quizData.isOpen,
-        questionList: questionList
-    }
-
-    return quiz;
-}
+});
