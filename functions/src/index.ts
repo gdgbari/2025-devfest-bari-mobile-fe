@@ -203,7 +203,6 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
 
 // Talk section
 
-// TODO: fix error 500 (?)
 export const createTalk = functions.https.onCall(async (data, context) => {
     const { title, description, track, room, startTime, endTime } = data;
 
@@ -211,9 +210,23 @@ export const createTalk = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
     }
 
-    // TODO: check user authorization (staff user)
-
     try {
+        const userDoc = await db.collection('users').doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'User not found.');
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            throw new functions.https.HttpsError('not-found', 'User data not found.');
+        }
+
+        if (userData.role != 'staff') {
+            throw new functions.https.HttpsError('permission-denied', 'User not authorized.');
+        }
+
         const talksRef = db.collection('talks');
 
         const talkDoc = await talksRef.add({
