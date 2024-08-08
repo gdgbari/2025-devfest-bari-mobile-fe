@@ -42,6 +42,7 @@ class LoginPage extends StatelessWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     context
                         .read<AuthenticationCubit>()
                         .signInWithEmailAndPassword(

@@ -34,6 +34,7 @@ class NavigationBarPage extends StatelessWidget {
       ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         selectedItemColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

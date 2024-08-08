@@ -15,6 +15,9 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routerConfig: appRouter,
         title: 'DevFest Bari 2024',
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+        ),
         builder: (context, child) {
           return BlocListener<AuthenticationCubit, AuthenticationState>(
             listener: _authListener,
