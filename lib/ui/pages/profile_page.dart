@@ -12,33 +12,38 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
           builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  GroupInfo(group: state.userProfile.group),
-                  const SizedBox(height: 20),
-                  UserInfo(userProfile: state.userProfile),
-                  const SizedBox(height: 20),
-                  const Expanded(child: SizedBox()),
-                  Center(
-                    child: TextButton(
-                      onPressed: () async {
-                        context.read<AuthenticationCubit>().signOut();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: const Text(
-                        'LOGOUT',
-                        style: TextStyle(color: Colors.white),
-                      ),
+            return Column(
+              children: <Widget>[
+                GroupInfo(group: state.userProfile.group),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        UserInfo(userProfile: state.userProfile),
+                        const SizedBox(height: 20),
+                        const Expanded(child: SizedBox()),
+                        Center(
+                          child: TextButton(
+                            onPressed: () async {
+                              context.read<AuthenticationCubit>().signOut();
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: const Text(
+                              'LOGOUT',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),

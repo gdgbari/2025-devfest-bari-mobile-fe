@@ -13,19 +13,13 @@ class UserInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Nome: ${userProfile.name}',
+          '${userProfile.name} ${userProfile.surname}',
           style: PresetTextStyle.black15w400,
           overflow: TextOverflow.ellipsis,
-          maxLines: 1,
+          maxLines: 2,
         ),
         Text(
-          'Cognome: ${userProfile.surname}',
-          style: PresetTextStyle.black15w400,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-        Text(
-          'Email: ${userProfile.email}',
+          userProfile.email,
           style: PresetTextStyle.black15w400,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
