@@ -2,6 +2,7 @@ import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class App extends StatelessWidget {
@@ -60,6 +61,10 @@ void _authListener(
   switch (state.status) {
     case AuthenticationStatus.initial:
       break;
+    case AuthenticationStatus.initialAuthFailure:
+      context.loaderOverlay.hide();
+      FlutterNativeSplash.remove();
+      break;
     case AuthenticationStatus.authenticationInProgress:
     case AuthenticationStatus.signOutInProgress:
       context.loaderOverlay.show();
@@ -68,6 +73,7 @@ void _authListener(
       context.loaderOverlay.hide();
       context.read<TalkCubit>().getTalkList();
       appRouter.goNamed(RouteNames.dashboardRoute.name);
+      FlutterNativeSplash.remove();
       break;
     case AuthenticationStatus.authenticationFailure:
       context.loaderOverlay.hide();
@@ -77,5 +83,6 @@ void _authListener(
       context.loaderOverlay.hide();
       appRouter.goNamed(RouteNames.loginRoute.name);
       break;
+
   }
 }

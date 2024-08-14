@@ -21,6 +21,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           isAuthenticated: true,
         ),
       );
+    } else {
+      emit(state.copyWith(status: AuthenticationStatus.initialAuthFailure));
     }
   }
 

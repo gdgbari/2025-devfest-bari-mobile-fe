@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_native_splash: ^2.4.1
   equatable: ^2.0.5
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
@@ -22,6 +23,22 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^4.0.0
+
+flutter_native_splash:
+  fullscreen: false
+  android: true
+  ios: true
+
+  color: "#FFFFFF"
+  image: assets/images/splash_logo.png
+  color_dark: "#FFFFFF"
+  image_dark: assets/images/splash_logo.png
+
+  android_12:
+    image: assets/images/splash_logo.png
+    icon_background_color: "#FFFFFF"
+    image_dark: assets/images/splash_logo.png
+    icon_background_color_dark: "#FFFFFF"
 
 flutter:
   uses-material-design: true
