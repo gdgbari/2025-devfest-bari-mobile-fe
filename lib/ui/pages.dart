@@ -5,3 +5,7 @@ export 'pages/navigation_bar_page.dart';
 export 'pages/profile_page.dart';
 export 'pages/qr_code_page.dart';
 export 'pages/quiz_page.dart';
+export 'pages/sponsor_details_page.dart';
+export 'pages/sponsor_list_page.dart';
+export 'pages/talk_details_page.dart';
+export 'pages/talk_list_page.dart';

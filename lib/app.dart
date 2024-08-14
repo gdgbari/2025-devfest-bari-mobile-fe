@@ -43,6 +43,10 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
     lazy: false,
     create: (context) => AuthenticationCubit(),
   ),
+  BlocProvider<TalkCubit>(
+    lazy: false,
+    create: (context) => TalkCubit(),
+  ),
   BlocProvider<QuizCubit>(
     lazy: false,
     create: (context) => QuizCubit(),
@@ -62,6 +66,7 @@ void _authListener(
       break;
     case AuthenticationStatus.authenticationSuccess:
       context.loaderOverlay.hide();
+      context.read<TalkCubit>().getTalkList();
       appRouter.goNamed(RouteNames.dashboardRoute.name);
       break;
     case AuthenticationStatus.authenticationFailure:
