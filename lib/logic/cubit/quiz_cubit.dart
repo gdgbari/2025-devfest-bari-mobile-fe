@@ -9,6 +9,8 @@ class QuizCubit extends Cubit<QuizState> {
 
   QuizCubit() : super(const QuizState());
 
+  void resetQuiz() => emit(const QuizState());
+
   Future<void> getQuiz(String quizId) async {
     emit(state.copyWith(status: QuizStatus.fetchInProgress));
     if (quizId == state.quiz.quizId) {
@@ -21,12 +23,12 @@ class QuizCubit extends Cubit<QuizState> {
       final quiz = await _quizRepo.getQuiz(quizId);
       emit(
         state.copyWith(
+          status: QuizStatus.fetchSuccess,
           quiz: quiz,
           selectedAnswers: List<int?>.generate(
             quiz.questionList.length,
             (index) => null,
           ),
-          status: QuizStatus.fetchSuccess,
         ),
       );
     } catch (e) {
@@ -43,8 +45,8 @@ class QuizCubit extends Cubit<QuizState> {
     selectedAnswers[index] = answerIndex;
     emit(
       state.copyWith(
-        selectedAnswers: selectedAnswers,
         status: QuizStatus.selectionSuccess,
+        selectedAnswers: selectedAnswers,
       ),
     );
   }
@@ -52,8 +54,16 @@ class QuizCubit extends Cubit<QuizState> {
   Future<void> submitQuiz() async {
     emit(state.copyWith(status: QuizStatus.submissionInProgress));
     try {
-      await _quizRepo.submitQuiz(state.quiz.quizId, state.selectedAnswers);
-      emit(state.copyWith(status: QuizStatus.submissionSuccess));
+      final results = await _quizRepo.submitQuiz(
+        state.quiz.quizId,
+        state.selectedAnswers,
+      );
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionSuccess,
+          results: results,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: QuizStatus.submissionFailure));
     }

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class QuizPage extends StatelessWidget {
   final pageController = PageController();
@@ -36,7 +39,8 @@ class QuizPage extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: BlocBuilder<QuizCubit, QuizState>(
+        child: BlocConsumer<QuizCubit, QuizState>(
+          listener: _quizListener,
           builder: (context, state) {
             return Column(
               children: <Widget>[
@@ -119,7 +123,6 @@ class QuizPage extends StatelessWidget {
                             if (pageController.page?.round() ==
                                 state.quiz.questionList.length - 1) {
                               context.read<QuizCubit>().submitQuiz();
-                              context.goNamed(RouteNames.dashboardRoute.name);
                             } else {
                               pageController.nextPage(
                                 duration: const Duration(milliseconds: 200),
@@ -146,5 +149,34 @@ class QuizPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+void _quizListener(
+  BuildContext context,
+  QuizState state,
+) {
+  switch (state.status) {
+    case QuizStatus.submissionInProgress:
+      context.loaderOverlay.show();
+      break;
+    case QuizStatus.submissionSuccess:
+      context.loaderOverlay.hide();
+      showDialog(
+        context: context,
+        builder: (_) => QuizResultsDialog(
+          onPressed: () => context.goNamed(RouteNames.dashboardRoute.name),
+          content: Text(
+            'Punteggio: ${state.results.score}/${state.results.maxScore}',
+          ),
+        ),
+      );
+      break;
+    case QuizStatus.submissionFailure:
+      context.loaderOverlay.hide();
+      // TODO: show error message
+      break;
+    default:
+      break;
   }
 }

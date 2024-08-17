@@ -13,28 +13,32 @@ enum QuizStatus {
 }
 
 class QuizState extends Equatable {
+  final QuizStatus status;
   final Quiz quiz;
   final List<int?> selectedAnswers;
-  final QuizStatus status;
+  final QuizResults results;
 
   const QuizState({
+    this.status = QuizStatus.initial,
     this.quiz = const Quiz(),
     this.selectedAnswers = const [],
-    this.status = QuizStatus.initial,
+    this.results = const QuizResults(),
   });
 
   QuizState copyWith({
+    QuizStatus? status,
     Quiz? quiz,
     List<int?>? selectedAnswers,
-    QuizStatus? status,
+    QuizResults? results,
   }) {
     return QuizState(
+      status: status ?? this.status,
       quiz: quiz ?? this.quiz,
       selectedAnswers: selectedAnswers ?? this.selectedAnswers,
-      status: status ?? this.status,
+      results: results ?? this.results,
     );
   }
 
   @override
-  List<Object> get props => [quiz, selectedAnswers, status];
+  List<Object> get props => [status, quiz, selectedAnswers, results];
 }

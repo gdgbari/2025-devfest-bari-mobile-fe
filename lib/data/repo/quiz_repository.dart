@@ -18,9 +18,10 @@ class QuizRepository {
     }
   }
 
-  Future<void> submitQuiz(String quizId, List<int?> answerList) async {
+  Future<QuizResults> submitQuiz(String quizId, List<int?> answerList) async {
     try {
-      await _quizApi.submitQuiz(quizId, answerList);
+      final jsonQuizResults = await _quizApi.submitQuiz(quizId, answerList);
+      return QuizResults.fromJson(jsonQuizResults);
     } catch (e) {
       rethrow;
     }
