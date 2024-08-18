@@ -291,7 +291,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
 
         const result: QuizResult = { score, maxScore };
 
-        await db.collection('users').doc(uid).collection('quizzes').doc(quizId).set(result);
+        await db.collection('users').doc(uid).collection('quizResults').doc(quizId).set(result);
 
         return JSON.stringify(result);
     } catch (error) {
@@ -379,7 +379,7 @@ export const getTalkList = functions.https.onCall(async (_, context) => {
         return JSON.stringify(talkList);
     } catch (error) {
         console.log(error);
-        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk list.', error);
     }
 });
 
@@ -417,6 +417,6 @@ export const getSponsorList = functions.https.onCall(async (_, context) => {
         return JSON.stringify(sponsorList);
     } catch (error) {
         console.log(error);
-        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the talk quiz.', error);
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the sponsor list.', error);
     }
 });
