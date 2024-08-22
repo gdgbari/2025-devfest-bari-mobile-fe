@@ -4,6 +4,7 @@ import { Group } from '@modelsGroup';
 import { Question } from '@modelsQuestion';
 import { Quiz } from '@modelsQuiz';
 import { QuizResult } from '@modelsQuizResult';
+import { QuizStartTime } from '@modelsQuizStartTime';
 import { Sponsor } from '@modelsSponsor';
 import { Talk } from '@modelsTalk';
 import { UserProfile } from '@modelsUserProfile';
@@ -162,6 +163,7 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
             sponsorId: sponsorId,
             maxScore: maxScore,
             isOpen: false,
+            maxTime: 1000 * 60 * 3 // 3 minutes. We can change this value dynamically for each quiz if we want
         });
 
         return JSON.stringify({ quizId: quizDoc.id });
@@ -206,6 +208,8 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
     }
 
+    const uid = context.auth.uid;
+
     if (!quizId) {
         throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid quizId.');
     }
@@ -233,7 +237,28 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             maxScore: quizData.maxScore,
             isOpen: null,
             questionList: questionList,
+            maxTime: quizData.maxTime
         };
+
+        const startTimeDoc = db.collection('users').doc(uid).collection('quizStartTimes').doc(quizId);
+        const startTimeDocSnapshot = await startTimeDoc.get();
+
+        if (!startTimeDocSnapshot.exists) {
+            const startTime: QuizStartTime = { startTimestamp: Date.now() };
+            await startTimeDoc.set(startTime);
+        } else {
+            const startTimeData = startTimeDocSnapshot.data();
+
+            if (!startTimeData) {
+                throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.');
+            }
+
+            quiz.maxTime -= Date.now() - startTimeData.startTimestamp;
+
+            if (quiz.maxTime <= 0) {
+                throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.');
+            }
+        }
 
         return JSON.stringify(quiz);
     } catch (error) {
@@ -288,6 +313,17 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
                 score += question.value || 0;
             }
         });
+
+        const startTimeDoc = await db.collection('users').doc(uid).collection('quizStartTimes').doc(quizId).get();
+
+        if (!startTimeDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.');
+        }
+
+        const startTimeData = startTimeDoc.data();
+        if (startTimeData + quizData.maxTime - 5000 < Date.now()) { // 5 seconds buffer for network latency
+            throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.');
+        }
 
         const result: QuizResult = { score, maxScore };
 
