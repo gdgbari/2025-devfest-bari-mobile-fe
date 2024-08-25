@@ -179,13 +179,13 @@ async function parseQuestionListRef(questionListRef: DocumentReference[], hideDa
             const questionDoc = await questionRef.get();
 
             if (!questionDoc.exists) {
-                throw new functions.https.HttpsError('failed-precondition', 'Question not found', {errorCode: 'question-not-found'});
+                throw new functions.https.HttpsError('failed-precondition', 'Question not found.', {errorCode: 'question-not-found'});
             }
 
             const questionData = questionDoc.data();
 
             if (!questionData) {
-                throw new functions.https.HttpsError('failed-precondition', 'Question not found', {errorCode: 'question-not-found'});
+                throw new functions.https.HttpsError('failed-precondition', 'Question not found.', {errorCode: 'question-not-found'});
             }
 
             return {
