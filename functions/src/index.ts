@@ -22,13 +22,13 @@ async function parseGroupRef(groupRef: DocumentReference): Promise<Group> {
     const groupDoc = await groupRef.get();
 
     if (!groupDoc.exists) {
-        throw new functions.https.HttpsError('not-found', 'Group not found.');
+        throw new functions.https.HttpsError('not-found', 'Group not found.', {errorCode: 'group-not-found'});
     }
 
     const groupData = groupDoc.data();
 
     if (!groupData) {
-        throw new functions.https.HttpsError('not-found', 'Group data not found.');
+        throw new functions.https.HttpsError('not-found', 'Group data not found.', {errorCode: 'group-not-found'});
     }
 
     const group: Group = {
@@ -42,20 +42,20 @@ async function parseGroupRef(groupRef: DocumentReference): Promise<Group> {
 
 export const getUserProfile = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     try {
         const userDoc = await db.collection('users').doc(context.auth.uid).get();
 
         if (!userDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'User not found.');
+            throw new functions.https.HttpsError('not-found', 'User not found.', {errorCode: 'user-not-found'});
         }
 
         const userData = userDoc.data();
 
         if (!userData) {
-            throw new functions.https.HttpsError('not-found', 'User data not found.');
+            throw new functions.https.HttpsError('not-found', 'User data not found.', {errorCode: 'user-not-found'});
         }
 
         const group: Group = await parseGroupRef(userData.group);
@@ -81,24 +81,24 @@ export const createQuestion = functions.https.onCall(async (data, context) => {
     const { text, answerList, correctAnswer, value } = data;
 
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     try {
         const userDoc = await db.collection('users').doc(context.auth.uid).get();
 
         if (!userDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'User not found.');
+            throw new functions.https.HttpsError('not-found', 'User not found.', {errorCode: 'user-not-found'});
         }
 
         const userData = userDoc.data();
 
         if (!userData) {
-            throw new functions.https.HttpsError('not-found', 'User data not found.');
+            throw new functions.https.HttpsError('not-found', 'User data not found.', {errorCode: 'user-not-found'});
         }
 
         if (userData.role != 'staff') {
-            throw new functions.https.HttpsError('permission-denied', 'User not authorized.');
+            throw new functions.https.HttpsError('permission-denied', 'User not authorized.', {errorCode: 'permission-denied'});
         }
 
         const questionsRef = db.collection('questions');
@@ -123,24 +123,24 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
     const { questionIdList, type, talkId, sponsorId } = data;
 
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     try {
         const userDoc = await db.collection('users').doc(context.auth.uid).get();
 
         if (!userDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'User not found.');
+            throw new functions.https.HttpsError('not-found', 'User not found.', {errorCode: 'user-not-found'});
         }
 
         const userData = userDoc.data();
 
         if (!userData) {
-            throw new functions.https.HttpsError('not-found', 'User data not found.');
+            throw new functions.https.HttpsError('not-found', 'User data not found.', {errorCode: 'user-not-found'});
         }
 
         if (userData.role != 'staff') {
-            throw new functions.https.HttpsError('permission-denied', 'User not authorized.');
+            throw new functions.https.HttpsError('permission-denied', 'User not authorized.', {errorCode: 'permission-denied'});
         }
 
         const quizRef = db.collection('quizzes');
@@ -179,13 +179,13 @@ async function parseQuestionListRef(questionListRef: DocumentReference[], hideDa
             const questionDoc = await questionRef.get();
 
             if (!questionDoc.exists) {
-                throw new Error('Question not found');
+                throw new functions.https.HttpsError('failed-precondition', 'Question not found', {errorCode: 'question-not-found'});
             }
 
             const questionData = questionDoc.data();
 
             if (!questionData) {
-                throw new Error('Question not found');
+                throw new functions.https.HttpsError('failed-precondition', 'Question not found', {errorCode: 'question-not-found'});
             }
 
             return {
@@ -205,26 +205,26 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
     const { quizId } = data;
 
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     const uid = context.auth.uid;
 
     if (!quizId) {
-        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid quizId.');
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid quizId.', {errorCode: 'invalid-argument'});
     }
 
     try {
         const quizDoc = await db.collection('quizzes').doc(quizId).get();
 
         if (!quizDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'Quiz not found.');
+            throw new functions.https.HttpsError('not-found', 'Quiz not found.', {errorCode: 'quiz-not-found'});
         }
 
         const quizData = quizDoc.data();
 
         if (!quizData || !quizData.isOpen) {
-            throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.');
+            throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.', {errorCode: 'quiz-not-open'});
         }
 
         const questionList: Question[] = await parseQuestionListRef(quizData.questionList, true);
@@ -250,13 +250,13 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             const startTimeData = startTimeDocSnapshot.data();
 
             if (!startTimeData) {
-                throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.');
+                throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
             }
 
             quiz.maxTime -= Date.now() - startTimeData.startTimestamp;
 
             if (quiz.maxTime <= 0) {
-                throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.');
+                throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.', {errorCode: 'quiz-time-up'});
             }
         }
 
@@ -271,39 +271,39 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
     const { quizId, answerList } = data;
 
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     const uid = context.auth.uid;
 
     if (!quizId || !Array.isArray(answerList)) {
-        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid quizId and answerList.');
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a valid quizId and answerList.', {errorCode: 'invalid-argument'});
     }
 
     try {
         const quizDoc = await db.collection('quizzes').doc(quizId).get();
 
         if (!quizDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'Quiz not found.');
+            throw new functions.https.HttpsError('not-found', 'Quiz not found.', {errorCode: 'quiz-not-found'});
         }
 
         const quizData = quizDoc.data();
 
         if (!quizData || !quizData.isOpen) {
-            throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.');
+            throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.', {errorCode: 'quiz-not-open'});
         }
 
         const answerDoc = await db.collection('users').doc(uid).collection('quizzes').doc(quizId).get();
 
         if (answerDoc.exists) {
-            throw new functions.https.HttpsError('already-exists', 'Quiz already submitted.');
+            throw new functions.https.HttpsError('already-exists', 'Quiz already submitted.', {errorCode: 'quiz-already-submitted'});
         }
 
         let score = 0;
         const maxScore = quizData.maxScore;
 
         if (answerList.length !== quizData.questionList.length) {
-            throw new functions.https.HttpsError('invalid-argument', 'The answerList must have the same length as the questionList.');
+            throw new functions.https.HttpsError('invalid-argument', 'The answerList must have the same length as the questionList.', {errorCode: 'invalid-argument'});
         }
 
         const questionList: Question[] = await parseQuestionListRef(quizData.questionList, false);
@@ -317,12 +317,12 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
         const startTimeDoc = await db.collection('users').doc(uid).collection('quizStartTimes').doc(quizId).get();
 
         if (!startTimeDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.');
+            throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
         }
 
         const startTimeData = startTimeDoc.data();
         if (startTimeData + quizData.maxTime - 5000 < Date.now()) { // 5 seconds buffer for network latency
-            throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.');
+            throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.', {errorCode: 'quiz-time-up'});
         }
 
         const result: QuizResult = { score, maxScore };
@@ -342,24 +342,24 @@ export const createTalk = functions.https.onCall(async (data, context) => {
     const { title, description, track, room, startTime, endTime } = data;
 
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     try {
         const userDoc = await db.collection('users').doc(context.auth.uid).get();
 
         if (!userDoc.exists) {
-            throw new functions.https.HttpsError('not-found', 'User not found.');
+            throw new functions.https.HttpsError('not-found', 'User not found.', {errorCode: 'user-not-found'});
         }
 
         const userData = userDoc.data();
 
         if (!userData) {
-            throw new functions.https.HttpsError('not-found', 'User data not found.');
+            throw new functions.https.HttpsError('not-found', 'User data not found.', {errorCode: 'user-not-found'});
         }
 
         if (userData.role != 'staff') {
-            throw new functions.https.HttpsError('permission-denied', 'User not authorized.');
+            throw new functions.https.HttpsError('permission-denied', 'User not authorized.', {errorCode: 'permission-denied'});
         }
 
         const talksRef = db.collection('talks');
@@ -382,14 +382,14 @@ export const createTalk = functions.https.onCall(async (data, context) => {
 
 export const getTalkList = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     try {
         const talksSnapshot = await db.collection('talks').get();
 
         if (!talksSnapshot) {
-            throw new functions.https.HttpsError('not-found', 'Talks not found.');
+            throw new functions.https.HttpsError('not-found', 'Talks not found.', {errorCode: 'talks-not-found'});
         }
 
         const talkList = await Promise.all(
@@ -423,14 +423,14 @@ export const getTalkList = functions.https.onCall(async (_, context) => {
 
 export const getSponsorList = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.');
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
 
     try {
         const sponsorsSnapshot = await db.collection('sponsors').get();
 
         if (!sponsorsSnapshot) {
-            throw new functions.https.HttpsError('not-found', 'Sponsors not found.');
+            throw new functions.https.HttpsError('not-found', 'Sponsors not found.', {errorCode: 'sponsors-not-found'});
         }
 
         const sponsorList = await Promise.all(
