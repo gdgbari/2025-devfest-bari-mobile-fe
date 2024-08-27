@@ -320,7 +320,6 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
         }
 
-        // Todo fix this line
         const startTimeData = startTimeDoc.data();
 
         if (!startTimeData) {
