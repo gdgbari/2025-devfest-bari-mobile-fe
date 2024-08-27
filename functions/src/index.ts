@@ -293,7 +293,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('failed-precondition', 'Quiz is not open.', {errorCode: 'quiz-not-open'});
         }
 
-        const answerDoc = await db.collection('users').doc(uid).collection('quizzes').doc(quizId).get();
+        const answerDoc = await db.collection('users').doc(uid).collection('quizResults').doc(quizId).get();
 
         if (answerDoc.exists) {
             throw new functions.https.HttpsError('already-exists', 'Quiz already submitted.', {errorCode: 'quiz-already-submitted'});
@@ -320,8 +320,14 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
         }
 
+        // Todo fix this line
         const startTimeData = startTimeDoc.data();
-        if (startTimeData + quizData.maxTime - 5000 < Date.now()) { // 5 seconds buffer for network latency
+
+        if (!startTimeData) {
+            throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
+        }
+
+        if (startTimeData.startTimestamp + quizData.maxTime - 5000 < Date.now()) { // 5 seconds buffer for network latency
             throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.', {errorCode: 'quiz-time-up'});
         }
 
