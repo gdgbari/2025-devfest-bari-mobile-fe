@@ -8,5 +8,5 @@ export interface Quiz {
     maxScore: number | null;
     isOpen: boolean | null;
     questionList: Question[];
-    maxTime: number;
+    timerDuration: number;
 }

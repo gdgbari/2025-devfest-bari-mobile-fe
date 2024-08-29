@@ -163,7 +163,7 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
             sponsorId: sponsorId,
             maxScore: maxScore,
             isOpen: false,
-            maxTime: 1000 * 60 * 3 // 3 minutes. We can change this value dynamically for each quiz if we want
+            timerDuration: 1000 * 60 * 3 // 3 minutes. We can change this value dynamically for each quiz if we want
         });
 
         return JSON.stringify({ quizId: quizDoc.id });
@@ -237,7 +237,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             maxScore: quizData.maxScore,
             isOpen: null,
             questionList: questionList,
-            maxTime: quizData.maxTime
+            timerDuration: quizData.timerDuration
         };
 
         const startTimeDoc = db.collection('users').doc(uid).collection('quizStartTimes').doc(quizId);
@@ -253,9 +253,9 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
                 throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
             }
 
-            quiz.maxTime -= Date.now() - startTimeData.startTimestamp;
+            quiz.timerDuration -= Date.now() - startTimeData.startTimestamp;
 
-            if (quiz.maxTime <= 0) {
+            if (quiz.timerDuration <= 0) {
                 throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.', {errorCode: 'quiz-time-up'});
             }
         }
@@ -326,7 +326,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('not-found', 'Quiz start time for user not found.', {errorCode: 'quiz-start-time-not-found'});
         }
 
-        if (startTimeData.startTimestamp + quizData.maxTime - 5000 < Date.now()) { // 5 seconds buffer for network latency
+        if (startTimeData.startTimestamp + quizData.timerDuration - 5000 < Date.now()) { // 5 seconds buffer for network latency
             throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.', {errorCode: 'quiz-time-up'});
         }
 
