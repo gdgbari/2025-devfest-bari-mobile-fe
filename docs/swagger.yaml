@@ -295,7 +295,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Question'
-        maxTime:
+        timerDuration:
           type: integer
 
     Question:
