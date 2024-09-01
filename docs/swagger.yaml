@@ -145,6 +145,30 @@ paths:
           description: Question not found.
         'quiz-time-up':
           description: Quiz time is up.
+        'talk-not-found':
+          description: Talk associated with quiz not found.
+        'sponsor-not-found':
+          description: Sponsor associated with quiz not found.
+        'internal':
+          description: Internal server error.
+
+  /getQuizResults:
+    post:
+      summary: Retrieve quiz results
+      description: This function retrieves the results of every quiz submitted by the authenticated user.
+      responses:
+        '200':
+          description: A JSON string containing the list of quiz results.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuizResult'
+        'unauthenticated':
+          description: User must be authenticated to access this resource.
+        'quiz-results-not-found':
+          description: Quiz results not found.
         'internal':
           description: Internal server error.
 
@@ -271,11 +295,16 @@ components:
         sponsorId:
           type: string
           description: The associated sponsor ID.
+        quizTitle:
+          type: string
+          description: The title of the quiz (unused if type is sponsor or talk).
 
     Quiz:
       type: object
       properties:
         quizId:
+          type: string
+        quizTitle:
           type: string
         type:
           type: string
@@ -329,6 +358,8 @@ components:
     QuizResult:
       type: object
       properties:
+        quizTitle:
+          type: string
         score:
           type: integer
         maxScore:

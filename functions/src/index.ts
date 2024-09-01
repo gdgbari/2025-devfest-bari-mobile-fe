@@ -120,7 +120,7 @@ export const createQuestion = functions.https.onCall(async (data, context) => {
 // Quiz section
 
 export const createQuiz = functions.https.onCall(async (data, context) => {
-    const { questionIdList, type, talkId, sponsorId } = data;
+    const { questionIdList, type, talkId, sponsorId, quizTitle } = data;
 
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
@@ -159,8 +159,9 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
         const quizDoc = await quizRef.add({
             questionList: questionListRef,
             type: type,
-            talkId: talkId,
-            sponsorId: sponsorId,
+            talkId: talkId ?? '',
+            sponsorId: sponsorId ?? '',
+            quizTitle: quizTitle ?? '',
             maxScore: maxScore,
             isOpen: false,
             timerDuration: 1000 * 60 * 3 // 3 minutes. We can change this value dynamically for each quiz if we want
@@ -231,6 +232,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
 
         const quiz: Quiz = {
             quizId: quizDoc.id,
+            quizTitle: quizData.title,
             type: quizData.type,
             talkId: quizData.talkId,
             sponsorId: quizData.sponsorId,
@@ -266,6 +268,40 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('internal', 'An error occurred while fetching the quiz.', error);
     }
 });
+
+async function fetchTitle(quizData: any): Promise<string> {
+    if (quizData.type === 'talk') {
+        const talkDoc = await db.collection('talks').doc(quizData.talkId).get();
+
+        if (!talkDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Talk not found.', {errorCode: 'talk-not-found'});
+        }
+
+        const talkData = talkDoc.data();
+
+        if (!talkData) {
+            throw new functions.https.HttpsError('not-found', 'Talk data not found.', {errorCode: 'talk-not-found'});
+        }
+
+        return talkData.title;
+    } else if (quizData.type === 'sponsor') {
+        const sponsorDoc = await db.collection('sponsors').doc(quizData.sponsorId).get();
+
+        if (!sponsorDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Sponsor not found.', {errorCode: 'sponsor-not-found'});
+        }
+
+        const sponsorData = sponsorDoc.data();
+
+        if (!sponsorData) {
+            throw new functions.https.HttpsError('not-found', 'Sponsor data not found.', {errorCode: 'sponsor-not-found'});
+        }
+
+        return sponsorData.name;
+    } else {
+        return quizData.title;
+    }
+}
 
 export const submitQuiz = functions.https.onCall(async (data, context) => {
     const { quizId, answerList } = data;
@@ -330,7 +366,8 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('failed-precondition', 'Quiz time is up.', {errorCode: 'quiz-time-up'});
         }
 
-        const result: QuizResult = { score, maxScore };
+        const quizTitle = await fetchTitle(quizData);
+        const result: QuizResult = { score, maxScore, quizTitle };
 
         await db.collection('users').doc(uid).collection('quizResults').doc(quizId).set(result);
 
@@ -338,6 +375,41 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
     } catch (error) {
         console.log(error);
         throw new functions.https.HttpsError('internal', 'An error occurred while submitting the quiz answers.', error);
+    }
+});
+
+export const getQuizResults = functions.https.onCall(async (_, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
+    }
+
+    try {
+        const quizResultsSnapshot = await db.collection('users').doc(context.auth.uid).collection('quizResults').get();
+
+        if (!quizResultsSnapshot) {
+            throw new functions.https.HttpsError('not-found', 'Quiz results not found.', {errorCode: 'quiz-results-not-found'});
+        }
+
+        const quizResults = await Promise.all(
+            quizResultsSnapshot.docs.map(
+                async quizResultDoc => {
+                    const quizResultData = quizResultDoc.data();
+
+                    const quizResult: QuizResult = {
+                        quizTitle: quizResultData.quizTitle,
+                        score: quizResultData.score,
+                        maxScore: quizResultData.maxScore
+                    }
+
+                    return quizResult;
+                }
+            )
+        );
+
+        return JSON.stringify(quizResults);
+    } catch (error) {
+        console.log(error);
+        throw new functions.https.HttpsError('internal', 'An error occurred while fetching the quiz results.', error);
     }
 });
 

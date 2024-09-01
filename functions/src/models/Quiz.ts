@@ -2,6 +2,7 @@ import { Question } from "@modelsQuestion";
 
 export interface Quiz {
     quizId: string;
+    quizTitle: string | null;
     type: string;
     talkId: string | null;
     sponsorId: string | null;
