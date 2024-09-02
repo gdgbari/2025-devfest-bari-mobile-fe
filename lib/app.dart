@@ -81,8 +81,7 @@ void _authListener(
       break;
     case AuthenticationStatus.signOutSuccess:
       context.loaderOverlay.hide();
-      appRouter.goNamed(RouteNames.loginRoute.name);
+      appRouter.goNamed(RouteNames.welcomeRoute.name);
       break;
-
   }
 }

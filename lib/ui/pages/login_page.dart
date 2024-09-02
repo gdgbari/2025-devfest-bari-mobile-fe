@@ -2,6 +2,7 @@ import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatelessWidget {
   final emailTextController = TextEditingController();
@@ -13,12 +14,19 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: ColorPalette.black,
         title: const Text(
-          'Login',
+          'Accedi con Email',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () => context.pop(),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -31,7 +39,7 @@ class LoginPage extends StatelessWidget {
                 onChanged: (email) => emailTextController.text = email,
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               CustomTextField(
                 hint: 'Password',
                 controller: passwordTextController,
@@ -51,11 +59,11 @@ class LoginPage extends StatelessWidget {
                         );
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: ColorPalette.black,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: const Text(
-                    'LOGIN',
+                    'ACCEDI',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

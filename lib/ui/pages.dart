@@ -9,3 +9,4 @@ export 'pages/sponsor_details_page.dart';
 export 'pages/sponsor_list_page.dart';
 export 'pages/talk_details_page.dart';
 export 'pages/talk_list_page.dart';
+export 'pages/welcome_page.dart';

@@ -7,8 +7,13 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: RouteNames.loginRoute.path,
+  initialLocation: RouteNames.welcomeRoute.path,
   routes: <RouteBase>[
+    GoRoute(
+      name: RouteNames.welcomeRoute.name,
+      path: RouteNames.welcomeRoute.path,
+      builder: (context, state) => const WelcomePage(),
+    ),
     GoRoute(
       name: RouteNames.loginRoute.name,
       path: RouteNames.loginRoute.path,

@@ -37,7 +37,7 @@ class CustomTextField extends StatelessWidget {
     this.borderColor = Colors.grey,
     this.borderRadius = 10,
     this.controller,
-    this.cursorColor = Colors.blue,
+    this.cursorColor = ColorPalette.black,
     this.enabled = true,
     this.errorBool = false,
     this.fillColor = Colors.white,

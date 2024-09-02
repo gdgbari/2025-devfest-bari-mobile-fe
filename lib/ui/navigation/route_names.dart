@@ -1,5 +1,6 @@
 enum RouteNames {
-  loginRoute(path: '/login'),
+  welcomeRoute(path: '/welcome'),
+  loginRoute(path: '/welcome/login'),
   dashboardRoute(path: '/home/dashboard'),
   talkListRoute(path: 'dashboard/talk_list'),
   talkDetailsRoute(path: 'dashboard/talk_list/talk_details'),
