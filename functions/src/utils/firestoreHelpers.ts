@@ -1,26 +1,23 @@
 import { DocumentReference } from "firebase-admin/firestore";
 import { Group } from "@models/Group";
 import { Question } from "@models/Question";
-import * as functions from "firebase-functions";
 import { db } from "../index";
+import { errorResponse, successResponse } from "./responseHelper";
+import { GenericResponse } from "../models/response/GenericResponse";
 
 export async function parseGroupRef(
     groupRef: DocumentReference
-): Promise<Group> {
+): Promise<GenericResponse<Group>> {
     const groupDoc = await groupRef.get();
 
     if (!groupDoc.exists) {
-        throw new functions.https.HttpsError("not-found", "Group not found.", {
-            errorCode: "group-not-found",
-        });
+        return errorResponse("group-not-found", "The group does not exist.");
     }
 
     const groupData = groupDoc.data();
 
     if (!groupData) {
-        throw new functions.https.HttpsError("not-found", "Group data not found.", {
-            errorCode: "group-not-found",
-        });
+        return errorResponse("group-not-found", "The group data does not exist.");
     }
 
     const group: Group = {
@@ -29,69 +26,59 @@ export async function parseGroupRef(
         imageUrl: groupData.imageUrl,
     };
 
-    return group;
+    return successResponse(group);
 }
 
 export async function parseQuestionListRef(
     questionListRef: DocumentReference[],
     hideData: boolean
-): Promise<Question[]> {
-    const questionList: Question[] = await Promise.all(
+): Promise<GenericResponse<Question[]>> {
+    const questionList: GenericResponse<Question>[] = await Promise.all(
         questionListRef.map(async (questionRef) => {
             const questionDoc = await questionRef.get();
 
             if (!questionDoc.exists) {
-                throw new functions.https.HttpsError(
-                    "failed-precondition",
-                    "Question not found.",
-                    { errorCode: "question-not-found" }
-                );
+                return errorResponse("question-not-found", "The question does not exist.");
             }
 
             const questionData = questionDoc.data();
 
             if (!questionData) {
-                throw new functions.https.HttpsError(
-                    "failed-precondition",
-                    "Question not found.",
-                    { errorCode: "question-not-found" }
-                );
+                return errorResponse("question-not-found", "The question data does not exist.");
             }
 
-            return {
+            return successResponse({
                 questionId: questionDoc.id,
                 text: questionData.text,
                 answerList: questionData.answerList,
                 correctAnswer: !hideData ? questionData.correctAnswer : null,
                 value: !hideData ? questionData.value : null,
-            } as Question;
+            } as Question);
         })
     );
 
-    return questionList;
+    if (questionList.some((question) => question.error)) {
+        return errorResponse("question-not-found", "The question does not exist.");
+    }
+
+    return successResponse(questionList.map((question) => question.data as Question));
 }
 
-export async function fetchTitle(quizData: any): Promise<string> {
+export async function fetchTitle(quizData: any): Promise<GenericResponse<String>> {
     if (quizData.type === "talk") {
         const talkDoc = await db.collection("talks").doc(quizData.talkId).get();
 
         if (!talkDoc.exists) {
-            throw new functions.https.HttpsError("not-found", "Talk not found.", {
-                errorCode: "talk-not-found",
-            });
+            return errorResponse("talk-not-found", "The talk does not exist.");
         }
 
         const talkData = talkDoc.data();
 
         if (!talkData) {
-            throw new functions.https.HttpsError(
-                "not-found",
-                "Talk data not found.",
-                { errorCode: "talk-not-found" }
-            );
+            return errorResponse("talk-not-found", "The talk data does not exist.");
         }
 
-        return talkData.title;
+        return successResponse(talkData.title);
     } else if (quizData.type === "sponsor") {
         const sponsorDoc = await db
             .collection("sponsors")
@@ -99,23 +86,17 @@ export async function fetchTitle(quizData: any): Promise<string> {
             .get();
 
         if (!sponsorDoc.exists) {
-            throw new functions.https.HttpsError("not-found", "Sponsor not found.", {
-                errorCode: "sponsor-not-found",
-            });
+            return errorResponse("sponsor-not-found", "The sponsor does not exist.");
         }
 
         const sponsorData = sponsorDoc.data();
 
         if (!sponsorData) {
-            throw new functions.https.HttpsError(
-                "not-found",
-                "Sponsor data not found.",
-                { errorCode: "sponsor-not-found" }
-            );
+            return errorResponse("sponsor-not-found", "The sponsor data does not exist.");
         }
 
-        return sponsorData.name;
+        return successResponse(sponsorData.name);
     } else {
-        return quizData.title;
+        return successResponse(quizData.title);
     }
 }

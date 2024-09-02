@@ -2,43 +2,30 @@ import * as functions from "firebase-functions";
 import { Timestamp } from "firebase-admin/firestore";
 import { db } from "../index";
 import { Talk } from "@models/Talk";
+import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 
 export const createTalk = functions.https.onCall(async (data, context) => {
     const { title, description, track, room, startTime, endTime } = data;
 
     if (!context.auth) {
-        throw new functions.https.HttpsError(
-            "unauthenticated",
-            "User must be authenticated.",
-            { errorCode: "unauthenticated" }
-        );
+        return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
     }
 
     try {
         const userDoc = await db.collection("users").doc(context.auth.uid).get();
 
         if (!userDoc.exists) {
-            throw new functions.https.HttpsError("not-found", "User not found.", {
-                errorCode: "user-not-found",
-            });
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
         }
 
         const userData = userDoc.data();
 
         if (!userData) {
-            throw new functions.https.HttpsError(
-                "not-found",
-                "User data not found.",
-                { errorCode: "user-not-found" }
-            );
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
         }
 
         if (userData.role != "staff") {
-            throw new functions.https.HttpsError(
-                "permission-denied",
-                "User not authorized.",
-                { errorCode: "permission-denied" }
-            );
+            return serializedErrorResponse("permission-denied", "User not authorized.");
         }
 
         const talksRef = db.collection("talks");
@@ -52,33 +39,23 @@ export const createTalk = functions.https.onCall(async (data, context) => {
             endTime: Timestamp.fromMillis(endTime ?? 0),
         });
 
-        return JSON.stringify({ talkId: talkDoc.id });
+        return serializedSuccessResponse({ talkId: talkDoc.id });
     } catch (error) {
-        console.log(error);
-        throw new functions.https.HttpsError(
-            "internal",
-            "An error occurred while creating the talk.",
-            error
-        );
+        console.error("An error occurred while creating the talk.", error);
+        return serializedExceptionResponse(error);
     }
 });
 
 export const getTalkList = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError(
-            "unauthenticated",
-            "User must be authenticated.",
-            { errorCode: "unauthenticated" }
-        );
+        return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
     }
 
     try {
         const talksSnapshot = await db.collection("talks").get();
 
         if (!talksSnapshot) {
-            throw new functions.https.HttpsError("not-found", "Talks not found.", {
-                errorCode: "talks-not-found",
-            });
+            return serializedErrorResponse("talks-not-found", "No talks found.");
         }
 
         const talkList = await Promise.all(
@@ -99,13 +76,9 @@ export const getTalkList = functions.https.onCall(async (_, context) => {
             })
         );
 
-        return JSON.stringify(talkList);
+        return serializedSuccessResponse(talkList);
     } catch (error) {
-        console.log(error);
-        throw new functions.https.HttpsError(
-            "internal",
-            "An error occurred while fetching the talk list.",
-            error
-        );
+        console.error("An error occurred while fetching the talk list.", error);
+        return serializedExceptionResponse(error);
     }
 });

@@ -1,23 +1,18 @@
 import * as functions from "firebase-functions";
 import { Sponsor } from "@models/Sponsor";
 import { db } from "../index";
+import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 
 export const getSponsorList = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError(
-            "unauthenticated",
-            "User must be authenticated.",
-            { errorCode: "unauthenticated" }
-        );
+        return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
     }
 
     try {
         const sponsorsSnapshot = await db.collection("sponsors").get();
 
         if (!sponsorsSnapshot) {
-            throw new functions.https.HttpsError("not-found", "Sponsors not found.", {
-                errorCode: "sponsors-not-found",
-            });
+            return serializedErrorResponse("sponsors-not-found", "No sponsors found.");
         }
 
         const sponsorList = await Promise.all(
@@ -31,17 +26,13 @@ export const getSponsorList = functions.https.onCall(async (_, context) => {
                     websiteUrl: sponsorData.websiteUrl,
                 };
 
-                return sponsor;
+                return serializedSuccessResponse(sponsor);
             })
         );
 
-        return JSON.stringify(sponsorList);
+        return serializedSuccessResponse(sponsorList);
     } catch (error) {
-        console.log(error);
-        throw new functions.https.HttpsError(
-            "internal",
-            "An error occurred while fetching the sponsor list.",
-            error
-        );
+        console.error("An error occurred while fetching the sponsor list.", error);
+        return serializedExceptionResponse(error);
     }
 });

@@ -3,36 +3,34 @@ import { Group } from "@models/Group";
 import { UserProfile } from "@models/UserProfile";
 import { parseGroupRef } from "../utils/firestoreHelpers";
 import { db } from "../index";
+import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
+import { GenericResponse } from "@modelsresponse/GenericResponse";
 
 export const getUserProfile = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError(
-            "unauthenticated",
-            "User must be authenticated.",
-            { errorCode: "unauthenticated" }
-        );
+        return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
     }
 
     try {
         const userDoc = await db.collection("users").doc(context.auth.uid).get();
 
         if (!userDoc.exists) {
-            throw new functions.https.HttpsError("not-found", "User not found.", {
-                errorCode: "user-not-found",
-            });
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
         }
 
         const userData = userDoc.data();
 
         if (!userData) {
-            throw new functions.https.HttpsError(
-                "not-found",
-                "User data not found.",
-                { errorCode: "user-not-found" }
-            );
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
         }
 
-        const group: Group = await parseGroupRef(userData.group);
+        const groupResponse: GenericResponse<Group> = await parseGroupRef(userData.group);
+
+        if (groupResponse.error) {
+            return serializedErrorResponse(groupResponse.error.errorCode, groupResponse.error.details);
+        }
+
+        const group: Group = groupResponse.data as Group;
 
         const userProfile: UserProfile = {
             userId: userDoc.id,
@@ -42,13 +40,9 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
             group: group,
         };
 
-        return JSON.stringify(userProfile);
+        return serializedSuccessResponse(userProfile);
     } catch (error) {
-        console.log(error);
-        throw new functions.https.HttpsError(
-            "internal",
-            "An error occurred while fetching the user.",
-            error
-        );
+        console.error("An error occurred while fetching the user profile.", error);
+        return serializedExceptionResponse(error);
     }
 });
