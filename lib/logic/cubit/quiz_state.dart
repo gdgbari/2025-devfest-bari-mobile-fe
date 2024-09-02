@@ -10,6 +10,7 @@ enum QuizStatus {
   submissionInProgress,
   submissionSuccess,
   submissionFailure,
+  timerExpired,
 }
 
 class QuizState extends Equatable {

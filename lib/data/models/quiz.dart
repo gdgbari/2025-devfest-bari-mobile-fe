@@ -5,49 +5,60 @@ import 'package:equatable/equatable.dart';
 
 class Quiz extends Equatable {
   final String quizId;
+  final String title;
   final String type;
   final String talkId;
   final String sponsorId;
   final List<Question> questionList;
+  final Duration timerDuration;
 
   const Quiz({
     this.quizId = '',
+    this.title = '',
     this.type = '',
     this.talkId = '',
     this.sponsorId = '',
     this.questionList = const [],
+    this.timerDuration = const Duration(seconds: 0),
   });
 
   Quiz copyWith({
     String? quizId,
+    String? title,
     String? type,
     String? talkId,
     String? sponsorId,
     int? maxScore,
     List<Question>? questionList,
+    Duration? timerDuration,
   }) {
     return Quiz(
       quizId: quizId ?? this.quizId,
+      title: title ?? this.title,
       type: type ?? this.type,
       talkId: talkId ?? this.talkId,
       sponsorId: sponsorId ?? this.sponsorId,
       questionList: questionList ?? this.questionList,
+      timerDuration: timerDuration ?? this.timerDuration,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'quizId': quizId,
+      'title': title,
       'type': type,
       'talkId': talkId,
       'sponsorId': sponsorId,
       'questionList': questionList.map((x) => x.toMap()).toList(),
+      'timerDuration': timerDuration.inSeconds,
     };
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
     return Quiz(
       quizId: map['quizId'] as String? ?? '',
+      title: map['title'] as String? ?? '',
       type: map['type'] as String? ?? '',
       talkId: map['talkId'] as String? ?? '',
       sponsorId: map['sponsorId'] as String? ?? '',
@@ -56,6 +67,7 @@ class Quiz extends Equatable {
           map['questionList'] ?? [],
         ).map((x) => Question.fromMap(x)),
       ),
+      timerDuration: Duration(seconds: map['timerDuration'] as int? ?? 0),
     );
   }
 
@@ -71,10 +83,12 @@ class Quiz extends Equatable {
   List<Object> get props {
     return [
       quizId,
+      title,
       type,
       talkId,
       sponsorId,
       questionList,
+      timerDuration,
     ];
   }
 }

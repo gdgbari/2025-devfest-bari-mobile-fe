@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:devfest_bari_2024/data.dart';
 import 'package:equatable/equatable.dart';
@@ -6,17 +8,37 @@ part 'quiz_state.dart';
 
 class QuizCubit extends Cubit<QuizState> {
   final _quizRepo = QuizRepository();
+  Timer? _timer;
 
   QuizCubit() : super(const QuizState());
 
   void resetQuiz() => emit(const QuizState());
 
-  Future<void> getQuiz(String quizId) async {
-    emit(state.copyWith(status: QuizStatus.fetchInProgress));
-    if (quizId == state.quiz.quizId) {
-      return emit(state.copyWith(status: QuizStatus.fetchSuccess));
-    }
+  void startTimer() {
+    Duration duration = state.quiz.timerDuration;
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) {
+        if (duration.inSeconds != 0) {
+          duration -= const Duration(seconds: 1);
+          emit(
+            state.copyWith(
+              quiz: state.quiz.copyWith(
+                timerDuration: duration,
+              ),
+            ),
+          );
+        } else {
+          stopTimer();
+          emit(state.copyWith(status: QuizStatus.timerExpired));
+        }
+      },
+    );
+  }
 
+  void stopTimer() => _timer?.cancel();
+
+  Future<void> getQuiz(String quizId) async {
     emit(const QuizState().copyWith(status: QuizStatus.fetchInProgress));
 
     try {
@@ -31,6 +53,7 @@ class QuizCubit extends Cubit<QuizState> {
           ),
         ),
       );
+      startTimer();
     } catch (e) {
       emit(state.copyWith(status: QuizStatus.fetchFailure));
     }

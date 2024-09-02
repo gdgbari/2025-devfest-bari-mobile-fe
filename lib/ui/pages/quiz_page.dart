@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
@@ -14,35 +12,35 @@ class QuizPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          'Quiz',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: false,
-        automaticallyImplyLeading: false,
-        actions: const <Widget>[
-          Icon(
-            Icons.timer_outlined,
-            color: Colors.white,
-          ),
-          SizedBox(width: 5),
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: Text(
-              '3:00',
-              style: PresetTextStyle.white17w400,
+    return BlocConsumer<QuizCubit, QuizState>(
+      listener: _quizListener,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            title: const Text(
+              'Quiz',
+              style: TextStyle(color: Colors.white),
             ),
+            centerTitle: false,
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              const Icon(
+                Icons.timer_outlined,
+                color: Colors.white,
+              ),
+              const SizedBox(width: 5),
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Text(
+                  _formatTimerDuration(state.quiz.timerDuration),
+                  style: PresetTextStyle.white17w400,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SafeArea(
-        child: BlocConsumer<QuizCubit, QuizState>(
-          listener: _quizListener,
-          builder: (context, state) {
-            return Column(
+          body: SafeArea(
+            child: Column(
               children: <Widget>[
                 Expanded(
                   child: PageView.builder(
@@ -144,10 +142,10 @@ class QuizPage extends StatelessWidget {
                   ),
                 ),
               ],
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -176,7 +174,17 @@ void _quizListener(
       context.loaderOverlay.hide();
       // TODO: show error message
       break;
+    case QuizStatus.timerExpired:
+      context.read<QuizCubit>().submitQuiz();
+      break;
     default:
       break;
   }
+}
+
+String _formatTimerDuration(Duration duration) {
+  final minutes = duration.inMinutes.remainder(60).abs().toString();
+  final seconds =
+      duration.inSeconds.remainder(60).abs().toString().padLeft(2, '0');
+  return '$minutes:$seconds';
 }

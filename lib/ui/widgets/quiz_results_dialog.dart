@@ -1,6 +1,5 @@
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class QuizResultsDialog extends StatelessWidget {
   final void Function()? onPressed;
