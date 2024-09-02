@@ -25,7 +25,7 @@ class ServerResponse extends Equatable {
   factory ServerResponse.fromMap(Map<String, dynamic> map) {
     return ServerResponse(
       data: map['data'] as String? ?? '',
-      error: ServerError.fromMap(map['error'] ?? {} as Map<String, dynamic>),
+      error: ServerError.fromMap(Map<String, dynamic>.from(map['error'] ?? {})),
     );
   }
 
