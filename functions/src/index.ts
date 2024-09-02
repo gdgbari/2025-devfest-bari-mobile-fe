@@ -378,7 +378,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
     }
 });
 
-export const getQuizResults = functions.https.onCall(async (_, context) => {
+export const getQuizHistory = functions.https.onCall(async (_, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated.', {errorCode: 'unauthenticated'});
     }
