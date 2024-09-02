@@ -1,7 +1,7 @@
 import { GenericResponse } from "../models/response/GenericResponse";
 
 export function serializedSuccessResponse(data: any): String {
-    return JSON.stringify(successResponse(data));
+    return JSON.stringify(successResponse(JSON.stringify(data)));
 }
 
 export function serializedErrorResponse(errorCode: String, details: String | null = null): String {
