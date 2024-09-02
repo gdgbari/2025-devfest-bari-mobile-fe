@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:devfest_bari_2024/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationApi {
@@ -11,26 +12,26 @@ class AuthenticationApi {
     return null;
   }
 
-  Future<String> getUserProfile(User user) async {
-    try {
-      final result = await FirebaseFunctions.instance
-          .httpsCallable('getUserProfile')
-          .call<String>();
+  Future<ServerResponse> getUserProfile(User user) async {
+    final result = await FirebaseFunctions.instance
+        .httpsCallable('getUserProfile')
+        .call<String>();
 
-      return result.data;
-    } on FirebaseFunctionsException {
-      rethrow;
-    }
+    return ServerResponse.fromJson(result.data);
   }
 
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    return _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      return _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException {
+      rethrow;
+    }
   }
 
   Future<void> signOut() async => await _firebaseAuth.signOut();

@@ -11,19 +11,31 @@ class QuizRepository {
 
   Future<Quiz> getQuiz(String quizId) async {
     try {
-      final jsonQuiz = await _quizApi.getQuiz(quizId);
-      return Quiz.fromJson(jsonQuiz);
-    } catch (e) {
-      rethrow;
+      final response = await _quizApi.getQuiz(quizId);
+
+      if (response.error.code.isNotEmpty) {
+        // TODO: handle errors
+        throw UnknownQuizError();
+      }
+
+      return Quiz.fromJson(response.data);
+    } on Exception {
+      throw UnknownQuizError();
     }
   }
 
   Future<QuizResults> submitQuiz(String quizId, List<int?> answerList) async {
     try {
-      final jsonQuizResults = await _quizApi.submitQuiz(quizId, answerList);
-      return QuizResults.fromJson(jsonQuizResults);
-    } catch (e) {
-      rethrow;
+      final response = await _quizApi.submitQuiz(quizId, answerList);
+
+      if (response.error.code.isNotEmpty) {
+        // TODO: handle errors
+        throw UnknownQuizError();
+      }
+
+      return QuizResults.fromJson(response.data);
+    } on Exception {
+      throw UnknownQuizError();
     }
   }
 }

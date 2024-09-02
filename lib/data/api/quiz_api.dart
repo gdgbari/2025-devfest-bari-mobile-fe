@@ -1,32 +1,30 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:devfest_bari_2024/data.dart';
 
 class QuizApi {
-  Future<String> getQuiz(String quizId) async {
-    try {
-      final result = await FirebaseFunctions.instance
-          .httpsCallable('getQuiz')
-          .call<String>({'quizId': quizId});
+  Future<ServerResponse> getQuiz(String quizId) async {
+    final body = {'quizId': quizId};
 
-      return result.data;
-    } on FirebaseFunctionsException {
-      rethrow;
-    }
+    final result = await FirebaseFunctions.instance
+        .httpsCallable('getQuiz')
+        .call<String>(body);
+
+    return ServerResponse.fromJson(result.data);
   }
 
-  Future<String> submitQuiz(String quizId, List<int?> answerList) async {
-    try {
-      final result = await FirebaseFunctions.instance
-          .httpsCallable('submitQuiz')
-          .call<String>(
-        {
-          'quizId': quizId,
-          'answerList': answerList,
-        },
-      );
+  Future<ServerResponse> submitQuiz(
+    String quizId,
+    List<int?> answerList,
+  ) async {
+    final body = {
+      'quizId': quizId,
+      'answerList': answerList,
+    };
 
-      return result.data;
-    } catch (e) {
-      rethrow;
-    }
+    final result = await FirebaseFunctions.instance
+        .httpsCallable('submitQuiz')
+        .call<String>(body);
+
+    return ServerResponse.fromJson(result.data);
   }
 }

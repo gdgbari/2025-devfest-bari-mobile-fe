@@ -22,10 +22,20 @@ class AuthenticationRepository {
 
   Future<UserProfile> getUserProfile(User user) async {
     try {
-      final rawUserProfile = await _authApi.getUserProfile(user);
-      return UserProfile.fromJson(rawUserProfile);
-    } catch (e) {
-      rethrow;
+      final response = await _authApi.getUserProfile(user);
+      
+      if (response.error.code.isNotEmpty) {
+        switch (response.error.code) {
+          case 'user-not-found':
+            throw UserNotFoundError();
+          default:
+            throw UnknownAuthenticationError();
+        }
+      }
+
+      return UserProfile.fromJson(response.data);
+    } on Exception {
+      throw UnknownAuthenticationError();
     }
   }
 
@@ -41,7 +51,8 @@ class AuthenticationRepository {
       return userCredential.user != null
           ? await getUserProfile(userCredential.user!)
           : const UserProfile();
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
+      // TODO: handle FirebaseAuthException
       rethrow;
     }
   }

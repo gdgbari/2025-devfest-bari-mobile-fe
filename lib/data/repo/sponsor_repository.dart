@@ -2,22 +2,22 @@ import 'dart:convert';
 
 import 'package:devfest_bari_2024/data.dart';
 
-class TalkRepository {
-  TalkRepository._internal();
+class SponsorRepository {
+  SponsorRepository._internal();
 
-  static final TalkRepository _instance = TalkRepository._internal();
+  static final SponsorRepository _instance = SponsorRepository._internal();
 
-  factory TalkRepository() => _instance;
+  factory SponsorRepository() => _instance;
 
-  final _talkApi = TalkApi();
+  final _sponsorApi = SponsorApi();
 
-  Future<List<Talk>> getTalkList() async {
+  Future<List<Talk>> getSponsorList() async {
     try {
-      final response = await _talkApi.getTalkList();
+      final response = await _sponsorApi.getSponsorList();
 
       if (response.error.code.isNotEmpty) {
         // TODO: handle errors
-        throw UnknownTalkError();
+        throw UnknownSponsorError();
       }
 
       final List<dynamic> rawTalkList = jsonDecode(response.data);
