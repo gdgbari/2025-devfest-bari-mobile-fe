@@ -23,8 +23,8 @@ class ServerError extends Equatable {
 
   factory ServerError.fromMap(Map<String, dynamic> map) {
     return ServerError(
-      code: map['code'] as String? ?? '',
-      message: map['message'] as String? ?? '',
+      code: map['errorCode'] as String? ?? '',
+      message: map['details'] as String? ?? '',
     );
   }
 
