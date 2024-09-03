@@ -51,11 +51,15 @@ class Quiz extends Equatable {
       'talkId': talkId,
       'sponsorId': sponsorId,
       'questionList': questionList.map((x) => x.toMap()).toList(),
-      'timerDuration': timerDuration.inSeconds,
+      'timerDuration': timerDuration.inMilliseconds,
     };
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
+    const backOffTime = 30000;
+    final timerDuration = map['timerDuration'] != null
+        ? (map['timerDuration'] as int) - backOffTime
+        : 0;
     return Quiz(
       quizId: map['quizId'] as String? ?? '',
       title: map['title'] as String? ?? '',
@@ -67,7 +71,7 @@ class Quiz extends Equatable {
           map['questionList'] ?? [],
         ).map((x) => Question.fromMap(x)),
       ),
-      timerDuration: Duration(seconds: map['timerDuration'] as int? ?? 0),
+      timerDuration: Duration(milliseconds: timerDuration),
     );
   }
 
