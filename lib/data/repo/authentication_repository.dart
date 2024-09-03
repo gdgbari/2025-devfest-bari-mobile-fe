@@ -21,22 +21,19 @@ class AuthenticationRepository {
   }
 
   Future<UserProfile> getUserProfile(User user) async {
-    try {
-      final response = await _authApi.getUserProfile(user);
-      
-      if (response.error.code.isNotEmpty) {
-        switch (response.error.code) {
-          case 'user-not-found':
-            throw UserNotFoundError();
-          default:
-            throw UnknownAuthenticationError();
-        }
-      }
+    final response = await _authApi.getUserProfile(user);
 
-      return UserProfile.fromJson(response.data);
-    } on Exception {
-      throw UnknownAuthenticationError();
+    if (response.error.code.isNotEmpty) {
+      signOut();
+      switch (response.error.code) {
+        case 'user-not-found':
+          throw MissingUserDataError();
+        default:
+          throw UnknownAuthenticationError();
+      }
     }
+
+    return UserProfile.fromJson(response.data);
   }
 
   Future<UserProfile> signInWithEmailAndPassword({
@@ -52,7 +49,16 @@ class AuthenticationRepository {
           ? await getUserProfile(userCredential.user!)
           : const UserProfile();
     } on FirebaseAuthException catch (e) {
-      // TODO: handle FirebaseAuthException
+      switch (e.code) {
+        case 'user-not-found':
+          throw UserNotFoundError();
+        case 'invalid-email':
+        case 'wrong-password':
+          throw InvalidCredentialsError();
+        default:
+          throw UnknownAuthenticationError();
+      }
+    } on Exception {
       rethrow;
     }
   }

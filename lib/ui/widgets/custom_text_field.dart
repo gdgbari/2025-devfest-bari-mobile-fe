@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final Color cursorColor;
   final bool enabled;
   final bool errorBool;
+  final Color errorColor;
   final Color fillColor;
   final FocusNode? focusNode;
   final double height;
@@ -40,6 +41,7 @@ class CustomTextField extends StatelessWidget {
     this.cursorColor = ColorPalette.black,
     this.enabled = true,
     this.errorBool = false,
+    this.errorColor = ColorPalette.coreRed,
     this.fillColor = Colors.white,
     this.focusNode,
     this.height = 50,
@@ -73,6 +75,8 @@ class CustomTextField extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             TextFormField(
+              onTapOutside: (_) =>
+                  FocusManager.instance.primaryFocus?.unfocus(),
               autofocus: autofocus,
               controller: controller,
               cursorColor: cursorColor,
@@ -90,15 +94,15 @@ class CustomTextField extends StatelessWidget {
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                  borderSide: const BorderSide(color: Colors.red),
+                  borderSide: BorderSide(color: errorColor),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                  borderSide: BorderSide(color: borderColor),
+                  borderSide: BorderSide(color: cursorColor, width: 1.5),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                  borderSide: const BorderSide(color: Colors.red),
+                  borderSide: BorderSide(color: errorColor),
                 ),
                 errorText: errorBool ? '' : null,
                 errorStyle: const TextStyle(

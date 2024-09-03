@@ -32,6 +32,7 @@ class LoginPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               CustomTextField(
                 hint: 'Email',
@@ -46,8 +47,10 @@ class LoginPage extends StatelessWidget {
                 onChanged: (email) => passwordTextController.text = email,
                 obscureText: true,
               ),
-              const SizedBox(height: 20),
-              Center(
+              const SizedBox(height: 30),
+              SizedBox(
+                height: 50,
+                width: double.maxFinite,
                 child: TextButton(
                   onPressed: () {
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -60,11 +63,12 @@ class LoginPage extends StatelessWidget {
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: ColorPalette.black,
+                    overlayColor: Colors.white,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: const Text(
                     'ACCEDI',
-                    style: TextStyle(color: Colors.white),
+                    style: PresetTextStyle.white19w400,
                   ),
                 ),
               ),

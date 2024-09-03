@@ -1,7 +1,13 @@
+/// Exception that occurs when the credentials does not match anything on Firebase Auth
+class InvalidCredentialsError implements Exception {}
+
+/// Exception that occurs when the user data are missing
+class MissingUserDataError implements Exception {}
+
 /// Exception that occurs when a request is made without authentication
 class UnauthenticatedError implements Exception {}
 
-/// Exception that occurs when the [userId] does not exists on the server
+/// Exception that occurs when the user does not exists on Firebase Auth
 class UserNotFoundError implements Exception {}
 
 /// Exception that occurs when the [groupId] does not exists on the server

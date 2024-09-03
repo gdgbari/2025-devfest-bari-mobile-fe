@@ -57,7 +57,7 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
 void _authListener(
   BuildContext context,
   AuthenticationState state,
-) {
+) async {
   switch (state.status) {
     case AuthenticationStatus.initial:
       break;
@@ -77,7 +77,27 @@ void _authListener(
       break;
     case AuthenticationStatus.authenticationFailure:
       context.loaderOverlay.hide();
-      // TODO: show error message
+      String errorMessage = '';
+      switch (state.error) {
+        case AuthenticationError.invalidCredentials:
+          errorMessage = 'Credenziali errate';
+          break;
+        case AuthenticationError.userNotFound:
+          errorMessage = 'Utente non trovato';
+          break;
+        case AuthenticationError.missingUserData:
+          errorMessage = 'Dati utente mancanti';
+          break;
+        case AuthenticationError.unknown:
+          errorMessage = 'Errore sconosciuto';
+          break;
+        default:
+          break;
+      }
+      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
+      if (ctx != null) {
+        showAuthenticationErrorDialog(ctx, errorMessage);
+      }
       break;
     case AuthenticationStatus.signOutSuccess:
       context.loaderOverlay.hide();

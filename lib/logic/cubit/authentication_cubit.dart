@@ -35,6 +35,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         userProfile: const UserProfile(),
         status: AuthenticationStatus.authenticationInProgress,
         isAuthenticated: false,
+        error: AuthenticationError.none,
       ),
     );
 
@@ -51,8 +52,34 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           isAuthenticated: true,
         ),
       );
-    } catch (e) {
-      emit(state.copyWith(status: AuthenticationStatus.authenticationFailure));
+    } on UserNotFoundError {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.authenticationFailure,
+          error: AuthenticationError.userNotFound,
+        ),
+      );
+    } on InvalidCredentialsError {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.authenticationFailure,
+          error: AuthenticationError.invalidCredentials,
+        ),
+      );
+    } on MissingUserDataError {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.authenticationFailure,
+          error: AuthenticationError.missingUserData,
+        ),
+      );
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.authenticationFailure,
+          error: AuthenticationError.unknown,
+        ),
+      );
     }
   }
 
