@@ -269,11 +269,18 @@ components:
         answerList:
           type: array
           items:
-            type: string
-          description: List of possible answers.
+            type: object
+            properties:
+              id:
+                type: string
+                description: A unique identifier for the answer.
+              value:
+                type: string
+                description: The answer text.
+          description: List of possible answers, each with a unique id and value.
         correctAnswer:
           type: string
-          description: The correct answer.
+          description: The correct answer id.
         value:
           type: integer
           description: The point value of the question.
