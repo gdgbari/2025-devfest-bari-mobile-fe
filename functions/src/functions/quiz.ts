@@ -8,6 +8,7 @@ import { parseQuestionListRef, fetchTitle } from "../utils/firestoreHelpers";
 import { db } from "../index";
 import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
+import { generateUniqueRandomStrings } from "utils/stringHelpers";
 
 export const createQuiz = functions.https.onCall(async (data, context) => {
     const { questionIdList, type, talkId, sponsorId, quizTitle } = data;
@@ -321,12 +322,22 @@ export const createQuestion = functions.https.onCall(async (data, context) => {
             return serializedErrorResponse("permission-denied", "User not authorized.");
         }
 
+        const answerListIds = generateUniqueRandomStrings(answerList.length);
+        const parsedAnswerList = answerList.map((answer: string) => {
+            return {
+                id: answerListIds.pop() ?? "",
+                value: answer,
+            };
+        });
+
+        const parsedCorrectAnswer = parsedAnswerList[correctAnswer].id;
+
         const questionsRef = db.collection("questions");
 
         const questionDoc = await questionsRef.add({
             text: text ?? "",
-            answerList: answerList ?? [],
-            correctAnswer: correctAnswer,
+            answerList: parsedAnswerList ?? [],
+            correctAnswer: parsedCorrectAnswer,
             value: value ?? "",
         } as Question);
 

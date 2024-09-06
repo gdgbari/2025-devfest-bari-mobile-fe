@@ -47,6 +47,8 @@ export async function parseQuestionListRef(
                 return errorResponse("question-not-found", "The question data does not exist.");
             }
 
+            questionData.answerList = questionData.answerList.sort(() => Math.random() - 0.5);
+
             return successResponse({
                 questionId: questionDoc.id,
                 text: questionData.text,
