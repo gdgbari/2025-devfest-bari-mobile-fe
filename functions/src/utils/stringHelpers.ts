@@ -1,4 +1,10 @@
-export function generateUniqueRandomStrings(N: number, length = 8) {
+import * as crypto from "crypto";
+
+export function generateUniqueRandomStrings(N: number) {
+    return Array.from({ length: N }, () => crypto.randomUUID())
+};
+
+function generateUniqueRandomStringsLegacy(N: number, length = 8) {
     const uniqueStrings = new Set();
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;

@@ -8,7 +8,82 @@ import { parseQuestionListRef, fetchTitle } from "../utils/firestoreHelpers";
 import { db } from "../index";
 import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
-import { generateUniqueRandomStrings } from "utils/stringHelpers";
+import { generateUniqueRandomStrings } from "../utils/stringHelpers";
+
+export const createQuizWithQuestions = functions.https.onCall(async (data, context) => {
+    const { questionList, type, talkId, sponsorId, quizTitle } = data;
+
+    if (!context.auth) {
+        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
+    }
+
+    try {
+        const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "User not found.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "User data not found.");
+        }
+
+        if (userData.role != "staff") {
+            return serializedErrorResponse("permission-denied", "User not authorized.");
+        }
+
+        const questionListRef: DocumentReference[] = [];
+        let maxScore = 0;
+
+        for (const question of questionList) {
+            const { text, answerList, correctAnswer, value } = question;
+
+            const answerListIds = generateUniqueRandomStrings(answerList.length);
+            const parsedAnswerList = answerList.map((answer: string) => {
+                return {
+                    id: answerListIds.pop() ?? "",
+                    value: answer,
+                };
+            });
+
+            const parsedCorrectAnswer = parsedAnswerList[correctAnswer].id;
+
+            const questionsRef = db.collection("questions");
+            const questionDoc = await questionsRef.add({
+                text: text ?? "",
+                answerList: parsedAnswerList ?? [],
+                correctAnswer: parsedCorrectAnswer,
+                value: value ?? 0,
+            } as Question);
+
+            questionListRef.push(questionDoc);
+
+            maxScore += value ?? 0;
+        }
+
+        // Create the quiz document
+        const quizRef = db.collection("quizzes");
+        const quizDoc = await quizRef.add({
+            questionList: questionListRef,
+            type: type,
+            talkId: talkId ?? "",
+            sponsorId: sponsorId ?? "",
+            quizTitle: quizTitle ?? "",
+            maxScore: maxScore,
+            isOpen: false,
+            timerDuration: 1000 * 60 * 3, // 3 minutes
+            creatorUid: context.auth.uid,
+        });
+
+        return serializedSuccessResponse({ quizId: quizDoc.id });
+    } catch (error) {
+        console.error("An error occurred while creating the quiz.", error);
+        return serializedExceptionResponse(error);
+    }
+});
+
 
 export const createQuiz = functions.https.onCall(async (data, context) => {
     const { questionIdList, type, talkId, sponsorId, quizTitle } = data;

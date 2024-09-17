@@ -10,6 +10,7 @@ import {
     createQuiz,
     submitQuiz,
     createQuestion,
+    createQuizWithQuestions
 } from "./functions/quiz";
 
 admin.initializeApp();
@@ -25,4 +26,5 @@ export {
     createQuiz,
     submitQuiz,
     createQuestion,
+    createQuizWithQuestions
 };
