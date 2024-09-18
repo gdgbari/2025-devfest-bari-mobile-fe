@@ -18,10 +18,10 @@ class QrCodePage extends StatelessWidget {
       listener: _quizListener,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: ColorPalette.black,
           title: const Text(
             'QR code',
-            style: TextStyle(color: Colors.white),
+            style: PresetTextStyle.white23w500,
           ),
           centerTitle: true,
           leading: IconButton(

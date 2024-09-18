@@ -19,6 +19,11 @@ final appRouter = GoRouter(
       path: RouteNames.loginRoute.path,
       builder: (context, state) => LoginPage(),
     ),
+    GoRoute(
+      name: RouteNames.signUpRoute.name,
+      path: RouteNames.signUpRoute.path,
+      builder: (context, state) => SignUpPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return NavigationBarPage(navigationShell: navigationShell);

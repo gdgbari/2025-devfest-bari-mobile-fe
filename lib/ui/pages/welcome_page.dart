@@ -1,6 +1,7 @@
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -12,7 +13,7 @@ class WelcomePage extends StatelessWidget {
         backgroundColor: ColorPalette.black,
         title: const Text(
           'DevFest Bari 2024',
-          style: TextStyle(color: Colors.white),
+          style: PresetTextStyle.white23w500,
         ),
         centerTitle: true,
       ),
@@ -29,11 +30,20 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const OAuthButton('email'),
+              OAuthButton(
+                method: 'email',
+                onPressed: () => context.pushNamed(RouteNames.signUpRoute.name),
+              ),
               const SizedBox(height: 10),
-              const OAuthButton('google'),
+              OAuthButton(
+                method: 'google',
+                onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
+              ),
               const SizedBox(height: 10),
-              const OAuthButton('apple'),
+              OAuthButton(
+                method: 'apple',
+                onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
+              ),
             ],
           ),
         ),

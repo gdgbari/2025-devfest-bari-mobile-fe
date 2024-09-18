@@ -17,12 +17,12 @@ class QuizPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blue,
+            backgroundColor: ColorPalette.black,
             title: const Text(
               'Quiz',
-              style: TextStyle(color: Colors.white),
+              style: PresetTextStyle.white23w500,
             ),
-            centerTitle: false,
+            centerTitle: true,
             automaticallyImplyLeading: false,
             actions: <Widget>[
               const Icon(

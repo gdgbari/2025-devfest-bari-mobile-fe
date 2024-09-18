@@ -11,11 +11,11 @@ class PresetTextStyle {
     fontSize: 13,
     fontWeight: FontWeight.w400,
   );
-  static const black13w600 = TextStyle(
+  static const black13w500 = TextStyle(
     color: ColorPalette.black,
     fontFamily: fontFamily,
     fontSize: 13,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const black13w700 = TextStyle(
     color: ColorPalette.black,
@@ -29,11 +29,11 @@ class PresetTextStyle {
     fontSize: 15,
     fontWeight: FontWeight.w400,
   );
-  static const black15w600 = TextStyle(
+  static const black15w500 = TextStyle(
     color: ColorPalette.black,
     fontFamily: fontFamily,
     fontSize: 15,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const black15w700 = TextStyle(
     color: ColorPalette.black,
@@ -47,11 +47,11 @@ class PresetTextStyle {
     fontSize: 17,
     fontWeight: FontWeight.w400,
   );
-  static const black17w600 = TextStyle(
+  static const black17w500 = TextStyle(
     color: ColorPalette.black,
     fontFamily: fontFamily,
     fontSize: 17,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const black17w700 = TextStyle(
     color: ColorPalette.black,
@@ -65,11 +65,11 @@ class PresetTextStyle {
     fontSize: 19,
     fontWeight: FontWeight.w400,
   );
-  static const black19w600 = TextStyle(
+  static const black19w500 = TextStyle(
     color: ColorPalette.black,
     fontFamily: fontFamily,
     fontSize: 19,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const black19w700 = TextStyle(
     color: ColorPalette.black,
@@ -83,11 +83,11 @@ class PresetTextStyle {
     fontSize: 21,
     fontWeight: FontWeight.w400,
   );
-  static const black21w600 = TextStyle(
+  static const black21w500 = TextStyle(
     color: ColorPalette.black,
     fontFamily: fontFamily,
     fontSize: 21,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const black21w700 = TextStyle(
     color: ColorPalette.black,
@@ -101,11 +101,11 @@ class PresetTextStyle {
     fontSize: 23,
     fontWeight: FontWeight.w400,
   );
-  static const black23w600 = TextStyle(
+  static const black23w500 = TextStyle(
     color: ColorPalette.black,
     fontFamily: fontFamily,
     fontSize: 23,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const black23w700 = TextStyle(
     color: ColorPalette.black,
@@ -121,11 +121,11 @@ class PresetTextStyle {
     fontSize: 13,
     fontWeight: FontWeight.w400,
   );
-  static const grey13w600 = TextStyle(
+  static const grey13w500 = TextStyle(
     color: Colors.grey,
     fontFamily: fontFamily,
     fontSize: 13,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const grey13w700 = TextStyle(
     color: Colors.grey,
@@ -139,11 +139,11 @@ class PresetTextStyle {
     fontSize: 15,
     fontWeight: FontWeight.w400,
   );
-  static const grey15w600 = TextStyle(
+  static const grey15w500 = TextStyle(
     color: Colors.grey,
     fontFamily: fontFamily,
     fontSize: 15,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const grey15w700 = TextStyle(
     color: Colors.grey,
@@ -157,11 +157,11 @@ class PresetTextStyle {
     fontSize: 17,
     fontWeight: FontWeight.w400,
   );
-  static const grey17w600 = TextStyle(
+  static const grey17w500 = TextStyle(
     color: Colors.grey,
     fontFamily: fontFamily,
     fontSize: 17,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const grey17w700 = TextStyle(
     color: Colors.grey,
@@ -175,11 +175,11 @@ class PresetTextStyle {
     fontSize: 19,
     fontWeight: FontWeight.w400,
   );
-  static const grey19w600 = TextStyle(
+  static const grey19w500 = TextStyle(
     color: Colors.grey,
     fontFamily: fontFamily,
     fontSize: 19,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const grey19w700 = TextStyle(
     color: Colors.grey,
@@ -193,11 +193,11 @@ class PresetTextStyle {
     fontSize: 21,
     fontWeight: FontWeight.w400,
   );
-  static const grey21w600 = TextStyle(
+  static const grey21w500 = TextStyle(
     color: Colors.grey,
     fontFamily: fontFamily,
     fontSize: 21,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const grey21w700 = TextStyle(
     color: Colors.grey,
@@ -211,11 +211,11 @@ class PresetTextStyle {
     fontSize: 23,
     fontWeight: FontWeight.w400,
   );
-  static const grey23w600 = TextStyle(
+  static const grey23w500 = TextStyle(
     color: Colors.grey,
     fontFamily: fontFamily,
     fontSize: 23,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const grey23w700 = TextStyle(
     color: Colors.grey,
@@ -231,11 +231,11 @@ class PresetTextStyle {
     fontSize: 13,
     fontWeight: FontWeight.w400,
   );
-  static const white13w600 = TextStyle(
+  static const white13w500 = TextStyle(
     color: Colors.white,
     fontFamily: fontFamily,
     fontSize: 13,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const white13w700 = TextStyle(
     color: Colors.white,
@@ -249,11 +249,11 @@ class PresetTextStyle {
     fontSize: 15,
     fontWeight: FontWeight.w400,
   );
-  static const white15w600 = TextStyle(
+  static const white15w500 = TextStyle(
     color: Colors.white,
     fontFamily: fontFamily,
     fontSize: 15,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const white15w700 = TextStyle(
     color: Colors.white,
@@ -267,11 +267,11 @@ class PresetTextStyle {
     fontSize: 17,
     fontWeight: FontWeight.w400,
   );
-  static const white17w600 = TextStyle(
+  static const white17w500 = TextStyle(
     color: Colors.white,
     fontFamily: fontFamily,
     fontSize: 17,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const white17w700 = TextStyle(
     color: Colors.white,
@@ -285,11 +285,11 @@ class PresetTextStyle {
     fontSize: 19,
     fontWeight: FontWeight.w400,
   );
-  static const white19w600 = TextStyle(
+  static const white19w500 = TextStyle(
     color: Colors.white,
     fontFamily: fontFamily,
     fontSize: 19,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const white19w700 = TextStyle(
     color: Colors.white,
@@ -303,11 +303,11 @@ class PresetTextStyle {
     fontSize: 21,
     fontWeight: FontWeight.w400,
   );
-  static const white21w600 = TextStyle(
+  static const white21w500 = TextStyle(
     color: Colors.white,
     fontFamily: fontFamily,
     fontSize: 21,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const white21w700 = TextStyle(
     color: Colors.white,
@@ -321,11 +321,11 @@ class PresetTextStyle {
     fontSize: 23,
     fontWeight: FontWeight.w400,
   );
-  static const white23w600 = TextStyle(
+  static const white23w500 = TextStyle(
     color: Colors.white,
     fontFamily: fontFamily,
     fontSize: 23,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const white23w700 = TextStyle(
     color: Colors.white,
