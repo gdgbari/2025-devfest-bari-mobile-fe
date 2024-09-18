@@ -45,6 +45,7 @@ class QrCodePage extends StatelessWidget {
           ],
         ),
         body: SafeArea(
+          bottom: false,
           child: Stack(
             children: <Widget>[
               MobileScanner(

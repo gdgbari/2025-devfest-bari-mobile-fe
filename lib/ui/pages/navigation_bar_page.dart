@@ -35,7 +35,7 @@ class NavigationBarPage extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: ColorPalette.gray,
         selectedItemColor: ColorPalette.coreRed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -44,7 +44,7 @@ class NavigationBarPage extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: 'Profilo',
           ),
         ],
         currentIndex: navigationShell.currentIndex,
