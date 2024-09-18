@@ -26,38 +26,7 @@ final appRouter = GoRouter(
       branches: <StatefulShellBranch>[
         StatefulShellBranch(
           navigatorKey: _shellNavigatorKey,
-          initialLocation: RouteNames.dashboardRoute.path,
-          routes: <RouteBase>[
-            GoRoute(
-              name: RouteNames.dashboardRoute.name,
-              path: RouteNames.dashboardRoute.path,
-              builder: (context, state) => const DashboardPage(),
-              routes: <RouteBase>[
-                GoRoute(
-                  name: RouteNames.talkListRoute.name,
-                  path: RouteNames.talkListRoute.path,
-                  builder: (context, state) => const TalkListPage(),
-                ),
-                GoRoute(
-                  name: RouteNames.talkDetailsRoute.name,
-                  path: RouteNames.talkDetailsRoute.path,
-                  builder: (context, state) => const TalkDetailsPage(),
-                ),
-                GoRoute(
-                  name: RouteNames.sponsorListRoute.name,
-                  path: RouteNames.sponsorListRoute.path,
-                  builder: (context, state) => const SponsorListPage(),
-                ),
-                GoRoute(
-                  name: RouteNames.sponsorDetailsRoute.name,
-                  path: RouteNames.sponsorDetailsRoute.path,
-                  builder: (context, state) => const SponsorDetailsPage(),
-                ),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
+          initialLocation: RouteNames.leaderboardRoute.path,
           routes: <RouteBase>[
             GoRoute(
               name: RouteNames.leaderboardRoute.name,

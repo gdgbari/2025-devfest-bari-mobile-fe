@@ -14,33 +14,30 @@ class NavigationBarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: ColorPalette.black,
         title: const Text(
           'DevFest Bari 2024',
-          style: TextStyle(color: Colors.white),
+          style: PresetTextStyle.white23w500,
         ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.pushNamed(RouteNames.qrCodeRoute.name);
-            },
-            icon: const Icon(
-              Icons.photo_camera_outlined,
-              color: Colors.white,
-            ),
-          ),
-        ],
+        centerTitle: true,
       ),
       body: navigationShell,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.pushNamed(RouteNames.qrCodeRoute.name),
+        elevation: 1,
+        backgroundColor: ColorPalette.coreRed,
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.photo_camera_outlined,
+          color: Colors.white,
+          size: 26,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: ColorPalette.coreRed,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.leaderboard),
             label: 'Leaderboard',
