@@ -1,7 +1,7 @@
 require("module-alias/register");
 
 import * as admin from "firebase-admin";
-import { getUserProfile } from "./functions/auth";
+import { getUserProfile, signUp } from "./functions/auth";
 import { createTalk, getTalkList } from "./functions/talk";
 import { getSponsorList } from "./functions/sponsor";
 import {
@@ -17,6 +17,7 @@ admin.initializeApp();
 export const db = admin.firestore();
 
 export {
+    signUp,
     getUserProfile,
     createTalk,
     getTalkList,
@@ -26,5 +27,5 @@ export {
     createQuiz,
     submitQuiz,
     createQuestion,
-    createQuizWithQuestions
+    createQuizWithQuestions,
 };

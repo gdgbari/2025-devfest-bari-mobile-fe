@@ -5,5 +5,5 @@ export interface UserProfile {
     email: string;
     name: string;
     surname: string;
-    group: Group;
+    group: Group | null;
 }
