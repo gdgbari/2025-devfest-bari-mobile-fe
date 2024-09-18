@@ -163,7 +163,7 @@ void _quizListener(
       showDialog(
         context: context,
         builder: (_) => QuizResultsDialog(
-          onPressed: () => context.goNamed(RouteNames.dashboardRoute.name),
+          onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
           content: Text(
             'Punteggio: ${state.results.score}/${state.results.maxScore}',
           ),
