@@ -36,6 +36,29 @@ class AuthenticationRepository {
     return UserProfile.fromJson(response.data);
   }
 
+  Future<void> signUp({
+    required String name,
+    required String surname,
+    required String email,
+    required String password,
+  }) async {
+    final response = await _authApi.signUp(
+      name: name,
+      surname: surname,
+      email: email,
+      password: password,
+    );
+
+    if (response.error.code.isNotEmpty) {
+      switch (response.error.code) {
+        case 'user-already-registered':
+          throw UserAlreadyRegisteredError();
+        default:
+          throw UnknownAuthenticationError();
+      }
+    }
+  }
+
   Future<UserProfile> signInWithEmailAndPassword({
     required String email,
     required String password,

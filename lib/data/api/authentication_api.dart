@@ -20,6 +20,24 @@ class AuthenticationApi {
     return ServerResponse.fromJson(result.data);
   }
 
+  Future<ServerResponse> signUp({
+    required String name,
+    required String surname,
+    required String email,
+    required String password,
+  }) async {
+    final result = await FirebaseFunctions.instance
+        .httpsCallable('signUp')
+        .call<String>({
+      'name': name,
+      'surname': surname,
+      'email': email,
+      'password': password
+    });
+
+    return ServerResponse.fromJson(result.data);
+  }
+
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,

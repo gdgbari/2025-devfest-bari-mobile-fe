@@ -1,3 +1,6 @@
+/// Exception that occurs when the user is already registered
+class UserAlreadyRegisteredError implements Exception {}
+
 /// Exception that occurs when the credentials does not match anything on Firebase Auth
 class InvalidCredentialsError implements Exception {}
 

@@ -21,7 +21,7 @@ class QrCodePage extends StatelessWidget {
           backgroundColor: ColorPalette.black,
           title: const Text(
             'QR code',
-            style: PresetTextStyle.white23w500,
+            style: PresetTextStyle.white21w500,
           ),
           centerTitle: true,
           leading: IconButton(

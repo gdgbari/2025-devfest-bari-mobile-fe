@@ -14,31 +14,38 @@ class OAuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        backgroundColor: ColorPalette.black,
-        overlayColor: Colors.white,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 40, right: 10, top: 10, bottom: 10),
-            child: SvgPicture.asset(
-              'assets/images/icons/$method.svg',
-              width: 30,
+    return SizedBox(
+      height: 60,
+      child: TextButton(
+        onPressed: onPressed,
+        style: TextButton.styleFrom(
+          backgroundColor: ColorPalette.black,
+          overlayColor: Colors.white,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 40,
+                right: 10,
+                top: 10,
+                bottom: 10,
+              ),
+              child: SvgPicture.asset(
+                'assets/images/icons/$method.svg',
+                width: 26,
+              ),
             ),
-          ),
-          const SizedBox(width: 30),
-          Expanded(
-            child: Text(
-              'Accedi con ${method.capitalize()}',
-              style: PresetTextStyle.white19w400,
+            const SizedBox(width: 30),
+            Expanded(
+              child: Text(
+                'Accedi con ${method.capitalize()}',
+                style: PresetTextStyle.white19w400,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

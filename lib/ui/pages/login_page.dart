@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
         backgroundColor: ColorPalette.black,
         title: const Text(
           'Accedi con Email',
-          style: PresetTextStyle.white23w500,
+          style: PresetTextStyle.white21w500,
         ),
         centerTitle: true,
         leading: IconButton(
@@ -38,14 +38,12 @@ class LoginPage extends StatelessWidget {
               CustomTextField(
                 hint: 'Email',
                 controller: emailTextController,
-                onChanged: (email) => emailTextController.text = email,
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 hint: 'Password',
                 controller: passwordTextController,
-                onChanged: (email) => passwordTextController.text = email,
                 obscureText: true,
               ),
               const SizedBox(height: 20),

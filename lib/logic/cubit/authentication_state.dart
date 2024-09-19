@@ -3,6 +3,9 @@ part of 'authentication_cubit.dart';
 enum AuthenticationStatus {
   initial,
   initialAuthFailure,
+  signUpInProgress,
+  signUpSuccess,
+  signUpFailure,
   authenticationInProgress,
   authenticationSuccess,
   authenticationFailure,

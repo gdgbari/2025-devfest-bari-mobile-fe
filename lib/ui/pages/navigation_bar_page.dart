@@ -17,7 +17,7 @@ class NavigationBarPage extends StatelessWidget {
         backgroundColor: ColorPalette.black,
         title: const Text(
           'DevFest Bari 2024',
-          style: PresetTextStyle.white23w500,
+          style: PresetTextStyle.white21w500,
         ),
         centerTitle: true,
       ),

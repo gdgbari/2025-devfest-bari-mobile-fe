@@ -1,6 +1,8 @@
+import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -19,7 +21,7 @@ class SignUpPage extends StatelessWidget {
         backgroundColor: ColorPalette.black,
         title: const Text(
           'Registrazione',
-          style: PresetTextStyle.white23w500,
+          style: PresetTextStyle.white21w500,
         ),
         centerTitle: true,
         leading: IconButton(
@@ -44,28 +46,24 @@ class SignUpPage extends StatelessWidget {
               CustomTextField(
                 hint: 'Nome',
                 controller: nameController,
-                onChanged: (name) => nameController.text = name,
                 keyboardType: TextInputType.name,
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 hint: 'Cognome',
                 controller: surnameController,
-                onChanged: (surname) => surnameController.text = surname,
                 keyboardType: TextInputType.name,
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 hint: 'Email',
                 controller: emailTextController,
-                onChanged: (email) => emailTextController.text = email,
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 hint: 'Password',
                 controller: passwordTextController,
-                onChanged: (email) => passwordTextController.text = email,
                 obscureText: true,
               ),
               const SizedBox(height: 20),
@@ -75,7 +73,18 @@ class SignUpPage extends StatelessWidget {
                 child: TextButton(
                   onPressed: () {
                     FocusManager.instance.primaryFocus?.unfocus();
-                    // TODO
+
+                    final name = nameController.text;
+                    final surname = surnameController.text;
+                    final email = emailTextController.text;
+                    final password = passwordTextController.text;
+
+                    context.read<AuthenticationCubit>().signUp(
+                          name: name,
+                          surname: surname,
+                          email: email,
+                          password: password,
+                        );
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: ColorPalette.black,

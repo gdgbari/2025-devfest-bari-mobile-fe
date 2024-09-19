@@ -20,7 +20,7 @@ class QuizPage extends StatelessWidget {
             backgroundColor: ColorPalette.black,
             title: const Text(
               'Quiz',
-              style: PresetTextStyle.white23w500,
+              style: PresetTextStyle.white21w500,
             ),
             centerTitle: true,
             automaticallyImplyLeading: false,

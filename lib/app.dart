@@ -55,12 +55,11 @@ void _authListener(
   AuthenticationState state,
 ) async {
   switch (state.status) {
-    case AuthenticationStatus.initial:
-      break;
     case AuthenticationStatus.initialAuthFailure:
       context.loaderOverlay.hide();
       FlutterNativeSplash.remove();
       break;
+    case AuthenticationStatus.signUpInProgress:
     case AuthenticationStatus.authenticationInProgress:
     case AuthenticationStatus.signOutInProgress:
       context.loaderOverlay.show();
@@ -69,6 +68,10 @@ void _authListener(
       context.loaderOverlay.hide();
       appRouter.goNamed(RouteNames.leaderboardRoute.name);
       FlutterNativeSplash.remove();
+      break;
+    case AuthenticationStatus.signUpFailure:
+      context.loaderOverlay.hide();
+      // TODO: implement error message
       break;
     case AuthenticationStatus.authenticationFailure:
       context.loaderOverlay.hide();
@@ -97,6 +100,8 @@ void _authListener(
     case AuthenticationStatus.signOutSuccess:
       context.loaderOverlay.hide();
       appRouter.goNamed(RouteNames.welcomeRoute.name);
+      break;
+    default:
       break;
   }
 }
