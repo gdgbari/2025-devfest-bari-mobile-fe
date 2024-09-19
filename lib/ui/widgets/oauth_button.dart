@@ -15,7 +15,7 @@ class OAuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 65,
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
@@ -34,7 +34,7 @@ class OAuthButton extends StatelessWidget {
               ),
               child: SvgPicture.asset(
                 'assets/images/icons/$method.svg',
-                width: 26,
+                width: 30,
               ),
             ),
             const SizedBox(width: 30),
