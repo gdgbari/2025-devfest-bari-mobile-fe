@@ -344,13 +344,21 @@ components:
         answerList:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Answer'
         correctAnswer:
           type: string
           nullable: true
         value:
           type: integer
           nullable: true
+
+    Answer:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
 
     SubmitQuizRequest:
       type: object
