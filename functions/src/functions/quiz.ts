@@ -44,7 +44,7 @@ export const createQuizWithQuestions = functions.https.onCall(async (data, conte
             const parsedAnswerList = answerList.map((answer: string) => {
                 return {
                     id: answerListIds.pop() ?? "",
-                    value: answer,
+                    text: answer,
                 };
             });
 
@@ -401,7 +401,7 @@ export const createQuestion = functions.https.onCall(async (data, context) => {
         const parsedAnswerList = answerList.map((answer: string) => {
             return {
                 id: answerListIds.pop() ?? "",
-                value: answer,
+                text: answer,
             };
         });
 
