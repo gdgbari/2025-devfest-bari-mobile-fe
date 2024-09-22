@@ -16,5 +16,5 @@ class UserNotFoundError implements Exception {}
 /// Exception that occurs when the [groupId] does not exists on the server
 class GroupNotFoundError implements Exception {}
 
-/// Exception that occurs when the authentication reponse status code is 500
+/// Exception that occurs when the authentication response status code is 500
 class UnknownAuthenticationError implements Exception {}

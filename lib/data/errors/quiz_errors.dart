@@ -16,7 +16,7 @@ class QuizStartTimeNotFoundError implements Exception {}
 /// Exception that occurs when the time of the quiz is over
 class QuizTimeIsUpError implements Exception {}
 
-/// Exception that occurs when the sumbission does not include a valid [Quiz] object
+/// Exception that occurs when the submission does not include a valid [Quiz] object
 class InvalidQuizSubmissionError implements Exception {}
 
 /// Exception that occurs when the [Quiz] was already submitted
@@ -25,5 +25,5 @@ class QuizAlreadySubmittedError implements Exception {}
 /// Exception that occurs when ??? //? TODO: Ask to @nico
 class QuizHistoryNotFoundError implements Exception {}
 
-/// Exception that occurs when the quiz reponse status code is 500
+/// Exception that occurs when the quiz response status code is 500
 class UnknownQuizError implements Exception {}
