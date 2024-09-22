@@ -4,6 +4,7 @@ import * as admin from "firebase-admin";
 import { getUserProfile, signUp } from "./functions/auth";
 import { createTalk, getTalkList } from "./functions/talk";
 import { getSponsorList } from "./functions/sponsor";
+import { getLeaderboard } from "./functions/leaderboard";
 import {
     getQuizHistory,
     getQuiz,
