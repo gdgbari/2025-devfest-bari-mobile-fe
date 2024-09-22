@@ -4,14 +4,14 @@ import { Question } from "@models/Question";
 import { Quiz } from "@models/Quiz";
 import { QuizResult } from "@models/QuizResult";
 import { QuizStartTime } from "@models/QuizStartTime";
-import { parseQuestionListRef, fetchTitle } from "../utils/firestoreHelpers";
+import { parseQuestionListRef} from "../utils/firestoreHelpers";
 import { db } from "../index";
 import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
 import { generateUniqueRandomStrings } from "../utils/stringHelpers";
 
-export const createQuizWithQuestions = functions.https.onCall(async (data, context) => {
-    const { questionList, type, talkId, sponsorId, quizTitle } = data;
+export const createQuiz = functions.https.onCall(async (data, context) => {
+    const { questionList, type, talkId, sponsorId, title } = data;
 
     if (!context.auth) {
         return serializedErrorResponse("unauthenticated", "User must be authenticated.");
@@ -70,7 +70,7 @@ export const createQuizWithQuestions = functions.https.onCall(async (data, conte
             type: type,
             talkId: talkId ?? "",
             sponsorId: sponsorId ?? "",
-            quizTitle: quizTitle ?? "",
+            title: title ?? "",
             maxScore: maxScore,
             isOpen: false,
             timerDuration: 1000 * 60 * 3, // 3 minutes
@@ -84,67 +84,6 @@ export const createQuizWithQuestions = functions.https.onCall(async (data, conte
     }
 });
 
-
-export const createQuiz = functions.https.onCall(async (data, context) => {
-    const { questionIdList, type, talkId, sponsorId, quizTitle } = data;
-
-    if (!context.auth) {
-        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
-    }
-
-    try {
-        const userDoc = await db.collection("users").doc(context.auth.uid).get();
-
-        if (!userDoc.exists) {
-            return serializedErrorResponse("user-not-found", "User not found.");
-        }
-
-        const userData = userDoc.data();
-
-        if (!userData) {
-            return serializedErrorResponse("user-not-found", "User data not found.");
-        }
-
-        if (userData.role != "staff") {
-            return serializedErrorResponse("permission-denied", "User not authorized.");
-        }
-
-        const quizRef = db.collection("quizzes");
-
-        const questionListRef: DocumentReference[] = (
-            questionIdList as string[]
-        ).map((docId: string) => db.collection("questions").doc(docId));
-
-        const questionListResponse = await parseQuestionListRef(questionListRef, false);
-
-        if (questionListResponse.error) {
-            return serializedErrorResponse(questionListResponse.error.errorCode, questionListResponse.error.details);
-        }
-
-        const questionList: Question[] = questionListResponse.data as Question[];
-
-        let maxScore = 0;
-        questionList.forEach((question) => {
-            maxScore += question.value ?? 0;
-        });
-
-        const quizDoc = await quizRef.add({
-            questionList: questionListRef,
-            type: type,
-            talkId: talkId ?? "",
-            sponsorId: sponsorId ?? "",
-            quizTitle: quizTitle ?? "",
-            maxScore: maxScore,
-            isOpen: false,
-            timerDuration: 1000 * 60 * 3, // 3 minutes. We can change this value dynamically for each quiz if we want
-        });
-
-        return serializedSuccessResponse({ quizId: quizDoc.id });
-    } catch (error) {
-        console.error("An error occurred while creating the quiz.", error);
-        return serializedExceptionResponse(error);
-    }
-});
 
 export const getQuiz = functions.https.onCall(async (data, context) => {
     const { quizId } = data;
@@ -185,7 +124,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
 
         const quiz: Quiz = {
             quizId: quizDoc.id,
-            quizTitle: quizData.title,
+            title: quizData.title,
             type: quizData.type,
             talkId: quizData.talkId,
             sponsorId: quizData.sponsorId,
@@ -312,13 +251,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             return serializedErrorResponse("quiz-time-up", "Quiz time is up.");
         }
 
-        const quizTitleResponse = await fetchTitle(quizData);
-
-        if (quizTitleResponse.error) {
-            return serializedErrorResponse(quizTitleResponse.error.errorCode, quizTitleResponse.error.details);
-        }
-
-        const quizTitle: string = quizTitleResponse.data as string;
+        const quizTitle: string = quizData.title;
 
         const result: QuizResult = { score, maxScore, quizTitle: quizTitle };
 
@@ -369,56 +302,6 @@ export const getQuizHistory = functions.https.onCall(async (_, context) => {
         return serializedSuccessResponse(quizResults);
     } catch (error) {
         console.error("An error occurred while fetching the quiz history.", error);
-        return serializedExceptionResponse(error);
-    }
-});
-
-export const createQuestion = functions.https.onCall(async (data, context) => {
-    const { text, answerList, correctAnswer, value } = data;
-
-    if (!context.auth) {
-        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
-    }
-
-    try {
-        const userDoc = await db.collection("users").doc(context.auth.uid).get();
-
-        if (!userDoc.exists) {
-            return serializedErrorResponse("user-not-found", "User not found.");
-        }
-
-        const userData = userDoc.data();
-
-        if (!userData) {
-            return serializedErrorResponse("user-not-found", "User data not found.");
-        }
-
-        if (userData.role != "staff") {
-            return serializedErrorResponse("permission-denied", "User not authorized.");
-        }
-
-        const answerListIds = generateUniqueRandomStrings(answerList.length);
-        const parsedAnswerList = answerList.map((answer: string) => {
-            return {
-                id: answerListIds.pop() ?? "",
-                text: answer,
-            };
-        });
-
-        const parsedCorrectAnswer = parsedAnswerList[correctAnswer].id;
-
-        const questionsRef = db.collection("questions");
-
-        const questionDoc = await questionsRef.add({
-            text: text ?? "",
-            answerList: parsedAnswerList ?? [],
-            correctAnswer: parsedCorrectAnswer,
-            value: value ?? "",
-        } as Question);
-
-        return serializedSuccessResponse({ questionId: questionDoc.id });
-    } catch (error) {
-        console.error("An error occurred while creating the question.", error);
         return serializedExceptionResponse(error);
     }
 });

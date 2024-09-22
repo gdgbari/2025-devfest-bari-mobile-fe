@@ -9,8 +9,6 @@ import {
     getQuiz,
     createQuiz,
     submitQuiz,
-    createQuestion,
-    createQuizWithQuestions
 } from "./functions/quiz";
 
 admin.initializeApp();
@@ -26,6 +24,4 @@ export {
     getQuiz,
     createQuiz,
     submitQuiz,
-    createQuestion,
-    createQuizWithQuestions,
 };
