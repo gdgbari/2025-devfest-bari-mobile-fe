@@ -18,11 +18,11 @@ class QuizPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ColorPalette.black,
-            title: const Text(
-              'Quiz',
+            title: Text(
+              state.quiz.title,
               style: PresetTextStyle.white21w500,
             ),
-            centerTitle: true,
+            centerTitle: false,
             automaticallyImplyLeading: false,
             actions: <Widget>[
               const Icon(
@@ -60,7 +60,7 @@ class QuizPage extends StatelessWidget {
                                   final answer =
                                       question.answerList[answerIndex];
                                   return AnswerListTile(
-                                    value: answerIndex,
+                                    value: answer.answerId,
                                     groupValue:
                                         state.selectedAnswers[questionIndex],
                                     onChanged: (selectedAnswer) {
@@ -69,7 +69,7 @@ class QuizPage extends StatelessWidget {
                                             selectedAnswer,
                                           );
                                     },
-                                    title: answer,
+                                    title: answer.text,
                                   );
                                 },
                                 separatorBuilder: (context, index) =>
@@ -129,7 +129,7 @@ class QuizPage extends StatelessWidget {
                             }
                           },
                           style: TextButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: ColorPalette.coreRed,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(

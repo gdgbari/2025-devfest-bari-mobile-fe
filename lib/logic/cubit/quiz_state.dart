@@ -16,7 +16,7 @@ enum QuizStatus {
 class QuizState extends Equatable {
   final QuizStatus status;
   final Quiz quiz;
-  final List<int?> selectedAnswers;
+  final List<String?> selectedAnswers;
   final QuizResults results;
 
   const QuizState({
@@ -29,7 +29,7 @@ class QuizState extends Equatable {
   QuizState copyWith({
     QuizStatus? status,
     Quiz? quiz,
-    List<int?>? selectedAnswers,
+    List<String?>? selectedAnswers,
     QuizResults? results,
   }) {
     return QuizState(

@@ -14,7 +14,7 @@ class QuizApi {
 
   Future<ServerResponse> submitQuiz(
     String quizId,
-    List<int?> answerList,
+    List<String?> answerList,
   ) async {
     final body = {
       'quizId': quizId,

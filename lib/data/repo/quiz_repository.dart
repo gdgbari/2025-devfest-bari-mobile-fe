@@ -24,7 +24,7 @@ class QuizRepository {
     }
   }
 
-  Future<QuizResults> submitQuiz(String quizId, List<int?> answerList) async {
+  Future<QuizResults> submitQuiz(String quizId, List<String?> answerList) async {
     try {
       final response = await _quizApi.submitQuiz(quizId, answerList);
 

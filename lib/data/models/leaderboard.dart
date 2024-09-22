@@ -2,39 +2,46 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'leaderboard_entry.dart';
+import 'package:devfest_bari_2024/data.dart';
 
 class Leaderboard extends Equatable {
-  final String name;
-  final List<LeaderboardEntry> entries;
+  final List<UserProfile> users;
+  final List<Group> groups;
 
   const Leaderboard({
-    this.name = '',
-    this.entries = const [],
+    this.users = const [],
+    this.groups = const [],
   });
 
   Leaderboard copyWith({
-    String? name,
-    List<LeaderboardEntry>? entries,
+    List<UserProfile>? users,
+    List<Group>? groups,
   }) {
     return Leaderboard(
-      name: name ?? this.name,
-      entries: entries ?? this.entries,
+      users: users ?? this.users,
+      groups: groups ?? this.groups,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'name': name,
-      'entries': entries.map((x) => x.toMap()).toList(),
+      'users': users.map((x) => x.toMap()).toList(),
+      'groups': groups.map((x) => x.toMap()).toList(),
     };
   }
 
   factory Leaderboard.fromMap(Map<String, dynamic> map) {
     return Leaderboard(
-      name: map['name'] as String? ?? '',
-      entries: List<LeaderboardEntry>.from((map['entries'] ?? [])
-          .map((x) => LeaderboardEntry.fromMap(x as Map<String, dynamic>))),
+      users: List<UserProfile>.from(
+        (map['users'] ?? [] as List<Map<String, dynamic>>).map<UserProfile>(
+          (x) => UserProfile.fromMap(x),
+        ),
+      ),
+      groups: List<Group>.from(
+        (map['groups'] ?? [] as List<Map<String, dynamic>>).map<Group>(
+          (x) => Group.fromMap(x),
+        ),
+      ),
     );
   }
 
@@ -47,5 +54,5 @@ class Leaderboard extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object?> get props => [name, entries];
+  List<Object> get props => [users, groups];
 }

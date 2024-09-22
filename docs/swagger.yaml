@@ -28,28 +28,6 @@ paths:
         'internal':
           description: Internal server error.
 
-  /createQuestion:
-    post:
-      summary: Create a new question
-      description: This function allows staff members to create a new question.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateQuestionRequest'
-      responses:
-        'success':
-          description: A JSON string containing the question ID.
-        'unauthenticated':
-          description: User must be authenticated to access this resource.
-        'user-not-found':
-          description: User profile not found.
-        'permission-denied':
-          description: User not authorized to create a question.
-        'internal':
-          description: Internal server error.
-
   /createQuiz:
     post:
       summary: Create a new quiz
@@ -260,39 +238,14 @@ components:
         group:
           $ref: '#/components/schemas/Group'
 
-    CreateQuestionRequest:
-      type: object
-      properties:
-        text:
-          type: string
-          description: The question text.
-        answerList:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: A unique identifier for the answer.
-              value:
-                type: string
-                description: The answer text.
-          description: List of possible answers, each with a unique id and value.
-        correctAnswer:
-          type: string
-          description: The correct answer id.
-        value:
-          type: integer
-          description: The point value of the question.
-
     CreateQuizRequest:
       type: object
       properties:
-        questionIdList:
+        questionList:
           type: array
           items:
-            type: string
-          description: List of question IDs included in the quiz.
+            type: '#/components/schemas/Question'
+          description: List of questions included in the quiz.
         type:
           type: string
           description: The type of the quiz.
@@ -302,16 +255,16 @@ components:
         sponsorId:
           type: string
           description: The associated sponsor ID.
-        quizTitle:
+        title:
           type: string
-          description: The title of the quiz (unused if type is sponsor or talk).
+          description: The title of the quiz
 
     Quiz:
       type: object
       properties:
         quizId:
           type: string
-        quizTitle:
+        title:
           type: string
         type:
           type: string

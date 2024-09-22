@@ -1,3 +1,4 @@
+export 'models/answer.dart';
 export 'models/group.dart';
 export 'models/question.dart';
 export 'models/quiz.dart';
