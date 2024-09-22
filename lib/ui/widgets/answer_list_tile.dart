@@ -1,11 +1,13 @@
+import 'package:devfest_bari_2024/ui/theme/color_palette.dart';
 import 'package:flutter/material.dart';
 
 class AnswerListTile extends StatelessWidget {
-  final int value;
-  final int? groupValue;
-  final void Function(int?)? onChanged;
+  final String value;
+  final String? groupValue;
+  final void Function(String?)? onChanged;
   final String title;
   final Color color;
+  final Color selectionColor;
 
   const AnswerListTile({
     super.key,
@@ -13,7 +15,8 @@ class AnswerListTile extends StatelessWidget {
     required this.groupValue,
     required this.onChanged,
     required this.title,
-    this.color = Colors.blue,
+    this.color = ColorPalette.black,
+    this.selectionColor = ColorPalette.coreRed,
   });
 
   @override
@@ -28,11 +31,11 @@ class AnswerListTile extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            Radio<int?>(
+            Radio<String?>(
               value: value,
               groupValue: groupValue,
               onChanged: onChanged,
-              activeColor: color,
+              activeColor: selectionColor,
             ),
             Expanded(child: Text(title)),
           ],

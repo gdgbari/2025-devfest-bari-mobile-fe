@@ -7,17 +7,13 @@ class Quiz extends Equatable {
   final String quizId;
   final String title;
   final String type;
-  final String talkId;
-  final String sponsorId;
   final List<Question> questionList;
   final Duration timerDuration;
 
   const Quiz({
     this.quizId = '',
-    this.title = '',
+    this.title = 'Quiz',
     this.type = '',
-    this.talkId = '',
-    this.sponsorId = '',
     this.questionList = const [],
     this.timerDuration = const Duration(seconds: 0),
   });
@@ -26,8 +22,6 @@ class Quiz extends Equatable {
     String? quizId,
     String? title,
     String? type,
-    String? talkId,
-    String? sponsorId,
     int? maxScore,
     List<Question>? questionList,
     Duration? timerDuration,
@@ -36,23 +30,9 @@ class Quiz extends Equatable {
       quizId: quizId ?? this.quizId,
       title: title ?? this.title,
       type: type ?? this.type,
-      talkId: talkId ?? this.talkId,
-      sponsorId: sponsorId ?? this.sponsorId,
       questionList: questionList ?? this.questionList,
       timerDuration: timerDuration ?? this.timerDuration,
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'quizId': quizId,
-      'title': title,
-      'type': type,
-      'talkId': talkId,
-      'sponsorId': sponsorId,
-      'questionList': questionList.map((x) => x.toMap()).toList(),
-      'timerDuration': timerDuration.inMilliseconds,
-    };
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
@@ -62,10 +42,8 @@ class Quiz extends Equatable {
         : 0;
     return Quiz(
       quizId: map['quizId'] as String? ?? '',
-      title: map['title'] as String? ?? '',
+      title: map['quizTitle'] as String? ?? '',
       type: map['type'] as String? ?? '',
-      talkId: map['talkId'] as String? ?? '',
-      sponsorId: map['sponsorId'] as String? ?? '',
       questionList: List<Question>.from(
         List<Map<String, dynamic>>.from(
           map['questionList'] ?? [],
@@ -74,8 +52,6 @@ class Quiz extends Equatable {
       timerDuration: Duration(milliseconds: timerDuration),
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory Quiz.fromJson(String source) =>
       Quiz.fromMap(json.decode(source) as Map<String, dynamic>);
@@ -89,8 +65,6 @@ class Quiz extends Equatable {
       quizId,
       title,
       type,
-      talkId,
-      sponsorId,
       questionList,
       timerDuration,
     ];

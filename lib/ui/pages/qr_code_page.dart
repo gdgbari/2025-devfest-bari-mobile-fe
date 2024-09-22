@@ -35,7 +35,7 @@ class QrCodePage extends StatelessWidget {
             IconButton(
               onPressed: () {
                 // TODO: only for testing => move all to "onDetect"
-                context.read<QuizCubit>().getQuiz('UMr3Cow2aYJPbAXhtuOz');
+                context.read<QuizCubit>().getQuiz('UNOLeIPMt0DPFwgMn4g1');
               },
               icon: const Icon(
                 Icons.qr_code,

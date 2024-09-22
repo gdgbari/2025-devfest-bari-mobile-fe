@@ -47,7 +47,7 @@ class QuizCubit extends Cubit<QuizState> {
         state.copyWith(
           status: QuizStatus.fetchSuccess,
           quiz: quiz,
-          selectedAnswers: List<int?>.generate(
+          selectedAnswers: List<String?>.generate(
             quiz.questionList.length,
             (index) => null,
           ),
@@ -59,13 +59,13 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  void selectAnswer(String quizId, int? answerIndex) {
+  void selectAnswer(String quizId, String? answerId) {
     emit(state.copyWith(status: QuizStatus.selectionInProgress));
     final index = state.quiz.questionList.indexWhere(
       (quiz) => quiz.questionId == quizId,
     );
-    final selectedAnswers = List<int?>.from(state.selectedAnswers);
-    selectedAnswers[index] = answerIndex;
+    final selectedAnswers = List<String?>.from(state.selectedAnswers);
+    selectedAnswers[index] = answerId;
     emit(
       state.copyWith(
         status: QuizStatus.selectionSuccess,
