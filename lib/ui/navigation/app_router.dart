@@ -36,7 +36,7 @@ final appRouter = GoRouter(
             GoRoute(
               name: RouteNames.leaderboardRoute.name,
               path: RouteNames.leaderboardRoute.path,
-              builder: (context, state) => const LeaderboardPage(),
+              builder: (context, state) => LeaderboardPage(),
             ),
           ],
         ),

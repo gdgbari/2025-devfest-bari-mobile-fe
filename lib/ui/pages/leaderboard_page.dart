@@ -1,9 +1,13 @@
 import 'package:devfest_bari_2024/data.dart';
+import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LeaderboardPage extends StatelessWidget {
-  const LeaderboardPage({super.key});
+  final pageController = PageController();
+
+  LeaderboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,20 +15,36 @@ class LeaderboardPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              const CustomSegmentedButton(),
-              const SizedBox(height: 20),
-              Expanded(
-                child: PageView(
-                  children: const <Widget>[
-                    UserLeaderboard(),
-                    TeamLeaderboard(),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
+          child: BlocConsumer<LeaderboardCubit, LeaderboardState>(
+            listenWhen: (previous, current) =>
+                previous.pageIndex != current.pageIndex,
+            listener: (context, state) {
+              pageController.jumpToPage(state.pageIndex);
+            },
+            builder: (context, state) {
+              return Column(
+                children: <Widget>[
+                  CustomSegmentedButton(
+                    index: state.pageIndex,
+                    onValueChanged: (value) => context
+                        .read<LeaderboardCubit>()
+                        .changeLeaderboard(value),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: PageView(
+                      controller: pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: const <Widget>[
+                        UserLeaderboard(),
+                        TeamLeaderboard(),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -137,7 +157,7 @@ class TeamLeaderboard extends StatelessWidget {
               name: 'Panzerotto',
               colors: GroupColors.yellow,
               position: 4,
-              score: 30,
+              score: 40,
             ),
             maxScore: 100,
           ),

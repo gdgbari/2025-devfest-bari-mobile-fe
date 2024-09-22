@@ -1,15 +1,15 @@
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/cupertino.dart';
 
-class CustomSegmentedButton extends StatefulWidget {
-  const CustomSegmentedButton({super.key});
+class CustomSegmentedButton extends StatelessWidget {
+  final int index;
+  final void Function(int) onValueChanged;
 
-  @override
-  State<CustomSegmentedButton> createState() => _CustomSegmentedButtonState();
-}
-
-class _CustomSegmentedButtonState extends State<CustomSegmentedButton> {
-  int index = 0;
+  const CustomSegmentedButton({
+    super.key,
+    required this.index,
+    required this.onValueChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _CustomSegmentedButtonState extends State<CustomSegmentedButton> {
             ),
           ),
         },
-        onValueChanged: (int val) => setState(() => index = val),
+        onValueChanged: onValueChanged,
       ),
     );
   }

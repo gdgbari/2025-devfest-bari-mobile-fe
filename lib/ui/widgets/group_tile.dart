@@ -24,6 +24,13 @@ class GroupTile extends StatelessWidget {
           child: Container(
             color: group.colors.primaryColor,
             width: width,
+            child: Center(
+              child: Text(
+                '${group.position}°',
+                softWrap: false,
+                style: PresetTextStyle.white21w500,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 10),
