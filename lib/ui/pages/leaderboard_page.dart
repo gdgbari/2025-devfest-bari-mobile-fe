@@ -23,6 +23,7 @@ class LeaderboardPage extends StatelessWidget {
             },
             builder: (context, state) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CustomSegmentedButton(
                     index: state.pageIndex,
@@ -59,6 +60,27 @@ class UserLeaderboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: const <Widget>[
+        Text(
+          'Il tuo punteggio',
+          style: PresetTextStyle.black23w500,
+        ),
+        SizedBox(height: 10),
+        UserTile(
+          userProfile: UserProfile(
+            nickname: 'pippobaudo555',
+            group: Group(
+              colors: GroupColors.red,
+            ),
+            position: 13,
+            score: 100,
+          ),
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Top 5',
+          style: PresetTextStyle.black23w500,
+        ),
+        SizedBox(height: 10),
         UserTile(
           userProfile: UserProfile(
             nickname: 'pippobaudo123',
@@ -100,6 +122,17 @@ class UserLeaderboard extends StatelessWidget {
             ),
             position: 4,
             score: 191,
+          ),
+        ),
+        SizedBox(height: 10),
+        UserTile(
+          userProfile: UserProfile(
+            nickname: 'pippobaudo888',
+            group: Group(
+              colors: GroupColors.yellow,
+            ),
+            position: 5,
+            score: 155,
           ),
         ),
       ],
