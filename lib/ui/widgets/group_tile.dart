@@ -21,7 +21,8 @@ class GroupTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             color: group.colors.primaryColor,
             width: width,
             child: Center(
