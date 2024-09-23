@@ -148,6 +148,11 @@ class TeamLeaderboard extends StatelessWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Text(
+          'Classifica generale',
+          style: PresetTextStyle.black23w500,
+        ),
+        SizedBox(height: 10),
         Expanded(
           child: GroupTile(
             group: Group(
