@@ -132,6 +132,7 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             isOpen: null,
             questionList: questionList,
             timerDuration: quizData.timerDuration,
+            creatorUid: null,
         };
 
         const startTimeDoc = db
@@ -302,6 +303,116 @@ export const getQuizHistory = functions.https.onCall(async (_, context) => {
         return serializedSuccessResponse(quizResults);
     } catch (error) {
         console.error("An error occurred while fetching the quiz history.", error);
+        return serializedExceptionResponse(error);
+    }
+});
+
+export const deleteQuiz = functions.https.onCall(async (data, context) => {
+    const { quizId } = data;
+
+    if (!context.auth) {
+        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
+    }
+
+    try {
+        const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "User not found.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "User data not found.");
+        }
+
+        if (userData.role != "staff") {
+            return serializedErrorResponse("permission-denied", "User not authorized.");
+        }
+
+        const quizRef = db.collection("quizzes").doc(quizId);
+        const quizDoc = await quizRef.get();
+
+        if (!quizDoc.exists) {
+            return serializedErrorResponse("quiz-not-found", "Quiz not found.");
+        }
+
+        await quizRef.delete();
+
+        return serializedSuccessResponse({ questionId: quizDoc.id });
+    } catch (error) {
+        console.error("An error occurred while deleting the quiz.", error);
+        return serializedExceptionResponse(error);
+    }
+});
+
+export const getQuizList = functions.https.onCall(async (_, context) => {
+    if (!context.auth) {
+        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
+    }
+
+    try {
+        const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "User not found.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "User data not found.");
+        }
+
+        let quizQuery;
+        if (userData.role === "staff") {
+            quizQuery = db.collection("quizzes");
+        }else{
+            return serializedErrorResponse("permission-denied", "User not authorized to view quizzes.");
+        };
+
+        const quizSnapshot = await quizQuery.get();
+
+        if (quizSnapshot.empty) {
+            return serializedErrorResponse("quiz-list-not-found", "Quiz list not found.");
+        }
+
+        const quizList = await Promise.all(
+            quizSnapshot.docs.map(async (quizDoc) => {
+                const quizData = quizDoc.data();
+
+                const questionListResponse: GenericResponse<Question[]> = await parseQuestionListRef(
+                    quizData.questionList,
+                    true
+                );
+        
+                if (questionListResponse.error) {
+                    return serializedErrorResponse(questionListResponse.error.errorCode, questionListResponse.error.details);
+                }
+
+                const questionList: Question[] = questionListResponse.data as Question[];
+
+                const quiz: Quiz = {
+                    quizId: quizDoc.id,
+                    title: quizData.title,
+                    creatorUid: quizData.creatorUid, 
+                    type: quizData.type,
+                    talkId: quizData.talkId,
+                    sponsorId: quizData.sponsorId,
+                    maxScore: quizData.maxScore,
+                    isOpen: null,
+                    questionList: questionList,
+                    timerDuration: quizData.timerDuration,
+                };
+
+                return quiz;
+            })
+        );
+
+        return serializedSuccessResponse(quizList);
+    } catch (error) {
+        console.error("An error occurred while fetching the quiz list.", error);
         return serializedExceptionResponse(error);
     }
 });

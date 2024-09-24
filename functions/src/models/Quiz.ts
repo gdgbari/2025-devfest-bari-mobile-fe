@@ -10,4 +10,5 @@ export interface Quiz {
     isOpen: boolean | null;
     questionList: Question[];
     timerDuration: number;
+    creatorUid: string | null;
 }
