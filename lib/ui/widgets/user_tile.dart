@@ -14,7 +14,7 @@ class UserTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        //color: userProfile.group.colors.secondaryColor,
+        // color: userProfile.group.colors.secondaryColor,
         border: Border.all(
           color: userProfile.group.colors.primaryColor,
         ),
@@ -38,15 +38,23 @@ class UserTile extends StatelessWidget {
             child: Text(
               userProfile.nickname,
               overflow: TextOverflow.ellipsis,
-              softWrap: true,
+              softWrap: false,
               maxLines: 1,
               style: PresetTextStyle.black17w400,
             ),
           ),
           const SizedBox(width: 15),
-          Text(
-            '${userProfile.score} punti',
-            style: PresetTextStyle.black17w400,
+          RichText(
+            text: TextSpan(
+              text: '${userProfile.score}',
+              style: PresetTextStyle.black17w500,
+              children: const <InlineSpan>[
+                TextSpan(
+                  text: ' punti',
+                  style: PresetTextStyle.black17w400,
+                ),
+              ],
+            ),
           ),
         ],
       ),
