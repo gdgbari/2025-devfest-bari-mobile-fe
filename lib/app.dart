@@ -48,6 +48,10 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
     lazy: false,
     create: (context) => QuizCubit(),
   ),
+  BlocProvider<LeaderboardCubit>(
+    lazy: false,
+    create: (context) => LeaderboardCubit(),
+  ),
 ];
 
 void _authListener(

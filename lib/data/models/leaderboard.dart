@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
-
 import 'package:devfest_bari_2024/data.dart';
+import 'package:equatable/equatable.dart';
 
 class Leaderboard extends Equatable {
   final List<UserProfile> users;
@@ -23,13 +22,6 @@ class Leaderboard extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'users': users.map((x) => x.toMap()).toList(),
-      'groups': groups.map((x) => x.toMap()).toList(),
-    };
-  }
-
   factory Leaderboard.fromMap(Map<String, dynamic> map) {
     return Leaderboard(
       users: List<UserProfile>.from(
@@ -44,8 +36,6 @@ class Leaderboard extends Equatable {
       ),
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory Leaderboard.fromJson(String source) =>
       Leaderboard.fromMap(json.decode(source) as Map<String, dynamic>);

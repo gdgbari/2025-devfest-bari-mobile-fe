@@ -42,7 +42,7 @@ class Quiz extends Equatable {
         : 0;
     return Quiz(
       quizId: map['quizId'] as String? ?? '',
-      title: map['quizTitle'] as String? ?? '',
+      title: map['title'] as String? ?? '',
       type: map['type'] as String? ?? '',
       questionList: List<Question>.from(
         List<Map<String, dynamic>>.from(

@@ -10,6 +10,8 @@ import {
     getQuiz,
     createQuiz,
     submitQuiz,
+    deleteQuiz,
+    getQuizList,
 } from "./functions/quiz";
 
 admin.initializeApp();
@@ -25,4 +27,6 @@ export {
     getQuiz,
     createQuiz,
     submitQuiz,
+    deleteQuiz,
+    getQuizList,
 };

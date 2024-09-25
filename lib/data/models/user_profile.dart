@@ -46,19 +46,6 @@ class UserProfile extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'userId': userId,
-      'nickname': nickname,
-      'name': name,
-      'surname': surname,
-      'email': email,
-      'group': group.toMap(),
-      'position': position,
-      'score': score,
-    };
-  }
-
   factory UserProfile.fromMap(Map<String, dynamic> map) {
     return UserProfile(
       userId: map['userId'] as String? ?? '',
@@ -71,8 +58,6 @@ class UserProfile extends Equatable {
       score: map['score'] as int? ?? 0,
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory UserProfile.fromJson(String source) =>
       UserProfile.fromMap(json.decode(source) as Map<String, dynamic>);
