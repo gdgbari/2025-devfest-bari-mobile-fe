@@ -8,3 +8,4 @@ export 'models/server_response.dart';
 export 'models/sponsor.dart';
 export 'models/talk.dart';
 export 'models/user_profile.dart';
+export 'models/leaderboard.dart';
