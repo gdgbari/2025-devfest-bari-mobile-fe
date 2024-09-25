@@ -1,3 +1,4 @@
+import 'package:devfest_bari_2024/data.dart';
 import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
