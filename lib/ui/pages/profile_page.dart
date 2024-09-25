@@ -23,18 +23,9 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         UserInfo(userProfile: state.userProfile),
-                        const SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {
-                            context.read<AuthenticationCubit>().signOut();
-                          },
-                          child: Text(
-                            'ESCI',
-                            style: PresetTextStyle.black15w700.copyWith(
-                              color: ColorPalette.coreRed,
-                            ),
-                          ),
-                        ),
+                        const Expanded(child: SizedBox()),
+                        const SocialInfo(),
+                        const SizedBox(height: 40),
                       ],
                     ),
                   ),

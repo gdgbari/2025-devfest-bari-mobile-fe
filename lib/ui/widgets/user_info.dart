@@ -1,5 +1,5 @@
 import 'package:devfest_bari_2024/data.dart';
-import 'package:devfest_bari_2024/ui/theme/preset_text_style.dart';
+import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 
 class UserInfo extends StatelessWidget {
@@ -12,6 +12,11 @@ class UserInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Text(
+          userProfile.nickname,
+          style: PresetTextStyle.black23w500,
+        ),
+        const SizedBox(height: 10),
         Text(
           '${userProfile.name} ${userProfile.surname}',
           style: PresetTextStyle.black15w400,

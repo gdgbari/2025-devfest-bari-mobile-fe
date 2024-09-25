@@ -1,5 +1,7 @@
+import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class NavigationBarPage extends StatelessWidget {
@@ -20,6 +22,18 @@ class NavigationBarPage extends StatelessWidget {
           style: PresetTextStyle.white21w500,
         ),
         centerTitle: true,
+        actions: <Widget>[
+          Visibility(
+            visible: navigationShell.currentIndex == 1,
+            child: IconButton(
+              onPressed: () => context.read<AuthenticationCubit>().signOut(),
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: navigationShell,
       floatingActionButton: FloatingActionButton(
