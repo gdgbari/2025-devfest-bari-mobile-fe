@@ -24,6 +24,9 @@ export async function parseGroupRef(
         groupId: groupDoc.id,
         name: groupData.name,
         imageUrl: groupData.imageUrl,
+        color: groupData.color,
+        position: null,
+        score: groupData.score,
     };
 
     return successResponse(group);

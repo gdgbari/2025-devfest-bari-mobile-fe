@@ -1,6 +1,7 @@
-import {LeaderboardEntry} from "@modelsLeaderboardEntry";
+import {UserProfile} from "@modelsUserProfile";
+import {Group} from "@modelsGroup";
 
 export interface Leaderboard {
-    name: string | null;
-    entries: Set<LeaderboardEntry>;
+    users: Array<UserProfile>;
+    groups: Array<Group>;
 }

@@ -75,10 +75,14 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
 
         const userProfile: UserProfile = {
             userId: userDoc.id,
+            nickname: userData.nickname,
             email: userData.email,
             name: userData.name,
             surname: userData.surname,
             group: group,
+            groupId: group ? group.groupId : null,
+            position: null,
+            score: userData.score,
         };
 
         return serializedSuccessResponse(userProfile);
