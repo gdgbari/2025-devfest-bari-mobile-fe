@@ -11,7 +11,7 @@ class SocialInfo extends StatelessWidget {
       children: <Widget>[
         Text(
           'Follow us on our social media',
-          style: PresetTextStyle.black23w500,
+          style: PresetTextStyle.black21w500,
         ),
         SizedBox(height: 20),
         Row(
