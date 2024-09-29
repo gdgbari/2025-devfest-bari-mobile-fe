@@ -109,7 +109,7 @@ class QuizPage extends StatelessWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
-                            'INDIETRO',
+                            'BACK',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -133,7 +133,7 @@ class QuizPage extends StatelessWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
-                            'AVANTI',
+                            'NEXT',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -165,7 +165,7 @@ void _quizListener(
         builder: (_) => QuizResultsDialog(
           onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
           content: Text(
-            'Punteggio: ${state.results.score}/${state.results.maxScore}',
+            'Score: ${state.results.score}/${state.results.maxScore}',
           ),
         ),
       );

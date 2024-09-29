@@ -10,7 +10,7 @@ class SocialInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
-          'Seguici sui social',
+          'Follow us on our social media',
           style: PresetTextStyle.black23w500,
         ),
         SizedBox(height: 20),

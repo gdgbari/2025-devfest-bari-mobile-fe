@@ -27,7 +27,7 @@ class CustomSegmentedButton extends StatelessWidget {
             height: 35,
             child: Center(
               child: Text(
-                'Utenti',
+                'Users',
                 style: index == 0
                     ? PresetTextStyle.white15w500
                     : PresetTextStyle.black15w400,
@@ -38,7 +38,7 @@ class CustomSegmentedButton extends StatelessWidget {
             height: 35,
             child: Center(
               child: Text(
-                'Squadre',
+                'Teams',
                 style: index == 1
                     ? PresetTextStyle.white15w500
                     : PresetTextStyle.black15w400,

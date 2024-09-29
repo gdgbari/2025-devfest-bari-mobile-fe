@@ -29,7 +29,7 @@ class AuthenticationErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'ERRORE',
+        'ERROR',
         style: PresetTextStyle.black23w500.copyWith(
           color: ColorPalette.coreRed,
         ),

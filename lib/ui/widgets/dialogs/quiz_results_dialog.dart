@@ -14,9 +14,9 @@ class QuizResultsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('RISULTATI'),
+      title: const Text('SCORE'),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height / 8,
+        height: MediaQuery.of(context).size.height / 10,
         width: MediaQuery.of(context).size.width - 40,
         child: content,
       ),
@@ -24,7 +24,7 @@ class QuizResultsDialog extends StatelessWidget {
         TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: ColorPalette.black,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           child: const SizedBox(

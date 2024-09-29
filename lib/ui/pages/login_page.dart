@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ColorPalette.black,
         title: const Text(
-          'Accedi con Email',
+          'Sign in with Email',
           style: PresetTextStyle.white21w500,
         ),
         centerTitle: true,
@@ -69,7 +69,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    'ACCEDI',
+                    'SIGN IN',
                     style: PresetTextStyle.white19w400,
                   ),
                 ),

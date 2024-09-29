@@ -21,7 +21,7 @@ class SignUpPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ColorPalette.black,
         title: const Text(
-          'Registrazione',
+          'Sign up',
           style: PresetTextStyle.white21w500,
         ),
         centerTitle: true,
@@ -40,7 +40,7 @@ class SignUpPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               const Text(
-                'Unisciti alla DevFest Bari 2024!',
+                'Join us at DevFest Bari 2024!',
                 style: PresetTextStyle.black19w500,
               ),
               const SizedBox(height: 20),
@@ -51,13 +51,13 @@ class SignUpPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               CustomTextField(
-                hint: 'Nome',
+                hint: 'Name',
                 controller: nameController,
                 keyboardType: TextInputType.name,
               ),
               const SizedBox(height: 10),
               CustomTextField(
-                hint: 'Cognome',
+                hint: 'Surname',
                 controller: surnameController,
                 keyboardType: TextInputType.name,
               ),
@@ -98,7 +98,7 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    'ISCRIVITI',
+                    'SIGN UP',
                     style: PresetTextStyle.white21w400,
                   ),
                 ),
@@ -106,11 +106,11 @@ class SignUpPage extends StatelessWidget {
               const SizedBox(height: 20),
               RichText(
                 text: TextSpan(
-                  text: 'Hai già un account? ',
+                  text: 'Already have an account? ',
                   style: PresetTextStyle.black17w400,
                   children: <InlineSpan>[
                     TextSpan(
-                      text: 'Accedi',
+                      text: 'Sign in',
                       style: const TextStyle(
                         color: ColorPalette.coreRed,
                         fontWeight: FontWeight.w500,

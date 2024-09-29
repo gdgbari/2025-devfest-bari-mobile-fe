@@ -58,7 +58,7 @@ class NavigationBarPage extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profilo',
+            label: 'Profile',
           ),
         ],
         currentIndex: navigationShell.currentIndex,

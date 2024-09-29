@@ -40,7 +40,7 @@ class OAuthButton extends StatelessWidget {
             const SizedBox(width: 30),
             Expanded(
               child: Text(
-                'Accedi con ${method.capitalize()}',
+                'Sign in with ${method.capitalize()}',
                 style: PresetTextStyle.white19w400,
               ),
             ),

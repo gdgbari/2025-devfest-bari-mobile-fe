@@ -34,16 +34,17 @@ class WelcomePage extends StatelessWidget {
                 method: 'email',
                 onPressed: () => context.pushNamed(RouteNames.signUpRoute.name),
               ),
-              const SizedBox(height: 10),
-              OAuthButton(
-                method: 'google',
-                onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
-              ),
-              const SizedBox(height: 10),
-              OAuthButton(
-                method: 'apple',
-                onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
-              ),
+              // TODO: future implementation
+              // const SizedBox(height: 10),
+              // OAuthButton(
+              //   method: 'google',
+              //   onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
+              // ),
+              // const SizedBox(height: 10),
+              // OAuthButton(
+              //   method: 'apple',
+              //   onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
+              // ),
             ],
           ),
         ),

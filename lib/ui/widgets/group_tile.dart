@@ -37,11 +37,11 @@ class GroupTile extends StatelessWidget {
         const SizedBox(height: 10),
         RichText(
           text: TextSpan(
-            text: 'Team ${group.name}',
+            text: 'Team ${group.name.capitalize()}',
             style: PresetTextStyle.black17w700,
             children: <InlineSpan>[
               TextSpan(
-                text: ': ${group.score} punti',
+                text: ': ${group.score} points',
                 style: PresetTextStyle.black17w400,
               ),
             ],
