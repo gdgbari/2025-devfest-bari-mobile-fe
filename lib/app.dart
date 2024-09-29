@@ -23,7 +23,6 @@ class App extends StatelessWidget {
           return BlocListener<AuthenticationCubit, AuthenticationState>(
             listener: _authListener,
             child: LoaderOverlay(
-              useDefaultLoading: false,
               overlayColor: Colors.black.withOpacity(.4),
               overlayWidgetBuilder: (_) {
                 return const Center(
@@ -82,16 +81,16 @@ void _authListener(
       String errorMessage = '';
       switch (state.error) {
         case AuthenticationError.invalidCredentials:
-          errorMessage = 'Credenziali errate';
+          errorMessage = 'Invalid credentials';
           break;
         case AuthenticationError.userNotFound:
-          errorMessage = 'Utente non trovato';
+          errorMessage = 'User not found';
           break;
         case AuthenticationError.missingUserData:
-          errorMessage = 'Dati utente mancanti';
+          errorMessage = 'Missing user data';
           break;
         case AuthenticationError.unknown:
-          errorMessage = 'Errore sconosciuto';
+          errorMessage = 'Unknown error';
           break;
         default:
           break;
