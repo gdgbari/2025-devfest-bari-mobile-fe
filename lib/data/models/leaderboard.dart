@@ -4,19 +4,23 @@ import 'package:devfest_bari_2024/data.dart';
 import 'package:equatable/equatable.dart';
 
 class Leaderboard extends Equatable {
+  final LeaderboardUser currentUser;
   final List<LeaderboardUser> users;
   final List<Group> groups;
 
   const Leaderboard({
+    this.currentUser = const LeaderboardUser(),
     this.users = const [],
     this.groups = const [],
   });
 
   Leaderboard copyWith({
+    LeaderboardUser? currentUser,
     List<LeaderboardUser>? users,
     List<Group>? groups,
   }) {
     return Leaderboard(
+      currentUser: currentUser ?? this.currentUser,
       users: users ?? this.users,
       groups: groups ?? this.groups,
     );
@@ -24,6 +28,9 @@ class Leaderboard extends Equatable {
 
   factory Leaderboard.fromMap(Map<String, dynamic> map) {
     return Leaderboard(
+      currentUser: LeaderboardUser.fromMap(
+        (map['currentUser'] ?? {}) as Map<String, dynamic>,
+      ),
       users: List<LeaderboardUser>.from(
         (map['users'] ?? [] as List<Map<String, dynamic>>).map<LeaderboardUser>(
           (x) => LeaderboardUser.fromMap(x),
@@ -44,5 +51,5 @@ class Leaderboard extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [users, groups];
+  List<Object> get props => [currentUser, users, groups];
 }
