@@ -4,10 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:devfest_bari_2024/app.dart';
 import 'package:devfest_bari_2024/firebase_options.dart';
 import 'package:devfest_bari_2024/logic.dart';
+import 'package:devfest_bari_2024/ui.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_svg/svg.dart';
 
 void main() async {
   runZonedGuarded(
@@ -30,7 +32,8 @@ Future<void> _initialization() async {
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.white,
+      systemNavigationBarColor: ColorPalette.white,
+      systemNavigationBarDividerColor: ColorPalette.transparent,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
@@ -43,4 +46,22 @@ Future<void> _initialization() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await _precacheAllSvg();
+}
+
+Future<void> _precacheAllSvg() async {
+  await _precacheSvg('assets/images/devfest_logo.svg');
+  await _precacheSvg('assets/images/qr_marker.svg');
+  await _precacheSvg('assets/images/icons/email.svg');
+  await _precacheSvg('assets/images/icons/google.svg');
+  await _precacheSvg('assets/images/icons/apple.svg');
+  await _precacheSvg('assets/images/icons/instagram_logo.svg');
+  await _precacheSvg('assets/images/icons/linkedin_logo.svg');
+  await _precacheSvg('assets/images/icons/x_logo.svg');
+}
+
+Future<void> _precacheSvg(String path) async {
+  final loader = SvgAssetLoader(path);
+  svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
 }
