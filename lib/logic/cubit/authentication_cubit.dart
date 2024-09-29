@@ -27,6 +27,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> signUp({
+    required String nickname,
     required String name,
     required String surname,
     required String email,
@@ -47,6 +48,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       _checkEmail(email);
 
       await _authRepo.signUp(
+        nickname: nickname,
         name: name,
         surname: surname,
         email: email,

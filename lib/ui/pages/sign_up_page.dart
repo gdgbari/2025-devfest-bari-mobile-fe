@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpPage extends StatelessWidget {
+  final nicknameController = TextEditingController();
   final nameController = TextEditingController();
   final surnameController = TextEditingController();
   final emailTextController = TextEditingController();
@@ -44,6 +45,12 @@ class SignUpPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               CustomTextField(
+                hint: 'Nickname',
+                controller: nicknameController,
+                keyboardType: TextInputType.text,
+              ),
+              const SizedBox(height: 10),
+              CustomTextField(
                 hint: 'Nome',
                 controller: nameController,
                 keyboardType: TextInputType.name,
@@ -74,16 +81,12 @@ class SignUpPage extends StatelessWidget {
                   onPressed: () {
                     FocusManager.instance.primaryFocus?.unfocus();
 
-                    final name = nameController.text;
-                    final surname = surnameController.text;
-                    final email = emailTextController.text;
-                    final password = passwordTextController.text;
-
                     context.read<AuthenticationCubit>().signUp(
-                          name: name,
-                          surname: surname,
-                          email: email,
-                          password: password,
+                          nickname: nicknameController.text,
+                          name: nameController.text,
+                          surname: surnameController.text,
+                          email: emailTextController.text,
+                          password: passwordTextController.text,
                         );
                   },
                   style: TextButton.styleFrom(

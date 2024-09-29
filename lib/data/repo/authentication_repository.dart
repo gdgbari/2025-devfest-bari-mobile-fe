@@ -37,12 +37,14 @@ class AuthenticationRepository {
   }
 
   Future<void> signUp({
+    required String nickname,
     required String name,
     required String surname,
     required String email,
     required String password,
   }) async {
     final response = await _authApi.signUp(
+      nickname: nickname,
       name: name,
       surname: surname,
       email: email,
