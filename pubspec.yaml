@@ -18,12 +18,17 @@ dependencies:
   firebase_auth: ^5.1.2
   cloud_functions: ^5.0.3
   loader_overlay: ^4.0.1
-  mobile_scanner: ^5.1.1
+  mobile_scanner: ^5.2.3
   flutter_svg: ^2.0.10+1
   url_launcher: ^6.3.0
+  cached_network_image: ^3.4.1
+
+dependency_overrides:
+  firebase_core: "2.32.0"
+  cloud_functions: "4.7.6"
 
 dev_dependencies:
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter_native_splash:
   fullscreen: false
