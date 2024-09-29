@@ -61,18 +61,16 @@ class UserLeaderboard extends StatelessWidget {
     return ListView(
       children: const <Widget>[
         Text(
-          'Il tuo punteggio',
+          'Your score',
           style: PresetTextStyle.black23w500,
         ),
         SizedBox(height: 10),
         UserTile(
-          userProfile: UserProfile(
+          user: LeaderboardUser(
             nickname: 'pippobaudo555',
-            group: Group(
-              colors: GroupColors.red,
-            ),
             position: 13,
             score: 100,
+            groupColor: ColorPalette.coreRed,
           ),
         ),
         SizedBox(height: 20),
@@ -82,57 +80,46 @@ class UserLeaderboard extends StatelessWidget {
         ),
         SizedBox(height: 10),
         UserTile(
-          userProfile: UserProfile(
+          user: LeaderboardUser(
             nickname: 'pippobaudo123',
-            group: Group(
-              colors: GroupColors.green,
-            ),
             position: 1,
             score: 344,
+            groupColor: ColorPalette.coreGreen,
           ),
         ),
         SizedBox(height: 10),
         UserTile(
-          userProfile: UserProfile(
+          user: LeaderboardUser(
             nickname: 'pippobaudo321',
-            group: Group(
-              colors: GroupColors.yellow,
-            ),
             position: 2,
             score: 286,
+            groupColor: ColorPalette.coreYellow,
           ),
         ),
         SizedBox(height: 10),
         UserTile(
-          userProfile: UserProfile(
-            nickname: 'pippobaudo000',
-            group: Group(
-              colors: GroupColors.blue,
-            ),
-            position: 3,
-            score: 254,
-          ),
+          user: LeaderboardUser(
+              nickname: 'pippobaudo000',
+              position: 3,
+              score: 254,
+              groupColor: ColorPalette.coreBlue),
         ),
         SizedBox(height: 10),
         UserTile(
-          userProfile: UserProfile(
+          user: LeaderboardUser(
             nickname: 'pippobaudo777',
-            group: Group(
-              colors: GroupColors.red,
-            ),
             position: 4,
             score: 191,
+            groupColor: ColorPalette.coreRed,
           ),
         ),
         SizedBox(height: 10),
         UserTile(
-          userProfile: UserProfile(
+          user: LeaderboardUser(
             nickname: 'pippobaudo888',
-            group: Group(
-              colors: GroupColors.yellow,
-            ),
             position: 5,
             score: 155,
+            groupColor: ColorPalette.coreYellow,
           ),
         ),
       ],
@@ -149,7 +136,7 @@ class TeamLeaderboard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Classifica generale',
+          'Team rankings',
           style: PresetTextStyle.black23w500,
         ),
         SizedBox(height: 10),

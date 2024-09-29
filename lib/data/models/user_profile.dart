@@ -10,7 +10,6 @@ class UserProfile extends Equatable {
   final String surname;
   final String email;
   final Group group;
-  final int position;
   final int score;
 
   const UserProfile({
@@ -20,7 +19,6 @@ class UserProfile extends Equatable {
     this.surname = '',
     this.email = '',
     this.group = const Group(),
-    this.position = 0,
     this.score = 0,
   });
 
@@ -31,7 +29,6 @@ class UserProfile extends Equatable {
     String? surname,
     String? email,
     Group? group,
-    int? position,
     int? score,
   }) {
     return UserProfile(
@@ -41,7 +38,6 @@ class UserProfile extends Equatable {
       surname: surname ?? this.surname,
       email: email ?? this.email,
       group: group ?? this.group,
-      position: position ?? this.position,
       score: score ?? this.score,
     );
   }
@@ -54,7 +50,6 @@ class UserProfile extends Equatable {
       surname: map['surname'] as String? ?? '',
       email: map['email'] as String? ?? '',
       group: Group.fromMap(Map<String, dynamic>.from(map['group'] ?? {})),
-      position: map['position'] as int? ?? 0,
       score: map['score'] as int? ?? 0,
     );
   }
@@ -74,7 +69,6 @@ class UserProfile extends Equatable {
       surname,
       email,
       group,
-      position,
       score,
     ];
   }

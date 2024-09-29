@@ -18,6 +18,10 @@ enum GroupColors {
   yellow(
     primaryColor: ColorPalette.coreYellow,
     secondaryColor: ColorPalette.pastelYellow,
+  ),
+  black(
+    primaryColor: ColorPalette.black,
+    secondaryColor: ColorPalette.gray,
   );
 
   final Color primaryColor;

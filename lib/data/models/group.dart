@@ -44,7 +44,7 @@ class Group extends Equatable {
       name: map['name'] as String? ?? '',
       imageUrl: map['imageUrl'] as String? ?? '',
       colors: GroupColors.values.singleWhere(
-        (element) => element.name == (map['color'] ?? 'red'),
+        (element) => element.name == (map['color'] ?? 'black'),
       ),
       position: map['position'] as int? ?? 0,
       score: map['score'] as int? ?? 0,
