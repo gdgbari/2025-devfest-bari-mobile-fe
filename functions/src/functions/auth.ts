@@ -6,7 +6,6 @@ import * as functions from "firebase-functions";
 import { db } from "../index";
 import { parseGroupRef } from "../utils/firestoreHelpers";
 import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
-import { user } from "firebase-functions/v1/auth";
 
 export const signUp = functions.https.onCall(async (data, context) => {
     const { name, surname, nickname, email, password } = data;
@@ -139,7 +138,9 @@ export const redeemAuthCode = functions.https.onCall(async (data, context) => {
             user: userReference,
         }, { merge: true });
 
-        return serializedSuccessResponse("Code redeemed successfully.");
+        const group = (await parseGroupRef(groupReference)).data;
+
+        return serializedSuccessResponse(group);
     } catch (error) {
         console.error("An error occurred while redeeming the authorization code.", error);
         return serializedExceptionResponse(error);
