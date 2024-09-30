@@ -51,14 +51,19 @@ Future<void> _initialization() async {
 }
 
 Future<void> _precacheAllSvg() async {
-  await _precacheSvg('assets/images/devfest_logo.svg');
-  await _precacheSvg('assets/images/qr_marker.svg');
-  await _precacheSvg('assets/images/icons/email.svg');
-  await _precacheSvg('assets/images/icons/google.svg');
-  await _precacheSvg('assets/images/icons/apple.svg');
-  await _precacheSvg('assets/images/icons/instagram_logo.svg');
-  await _precacheSvg('assets/images/icons/linkedin_logo.svg');
-  await _precacheSvg('assets/images/icons/x_logo.svg');
+  final List<String> imageUrls = [
+    'assets/images/devfest_logo.svg',
+    'assets/images/qr_marker.svg',
+    'assets/images/icons/email.svg',
+    'assets/images/icons/google.svg',
+    'assets/images/icons/apple.svg',
+    'assets/images/icons/instagram_logo.svg',
+    'assets/images/icons/linkedin_logo.svg',
+    'assets/images/icons/x_logo.svg',
+  ];
+  for (var url in imageUrls) {
+    _precacheSvg(url);
+  }
 }
 
 Future<void> _precacheSvg(String path) async {
