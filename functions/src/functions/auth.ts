@@ -6,6 +6,7 @@ import * as functions from "firebase-functions";
 import { db } from "../index";
 import { parseGroupRef } from "../utils/firestoreHelpers";
 import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
+import { user } from "firebase-functions/v1/auth";
 
 export const signUp = functions.https.onCall(async (data, context) => {
     const { name, surname, nickname, email, password } = data;
@@ -93,6 +94,54 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
         return serializedSuccessResponse(userProfile);
     } catch (error) {
         console.error("An error occurred while fetching the user profile.", error);
+        return serializedExceptionResponse(error);
+    }
+});
+
+export const redeemAuthCode = functions.https.onCall(async (data, context) => {
+    const { code } = data;
+
+    if (!context.auth?.uid) {
+        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
+    }
+
+    if (!code.startsWith("checkin:")) {
+        return serializedErrorResponse("invalid-code", "The code is not a valid check-in code.");
+    }
+
+    try {
+        const codeParts = code.split(":");
+        const codeId = codeParts[codeParts.length - 1];
+        const authCodeDoc = await db.collection("authorizationCodes").doc(codeId).get();
+
+        if (!authCodeDoc.exists) {
+            return serializedErrorResponse("code-not-found", "The authorization code does not exist.");
+        }
+
+        const authCodeData = authCodeDoc.data();
+        const userReference = db.collection("users").doc(context.auth.uid);
+
+        if (authCodeData?.expired) {
+            if (authCodeData?.user?.path === userReference.path) {
+                return serializedSuccessResponse("Code already redeemed by this user.");
+            }
+            return serializedErrorResponse("code-expired", "The authorization code has expired.");
+        }
+
+        const groupReference = db.collection("groups").doc(authCodeData?.group.split("groups/")[1]);
+
+        await db.collection("users").doc(context.auth.uid).set({
+            group: groupReference
+        }, { merge: true });
+
+        await db.collection("authorizationCodes").doc(codeId).set({
+            expired: true
+            , user: userReference
+        }, { merge: true });
+
+        return serializedSuccessResponse("Code redeemed successfully.");
+    } catch (error) {
+        console.error("An error occurred while redeeming the authorization code.", error);
         return serializedExceptionResponse(error);
     }
 });
