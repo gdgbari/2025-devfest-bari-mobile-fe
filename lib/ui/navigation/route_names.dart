@@ -2,6 +2,7 @@ enum RouteNames {
   welcomeRoute(path: '/welcome'),
   loginRoute(path: '/welcome/login'),
   signUpRoute(path: '/welcome/sign_up'),
+  checkInRoute(path: '/welcome/check_in'),
   leaderboardRoute(path: '/home/leaderboard'),
   profileRoute(path: '/home/profile'),
   qrCodeRoute(path: '/home/qr_code'),

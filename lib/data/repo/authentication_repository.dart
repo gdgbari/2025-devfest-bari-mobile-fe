@@ -61,6 +61,20 @@ class AuthenticationRepository {
     }
   }
 
+  Future<Group> checkIn(String authorizationCode) async {
+    final response = await _authApi.checkIn(authorizationCode);
+
+    if (response.error.code.isNotEmpty) {
+      switch (response.error.code) {
+        // TODO: handle errors
+        default:
+          throw UnknownAuthenticationError();
+      }
+    }
+
+    return Group.fromJson(response.data);
+  }
+
   Future<UserProfile> signInWithEmailAndPassword({
     required String email,
     required String password,

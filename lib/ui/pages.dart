@@ -1,3 +1,4 @@
+export 'pages/check_in_page.dart';
 export 'pages/leaderboard_page.dart';
 export 'pages/login_page.dart';
 export 'pages/navigation_bar_page.dart';

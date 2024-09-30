@@ -14,13 +14,23 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> _getInitialAuthState() async {
     final user = await _authRepo.getInitialAuthState();
     if (user.userId.isNotEmpty) {
-      emit(
-        state.copyWith(
-          userProfile: user,
-          status: AuthenticationStatus.authenticationSuccess,
-          isAuthenticated: true,
-        ),
-      );
+      if (user.group.groupId.isEmpty) {
+        emit(
+          state.copyWith(
+            userProfile: user,
+            status: AuthenticationStatus.checkInRequired,
+            isAuthenticated: true,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            userProfile: user,
+            status: AuthenticationStatus.authenticationSuccess,
+            isAuthenticated: true,
+          ),
+        );
+      }
     } else {
       emit(state.copyWith(status: AuthenticationStatus.initialAuthFailure));
     }
@@ -84,6 +94,30 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     if (!check) throw Exception();
   }
 
+  Future<void> checkIn(String authorizationCode) async {
+    emit(state.copyWith(status: AuthenticationStatus.checkInInProgress));
+
+    try {
+      final group = await _authRepo.checkIn(authorizationCode);
+
+      emit(
+        state.copyWith(
+          userProfile: state.userProfile.copyWith(
+            group: group,
+          ),
+          status: AuthenticationStatus.checkInSuccess,
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.checkInFailure,
+        ),
+      );
+    }
+  }
+
   Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
@@ -103,13 +137,23 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         password: password,
       );
 
-      emit(
-        state.copyWith(
-          userProfile: user,
-          status: AuthenticationStatus.authenticationSuccess,
-          isAuthenticated: true,
-        ),
-      );
+      if (user.group.groupId.isEmpty) {
+        emit(
+          state.copyWith(
+            userProfile: user,
+            status: AuthenticationStatus.checkInRequired,
+            isAuthenticated: true,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            userProfile: user,
+            status: AuthenticationStatus.authenticationSuccess,
+            isAuthenticated: true,
+          ),
+        );
+      }
     } on UserNotFoundError {
       emit(
         state.copyWith(

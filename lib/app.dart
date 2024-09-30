@@ -63,16 +63,27 @@ void _authListener(
       FlutterNativeSplash.remove();
       break;
     case AuthenticationStatus.signUpInProgress:
+    case AuthenticationStatus.checkInInProgress:
     case AuthenticationStatus.authenticationInProgress:
     case AuthenticationStatus.signOutInProgress:
       context.loaderOverlay.show();
       break;
+    case AuthenticationStatus.checkInRequired:
+      context.loaderOverlay.hide();
+      appRouter.goNamed(RouteNames.checkInRoute.name);
+      FlutterNativeSplash.remove();
+      break;
+    case AuthenticationStatus.checkInSuccess:
     case AuthenticationStatus.authenticationSuccess:
       context.loaderOverlay.hide();
       appRouter.goNamed(RouteNames.leaderboardRoute.name);
       FlutterNativeSplash.remove();
       break;
     case AuthenticationStatus.signUpFailure:
+      context.loaderOverlay.hide();
+      // TODO: implement error message
+      break;
+    case AuthenticationStatus.checkInFailure:
       context.loaderOverlay.hide();
       // TODO: implement error message
       break;

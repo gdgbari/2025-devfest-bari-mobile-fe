@@ -42,6 +42,16 @@ class AuthenticationApi {
     return ServerResponse.fromJson(result.data);
   }
 
+  Future<ServerResponse> checkIn(String authorizationCode) async {
+    final body = {'code': authorizationCode};
+
+    final result = await FirebaseFunctions.instance
+        .httpsCallable('redeemAuthCode')
+        .call<String>(body);
+
+    return ServerResponse.fromJson(result.data);
+  }
+
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,
