@@ -128,15 +128,15 @@ export const redeemAuthCode = functions.https.onCall(async (data, context) => {
             return serializedErrorResponse("code-expired", "The authorization code has expired.");
         }
 
-        const groupReference = db.collection("groups").doc(authCodeData?.group.split("groups/")[1]);
+        const groupReference = authCodeData?.group;
 
         await db.collection("users").doc(context.auth.uid).set({
-            group: groupReference
+            group: groupReference,
         }, { merge: true });
 
         await db.collection("authorizationCodes").doc(codeId).set({
-            expired: true
-            , user: userReference
+            expired: true,
+            user: userReference,
         }, { merge: true });
 
         return serializedSuccessResponse("Code redeemed successfully.");
