@@ -8,7 +8,7 @@ import { parseGroupRef } from "../utils/firestoreHelpers";
 import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
 
 export const signUp = functions.https.onCall(async (data, context) => {
-    const { name, surname, email, password } = data;
+    const { name, surname, nickname, email, password } = data;
 
     try {
         const userRecord = await getAuth()
@@ -34,6 +34,10 @@ export const signUp = functions.https.onCall(async (data, context) => {
             name: name,
             surname: surname,
             email: email,
+            nickname: nickname,
+            group: null,
+            role: "attendee",
+            score: 0
         });
 
         return serializedSuccessResponse(uid);

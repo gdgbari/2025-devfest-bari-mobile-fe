@@ -10,4 +10,5 @@ export interface UserProfile {
     group: Group | null;
     position: number | null;
     score: number | null;
+    role: string | null;
 }
