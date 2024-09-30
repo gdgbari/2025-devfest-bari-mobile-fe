@@ -37,6 +37,7 @@ export const getLeaderboard = functions.https.onCall(async (_, context) => {
                         group: null,
                         position: null,
                         score: userData.score,
+                        role: null
                     }
 
                     return leaderboardUserEntry;
