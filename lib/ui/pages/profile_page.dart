@@ -39,6 +39,7 @@ class ProfilePage extends StatelessWidget {
                               decoration: const PrettyQrDecoration(
                                 shape: PrettyQrSmoothSymbol(
                                   color: ColorPalette.black,
+                                  roundFactor: 0,
                                 ),
                                 image: PrettyQrDecorationImage(
                                   image: AssetImage('assets/images/user.png'),
