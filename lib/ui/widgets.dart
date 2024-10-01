@@ -11,4 +11,6 @@ export 'widgets/qr_code_background.dart';
 export 'widgets/social_info.dart';
 export 'widgets/social_media_button.dart';
 export 'widgets/user_info.dart';
+export 'widgets/user_qr_code.dart';
 export 'widgets/user_tile.dart';
+export 'widgets/zoom_qr_code.dart';

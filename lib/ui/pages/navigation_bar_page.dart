@@ -40,6 +40,7 @@ class NavigationBarPage extends StatelessWidget {
         onPressed: () => context.pushNamed(RouteNames.qrCodeRoute.name),
         elevation: 1,
         backgroundColor: ColorPalette.coreRed,
+        splashColor: ColorPalette.pastelRed,
         shape: const CircleBorder(),
         child: const Icon(
           Icons.photo_camera_outlined,
