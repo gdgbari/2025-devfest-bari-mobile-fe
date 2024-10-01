@@ -22,6 +22,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   url_launcher: ^6.3.0
   cached_network_image: ^3.4.1
+  pretty_qr_code: ^3.3.0
 
 dependency_overrides:
   firebase_core: "2.32.0"
