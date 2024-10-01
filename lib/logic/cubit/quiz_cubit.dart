@@ -15,6 +15,8 @@ class QuizCubit extends Cubit<QuizState> {
   void resetQuiz() => emit(const QuizState());
 
   void startTimer() {
+    emit(state.copyWith(status: QuizStatus.timerInProgress));
+    stopTimer();
     Duration duration = state.quiz.timerDuration;
     _timer = Timer.periodic(
       const Duration(seconds: 1),

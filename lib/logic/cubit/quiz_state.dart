@@ -10,6 +10,7 @@ enum QuizStatus {
   submissionInProgress,
   submissionSuccess,
   submissionFailure,
+  timerInProgress,
   timerExpired,
 }
 
