@@ -31,25 +31,9 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         UserInfo(userProfile: state.userProfile),
-                        SizedBox(height: 40),
-                        Expanded(
-                          child: Center(
-                            child: PrettyQrView(
-                              qrImage: qrImage,
-                              decoration: const PrettyQrDecoration(
-                                shape: PrettyQrSmoothSymbol(
-                                  color: ColorPalette.black,
-                                  roundFactor: 0,
-                                ),
-                                image: PrettyQrDecorationImage(
-                                  image: AssetImage('assets/images/user.png'),
-                                  scale: 0.3,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 20),
+                        UserQrCode(qrImage: qrImage),
+                        Expanded(child: SizedBox()),
                         const SocialInfo(),
                         const SizedBox(height: 40),
                       ],
