@@ -6,6 +6,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
+  observers: [RouterObserver()],
   navigatorKey: _rootNavigatorKey,
   initialLocation: RouteNames.welcomeRoute.path,
   routes: <RouteBase>[
@@ -35,6 +36,7 @@ final appRouter = GoRouter(
       },
       branches: <StatefulShellBranch>[
         StatefulShellBranch(
+          observers: [RouterObserver()],
           navigatorKey: _shellNavigatorKey,
           initialLocation: RouteNames.leaderboardRoute.path,
           routes: <RouteBase>[
@@ -46,6 +48,7 @@ final appRouter = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          observers: [RouterObserver()],
           routes: <RouteBase>[
             GoRoute(
               name: RouteNames.profileRoute.name,
