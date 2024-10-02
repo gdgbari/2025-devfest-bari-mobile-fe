@@ -154,8 +154,6 @@ async function _refreshLeaderboard() {
                     }
                 });
 
-            functions.logger.log("Updating user ", userDoc.id, " with score ", userAcc);
-
             await userRef.update({
                 score: userAcc
             });
@@ -163,8 +161,6 @@ async function _refreshLeaderboard() {
 
 
         for (const groupDoc of groupsSnapshot.docs) {
-            functions.logger.log("Updating group ", groupDoc.id, " with score ", groupsScore[groupDoc.id] || 0);
-
             await groupsCollection.doc(groupDoc.id).update({
                 score: groupsScore[groupDoc.id] || 0,
             });
