@@ -29,15 +29,15 @@ class Leaderboard extends Equatable {
   factory Leaderboard.fromMap(Map<String, dynamic> map) {
     return Leaderboard(
       currentUser: LeaderboardUser.fromMap(
-        (map['currentUser'] ?? {}) as Map<String, dynamic>,
+        Map<String, dynamic>.from(map['currentUser'] ?? {}),
       ),
       users: List<LeaderboardUser>.from(
-        (map['users'] ?? [] as List<Map<String, dynamic>>).map<LeaderboardUser>(
+        List<Map<String, dynamic>>.from(map['users'] ?? []).map(
           (x) => LeaderboardUser.fromMap(x),
         ),
       ),
       groups: List<Group>.from(
-        (map['groups'] ?? [] as List<Map<String, dynamic>>).map<Group>(
+        List<Map<String, dynamic>>.from(map['groups'] ?? []).map(
           (x) => Group.fromMap(x),
         ),
       ),

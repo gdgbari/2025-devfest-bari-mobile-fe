@@ -33,7 +33,7 @@ class LeaderboardUser extends Equatable {
 
   factory LeaderboardUser.fromMap(Map<String, dynamic> map) {
     final groupColors = GroupColors.values.singleWhere(
-      (element) => element.name == (map['color'] ?? 'black'),
+      (element) => element.name == (map['groupColor'] ?? 'black'),
     );
     return LeaderboardUser(
       nickname: map['nickname'] as String? ?? '',

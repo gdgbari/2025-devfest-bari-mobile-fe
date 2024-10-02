@@ -15,7 +15,8 @@ class GroupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseWidth = MediaQuery.of(context).size.width - 40;
-    final width = (baseWidth * group.score) / maxScore;
+    final width =
+        maxScore != 0 ? (baseWidth * group.score) / maxScore : baseWidth;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +25,7 @@ class GroupTile extends StatelessWidget {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             color: group.colors.primaryColor,
-            width: width,
+            width: width.toDouble(),
             child: Center(
               child: Text(
                 '${group.position}°',

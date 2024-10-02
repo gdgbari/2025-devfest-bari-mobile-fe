@@ -76,6 +76,7 @@ void _authListener(
     case AuthenticationStatus.checkInSuccess:
     case AuthenticationStatus.authenticationSuccess:
       context.loaderOverlay.hide();
+      context.read<LeaderboardCubit>().getLeaderboard();
       appRouter.goNamed(RouteNames.leaderboardRoute.name);
       FlutterNativeSplash.remove();
       break;
