@@ -121,9 +121,6 @@ export const redeemAuthCode = functions.https.onCall(async (data, context) => {
         const userReference = db.collection("users").doc(context.auth.uid);
 
         if (authCodeData?.expired) {
-            if (authCodeData?.user?.path === userReference.path) {
-                return serializedSuccessResponse("Code already redeemed by this user.");
-            }
             return serializedErrorResponse("code-expired", "The authorization code has expired.");
         }
 

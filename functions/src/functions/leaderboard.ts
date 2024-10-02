@@ -97,7 +97,6 @@ export const getLeaderboard = functions.https.onCall(async (_, context) => {
             group.position = index + 1;
         });
 
-
         let leaderboard = {
             currentUser: currentUser || null,
             users: users,
@@ -117,7 +116,7 @@ async function _refreshLeaderboard() {
 
         const usersSnapshot = await usersCollection.get();
         const groupsSnapshot = await groupsCollection.get();
-        let groupsScore: { [key: string]: number } = {};
+        const groupsScore: { [key: string]: number } = {};
 
         if (!usersSnapshot) {
             return serializedErrorResponse("users-not-found", "No user found.");
@@ -142,15 +141,13 @@ async function _refreshLeaderboard() {
                         userAcc += quizResult.score;
                     });
 
-                    if (userData.group != null) {
-                        parseGroupRef(userData.group).then((groupResponse: GenericResponse<Group>) => {
-                            const groupData = groupResponse.data as Group;
-                            if (!groupsScore[groupData.groupId]) {
-                                groupsScore[groupData.groupId] = 0;
-                            }
-                            groupsScore[groupData.groupId] += userAcc || 0;
-                        });
-                    }
+                    parseGroupRef(userData.group).then((groupResponse: GenericResponse<Group>) => {
+                        const groupData = groupResponse.data as Group;
+                        if (!groupsScore[groupData.groupId]) {
+                            groupsScore[groupData.groupId] = 0;
+                        }
+                        groupsScore[groupData.groupId] += userAcc || 0;
+                    });
                 });
 
             await userRef.update({
