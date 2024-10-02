@@ -1,7 +1,8 @@
-import {UserProfile} from "@modelsUserProfile";
 import {Group} from "@modelsGroup";
+import {LeaderboardUserEntry} from "@modelsLeaderboardUserEntry";
 
 export interface Leaderboard {
-    users: Array<UserProfile>;
+    currentUser: LeaderboardUserEntry | null;
+    users: Array<LeaderboardUserEntry>;
     groups: Array<Group>;
 }

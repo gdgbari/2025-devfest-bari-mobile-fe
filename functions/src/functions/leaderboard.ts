@@ -1,19 +1,35 @@
 import * as functions from "firebase-functions";
-import {serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse} from "../utils/responseHelper";
+import {serializedErrorResponse, serializedExceptionResponse} from "../utils/responseHelper";
 import {db} from "../index";
 import {Leaderboard} from "@modelsLeaderboard";
-import {UserProfile} from "@modelsUserProfile";
 import {Group} from "@modelsGroup";
 import {QuizResult} from "@modelsQuizResult";
 import {GenericResponse} from "@modelsresponse/GenericResponse";
 import {parseGroupRef} from "../utils/firestoreHelpers";
+import {LeaderboardUserEntry} from "@modelsLeaderboardUserEntry";
 
 export const getLeaderboard = functions.https.onCall(async (_, context) => {
     try {
-        const leaderboard: Leaderboard = {
-            users: [],
-            groups: [],
-        };
+        if (!context.auth) {
+            return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
+        }
+
+        const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
+        }
+
+        if (userData.role != "staff") {
+            return serializedErrorResponse("permission-denied", "User not authorized.");
+        }
+
         const usersSnapshot = await db.collection("users").get();
 
         if (!usersSnapshot) {
@@ -22,34 +38,34 @@ export const getLeaderboard = functions.https.onCall(async (_, context) => {
 
         const users =
             await Promise.all(
-                usersSnapshot.docs.map(async (userDoc) => {
+                usersSnapshot.docs.filter(userDoc =>
+                    userDoc.data().group != null
+                ).map(async (userDoc) => {
                     const userData = userDoc.data();
+                    const groupColor: string = await parseGroupRef(userData.group)
+                        .then((groupResponse: GenericResponse<Group>) => {
+                            const groupData = groupResponse.data as Group;
+                            return groupData.color;
+                        });
 
-                    const leaderboardUserEntry: UserProfile = {
-                        userId: userDoc.id,
+                    const entry: LeaderboardUserEntry = {
                         nickname: userData.nickname,
-                        name: userData.name,
-                        surname: userData.surname,
-                        email: userData.email,
-                        groupId: userData.groupId,
-                        group: null,
                         position: null,
                         score: userData.score,
-                        role: null
+                        groupColor: groupColor,
                     }
 
-                    return leaderboardUserEntry;
+                    return entry;
                 })
             );
 
+        // Sort users by score and set the position
         users.sort((a, b) => {
-            if (a.score && b.score) {
-                return b.score - a.score;
-            }
-            return 0;
+            return (b.score || 0) - (a.score || 0);
         }).forEach((user, index) => {
             user.position = index + 1;
         });
+        const currentUser = users.find(user => user.nickname === userData.nickname);
 
         const groupsSnapshot = await db.collection("groups").get();
 
@@ -74,19 +90,21 @@ export const getLeaderboard = functions.https.onCall(async (_, context) => {
             })
         );
 
+        // Sort groups by score and set the position
         groups.sort((a, b) => {
-            if (a.score && b.score) {
-                return b.score - a.score;
-            }
-            return 0;
+            return (b.score || 0) - (a.score || 0);
         }).forEach((group, index) => {
             group.position = index + 1;
         });
 
-        users.forEach(user => leaderboard.users.push(user));
-        groups.forEach(group => leaderboard.groups.push(group));
 
-        return serializedSuccessResponse(leaderboard);
+        let leaderboard = {
+            currentUser: currentUser || null,
+            users: users,
+            groups: groups,
+        } as Leaderboard;
+        return leaderboard;
+        // return serializedSuccessResponse(leaderboard);
     } catch (error) {
         console.error("An error occurred while fetching the leaderboard.", error);
         return serializedExceptionResponse(error);
@@ -109,7 +127,9 @@ async function _refreshLeaderboard() {
             return serializedErrorResponse("groups-not-found", "No group found.");
         }
 
-        for (const userDoc of usersSnapshot.docs) {
+        const users = usersSnapshot.docs
+            .filter(userDoc => userDoc.data().group != null);
+        for (const userDoc of users) {
             let userAcc = 0;
             let userRef = usersCollection.doc(userDoc.id);
             const userData = userDoc.data();
