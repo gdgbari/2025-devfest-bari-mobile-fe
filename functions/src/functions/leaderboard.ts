@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import {serializedErrorResponse, serializedExceptionResponse} from "../utils/responseHelper";
+import {serializedSuccessResponse, serializedErrorResponse, serializedExceptionResponse} from "../utils/responseHelper";
 import {db} from "../index";
 import {Leaderboard} from "@modelsLeaderboard";
 import {Group} from "@modelsGroup";
@@ -103,8 +103,7 @@ export const getLeaderboard = functions.https.onCall(async (_, context) => {
             users: users,
             groups: groups,
         } as Leaderboard;
-        return leaderboard;
-        // return serializedSuccessResponse(leaderboard);
+        return serializedSuccessResponse(leaderboard);
     } catch (error) {
         console.error("An error occurred while fetching the leaderboard.", error);
         return serializedExceptionResponse(error);
