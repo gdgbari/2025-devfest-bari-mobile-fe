@@ -60,7 +60,7 @@ void _setSystemUIColor(String? routeName) {
     case 'welcomeRoute':
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
-          systemNavigationBarColor: ColorPalette.white,
+          systemNavigationBarColor: ColorPalette.seaBlue,
         ),
       );
       break;

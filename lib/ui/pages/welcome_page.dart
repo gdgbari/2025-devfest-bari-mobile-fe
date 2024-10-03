@@ -31,7 +31,7 @@ class WelcomePage extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Container(
-                color: Color(0xFF96BCFC),
+                color: ColorPalette.seaBlue,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Center(
                   child: OAuthButton(
@@ -43,7 +43,7 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
             Container(
-              color: Color(0xFF96BCFC),
+              color: ColorPalette.seaBlue,
               height: 20 + MediaQuery.of(context).padding.bottom,
             ),
           ],
