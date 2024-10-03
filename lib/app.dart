@@ -110,7 +110,7 @@ void _authListener(
       }
       final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
       if (ctx != null) {
-        showAuthenticationErrorDialog(ctx, errorMessage);
+        showCustomErrorDialog(ctx, errorMessage);
       }
       break;
     case AuthenticationStatus.checkInFailure:
@@ -133,7 +133,7 @@ void _authListener(
       }
       final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
       if (ctx != null) {
-        showAuthenticationErrorDialog(ctx, errorMessage);
+        showCustomErrorDialog(ctx, errorMessage);
       }
       break;
     case AuthenticationStatus.authenticationFailure:
@@ -154,7 +154,7 @@ void _authListener(
       }
       final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
       if (ctx != null) {
-        showAuthenticationErrorDialog(ctx, errorMessage);
+        showCustomErrorDialog(ctx, errorMessage);
       }
       break;
     case AuthenticationStatus.signOutSuccess:

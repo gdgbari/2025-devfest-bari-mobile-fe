@@ -2,7 +2,7 @@ export 'widgets/answer_list_tile.dart';
 export 'widgets/custom_loader.dart';
 export 'widgets/custom_segmented_button.dart';
 export 'widgets/custom_text_field.dart';
-export 'widgets/dialogs/authentication_error_dialog.dart';
+export 'widgets/dialogs/custom_error_dialog.dart';
 export 'widgets/dialogs/quiz_results_dialog.dart';
 export 'widgets/group_info.dart';
 export 'widgets/group_tile.dart';
