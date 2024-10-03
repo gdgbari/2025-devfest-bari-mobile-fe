@@ -18,7 +18,7 @@ class SocialMediaButton extends StatelessWidget {
       onTap: () => launchUrl(Uri.parse(url)),
       child: SvgPicture.asset(
         'assets/images/icons/${name}_logo.svg',
-        width: 50,
+        width: 40,
       ),
     );
   }

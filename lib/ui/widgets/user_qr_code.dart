@@ -9,13 +9,8 @@ class UserQrCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: <Widget>[
-        Text(
-          'Your QR code',
-          style: PresetTextStyle.black23w500,
-        ),
         SizedBox(
           height: 50,
           width: 50,
@@ -44,6 +39,10 @@ class UserQrCode extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        Text(
+          'Click to expand',
+          style: PresetTextStyle.black15w500,
         ),
       ],
     );

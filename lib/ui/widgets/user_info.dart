@@ -13,7 +13,7 @@ class UserInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          userProfile.nickname,
+          '@${userProfile.nickname}',
           style: PresetTextStyle.black23w500,
         ),
         const SizedBox(height: 10),

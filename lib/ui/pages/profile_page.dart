@@ -31,8 +31,8 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         UserInfo(userProfile: state.userProfile),
-                        SizedBox(height: 20),
-                        UserQrCode(qrImage: qrImage),
+                        Expanded(child: SizedBox()),
+                        Center(child: UserQrCode(qrImage: qrImage)),
                         Expanded(child: SizedBox()),
                         const SocialInfo(),
                         const SizedBox(height: 40),
