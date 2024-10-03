@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:devfest_bari_2024/data.dart';
+import 'package:devfest_bari_2024/logic.dart';
 import 'package:equatable/equatable.dart';
 
 part 'authentication_state.dart';
@@ -53,9 +54,10 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     );
 
     try {
-      _checkEmptyData(name, surname, email, password);
+      _checkSignUpEmptyData(nickname, name, surname, email, password);
 
-      _checkEmail(email);
+      InputValidators.checkEmail(email);
+      InputValidators.checkPassword(password);
 
       await _authRepo.signUp(
         nickname: nickname,
@@ -67,31 +69,44 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       emit(state.copyWith(status: AuthenticationStatus.signUpSuccess));
       signInWithEmailAndPassword(email: email, password: password);
+    } on UserAlreadyRegisteredError {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.signUpFailure,
+          error: AuthenticationError.userAlreadyRegistered,
+        ),
+      );
+    } on InvalidDataError {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.signUpFailure,
+          error: AuthenticationError.invalidCredentials,
+        ),
+      );
     } on Exception {
-      emit(state.copyWith(status: AuthenticationStatus.signUpFailure));
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.signUpFailure,
+          error: AuthenticationError.unknown,
+        ),
+      );
     }
   }
 
-  void _checkEmptyData(
+  void _checkSignUpEmptyData(
+    String nickname,
     String name,
     String surname,
     String email,
     String password,
   ) {
-    final check = name.isNotEmpty &&
+    final check = nickname.isNotEmpty &&
+        name.isNotEmpty &&
         surname.isNotEmpty &&
         email.isNotEmpty &&
         password.isNotEmpty;
 
-    if (!check) throw Exception();
-  }
-
-  void _checkEmail(String email) {
-    var check = RegExp(
-      r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$",
-    ).hasMatch(email);
-
-    if (!check) throw Exception();
+    if (!check) throw InvalidDataError();
   }
 
   Future<void> checkIn(String authorizationCode) async {
@@ -108,11 +123,25 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           status: AuthenticationStatus.checkInSuccess,
         ),
       );
-    } on Exception catch (e) {
-      print(e);
+    } on CheckInCodeNotFoundError {
       emit(
         state.copyWith(
           status: AuthenticationStatus.checkInFailure,
+          error: AuthenticationError.checkInCodeNotFound,
+        ),
+      );
+    } on CheckInCodeExpiredError {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.checkInFailure,
+          error: AuthenticationError.checkInCodeExpired,
+        ),
+      );
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.checkInFailure,
+          error: AuthenticationError.unknown,
         ),
       );
     }
@@ -132,15 +161,20 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     );
 
     try {
-      final user = await _authRepo.signInWithEmailAndPassword(
+      _checkSignInEmptyData(email, password);
+
+      InputValidators.checkEmail(email);
+      InputValidators.checkPassword(password);
+
+      final userProfile = await _authRepo.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      if (user.group.groupId.isEmpty) {
+      if (userProfile.group.groupId.isEmpty) {
         emit(
           state.copyWith(
-            userProfile: user,
+            userProfile: userProfile,
             status: AuthenticationStatus.checkInRequired,
             isAuthenticated: true,
           ),
@@ -148,7 +182,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       } else {
         emit(
           state.copyWith(
-            userProfile: user,
+            userProfile: userProfile,
             status: AuthenticationStatus.authenticationSuccess,
             isAuthenticated: true,
           ),
@@ -161,18 +195,18 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           error: AuthenticationError.userNotFound,
         ),
       );
-    } on InvalidCredentialsError {
+    } on InvalidDataError {
       emit(
         state.copyWith(
           status: AuthenticationStatus.authenticationFailure,
           error: AuthenticationError.invalidCredentials,
         ),
       );
-    } on MissingUserDataError {
+    } on InvalidCredentialsError {
       emit(
         state.copyWith(
           status: AuthenticationStatus.authenticationFailure,
-          error: AuthenticationError.missingUserData,
+          error: AuthenticationError.invalidCredentials,
         ),
       );
     } on Exception {
@@ -183,6 +217,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         ),
       );
     }
+  }
+
+  void _checkSignInEmptyData(
+    String email,
+    String password,
+  ) {
+    final check = email.isNotEmpty && password.isNotEmpty;
+
+    if (!check) throw InvalidDataError();
   }
 
   Future<void> signOut() async {

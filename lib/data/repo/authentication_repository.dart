@@ -27,7 +27,7 @@ class AuthenticationRepository {
       signOut();
       switch (response.error.code) {
         case 'user-not-found':
-          throw MissingUserDataError();
+          throw UserNotFoundError();
         default:
           throw UnknownAuthenticationError();
       }
@@ -66,7 +66,10 @@ class AuthenticationRepository {
 
     if (response.error.code.isNotEmpty) {
       switch (response.error.code) {
-        // TODO: handle errors
+        case 'code-not-found':
+          throw CheckInCodeNotFoundError();
+        case 'code-expired':
+          throw CheckInCodeExpiredError();
         default:
           throw UnknownAuthenticationError();
       }
@@ -91,7 +94,9 @@ class AuthenticationRepository {
       switch (e.code) {
         case 'user-not-found':
           throw UserNotFoundError();
+        case 'invalid-credential':
         case 'invalid-email':
+        case 'invalid-password':
         case 'wrong-password':
           throw InvalidCredentialsError();
         default:

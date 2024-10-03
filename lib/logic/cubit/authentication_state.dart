@@ -19,9 +19,11 @@ enum AuthenticationStatus {
 
 enum AuthenticationError {
   none,
+  userAlreadyRegistered,
+  checkInCodeNotFound,
+  checkInCodeExpired,
   userNotFound,
   invalidCredentials,
-  missingUserData,
   unknown,
 }
 

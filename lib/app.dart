@@ -93,27 +93,61 @@ void _authListener(
       break;
     case AuthenticationStatus.signUpFailure:
       context.loaderOverlay.hide();
-      // TODO: implement error message
+      String errorMessage = '';
+      switch (state.error) {
+        case AuthenticationError.userAlreadyRegistered:
+          errorMessage =
+              'Email already registered.\nPlease use a different email or login.';
+          break;
+        case AuthenticationError.invalidCredentials:
+          errorMessage = 'Invalid data entered.\nPlease try again.';
+          break;
+        case AuthenticationError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
+      if (ctx != null) {
+        showAuthenticationErrorDialog(ctx, errorMessage);
+      }
       break;
     case AuthenticationStatus.checkInFailure:
       context.loaderOverlay.hide();
-      // TODO: implement error message
+      String errorMessage = '';
+      switch (state.error) {
+        case AuthenticationError.checkInCodeExpired:
+          errorMessage =
+              'Check-in code has expired.\nPlease request a new code.';
+          break;
+        case AuthenticationError.checkInCodeNotFound:
+          errorMessage =
+              'Check-in code not found.\nPlease verify and scan again.';
+          break;
+        case AuthenticationError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
+      if (ctx != null) {
+        showAuthenticationErrorDialog(ctx, errorMessage);
+      }
       break;
     case AuthenticationStatus.authenticationFailure:
       context.loaderOverlay.hide();
       String errorMessage = '';
       switch (state.error) {
-        case AuthenticationError.invalidCredentials:
-          errorMessage = 'Invalid credentials';
-          break;
         case AuthenticationError.userNotFound:
-          errorMessage = 'User not found';
+          errorMessage = 'Email not registered.\nPlease try again.';
           break;
-        case AuthenticationError.missingUserData:
-          errorMessage = 'Missing user data';
+        case AuthenticationError.invalidCredentials:
+          errorMessage = 'Invalid data entered.\nPlease try again.';
           break;
         case AuthenticationError.unknown:
-          errorMessage = 'Unknown error';
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
           break;
         default:
           break;
