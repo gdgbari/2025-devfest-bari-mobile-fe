@@ -12,8 +12,6 @@ class QuizCubit extends Cubit<QuizState> {
 
   QuizCubit() : super(const QuizState());
 
-  void resetQuiz() => emit(const QuizState());
-
   void startTimer() {
     emit(state.copyWith(status: QuizStatus.timerInProgress));
     stopTimer();
@@ -56,8 +54,41 @@ class QuizCubit extends Cubit<QuizState> {
         ),
       );
       startTimer();
-    } catch (e) {
-      emit(state.copyWith(status: QuizStatus.fetchFailure));
+    } on QuizNotFoundError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizNotFound,
+        ),
+      );
+    } on QuizNotOpenError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizNotOpen,
+        ),
+      );
+    } on QuizTimeIsUpError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizTimeIsUp,
+        ),
+      );
+    } on QuizAlreadySubmittedError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizAlreadySubmitted,
+        ),
+      );
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.unknown,
+        ),
+      );
     }
   }
 
@@ -89,8 +120,41 @@ class QuizCubit extends Cubit<QuizState> {
           results: results,
         ),
       );
-    } catch (e) {
-      emit(state.copyWith(status: QuizStatus.submissionFailure));
+    } on QuizNotFoundError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizNotFound,
+        ),
+      );
+    } on QuizNotOpenError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizNotOpen,
+        ),
+      );
+    } on QuizTimeIsUpError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizTimeIsUp,
+        ),
+      );
+    } on QuizAlreadySubmittedError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizAlreadySubmitted,
+        ),
+      );
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.unknown,
+        ),
+      );
     }
   }
 }

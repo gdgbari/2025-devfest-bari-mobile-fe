@@ -93,7 +93,29 @@ void _quizListener(
       break;
     case QuizStatus.fetchFailure:
       context.loaderOverlay.hide();
-      // TODO: show error message
+      late String errorMessage;
+      switch (state.error) {
+        case QuizError.quizNotFound:
+          errorMessage = 'Quiz not found.\nPlease try onother one.';
+          break;
+        case QuizError.quizNotOpen:
+          errorMessage = 'Quiz not open.\nPlease scan the right one.';
+          break;
+        case QuizError.quizTimeIsUp:
+          errorMessage = 'Oops, you ran out of time.\n'
+              'We can\'t consider your answers.';
+          break;
+        case QuizError.quizAlreadySubmitted:
+          errorMessage = 'You have already answered to this quiz.\n'
+              'There are a lot of them, go and find another one!';
+          break;
+        case QuizError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      showCustomErrorDialog(context, errorMessage);
       break;
     default:
   }
