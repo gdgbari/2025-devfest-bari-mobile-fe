@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:devfest_bari_2024/logic.dart';
 
 class DebugBloc extends BlocObserver {
   @override
@@ -16,6 +19,13 @@ class DebugBloc extends BlocObserver {
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) async {
     print(error);
+
+    if (error is SocketException) {
+      InternetCubit().sendInternetFailure();
+    } else {
+      throw await Future.error(error, stackTrace);
+    }
+
     super.onError(bloc, error, stackTrace);
   }
 

@@ -20,5 +20,5 @@ class ColorPalette {
 
   // Custom section
   static const Color transparent = Color(0x00000000);
-  static const Color facebookBlue = Color(0xFF1877F2);
+  static const Color seaBlue = Color(0xFF96BCFC);
 }

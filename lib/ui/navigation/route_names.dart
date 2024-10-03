@@ -1,4 +1,5 @@
 enum RouteNames {
+  noInternetRoute(path: '/no_internet'),
   welcomeRoute(path: '/welcome'),
   loginRoute(path: '/welcome/login'),
   signUpRoute(path: '/welcome/sign_up'),

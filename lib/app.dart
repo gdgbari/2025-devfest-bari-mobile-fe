@@ -20,8 +20,15 @@ class App extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
         ),
         builder: (context, child) {
-          return BlocListener<AuthenticationCubit, AuthenticationState>(
-            listener: _authListener,
+          return MultiBlocListener(
+            listeners: <BlocListener>[
+              BlocListener<AuthenticationCubit, AuthenticationState>(
+                listener: _authListener,
+              ),
+              BlocListener<InternetCubit, InternetState>(
+                listener: _internetListener,
+              ),
+            ],
             child: LoaderOverlay(
               overlayColor: Colors.black.withOpacity(.4),
               overlayWidgetBuilder: (_) {
@@ -39,24 +46,28 @@ class App extends StatelessWidget {
 }
 
 List<BlocProvider> _topLevelProviders = <BlocProvider>[
+  BlocProvider<InternetCubit>(
+    lazy: false,
+    create: (_) => InternetCubit(),
+  ),
   BlocProvider<AuthenticationCubit>(
     lazy: false,
-    create: (context) => AuthenticationCubit(),
+    create: (_) => AuthenticationCubit(),
   ),
   BlocProvider<QuizCubit>(
     lazy: false,
-    create: (context) => QuizCubit(),
+    create: (_) => QuizCubit(),
   ),
   BlocProvider<LeaderboardCubit>(
     lazy: false,
-    create: (context) => LeaderboardCubit(),
+    create: (_) => LeaderboardCubit(),
   ),
 ];
 
 void _authListener(
   BuildContext context,
   AuthenticationState state,
-) async {
+) {
   switch (state.status) {
     case AuthenticationStatus.initialAuthFailure:
       context.loaderOverlay.hide();
@@ -118,5 +129,25 @@ void _authListener(
       break;
     default:
       break;
+  }
+}
+
+void _internetListener(
+  BuildContext context,
+  InternetState state,
+) {
+  if (state is InternetDisconnected) {
+    context.loaderOverlay.hide();
+    appRouter.goNamed(RouteNames.noInternetRoute.name);
+    FlutterNativeSplash.remove();
+  }
+
+  if (state is InternetConnected) {
+    context.read<LeaderboardCubit>().changeLeaderboard(0);
+    final route = context.read<AuthenticationCubit>().state.isAuthenticated
+        ? RouteNames.leaderboardRoute
+        : RouteNames.welcomeRoute;
+
+    appRouter.goNamed(route.name);
   }
 }

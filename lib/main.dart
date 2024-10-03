@@ -6,6 +6,7 @@ import 'package:devfest_bari_2024/firebase_options.dart';
 import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -19,7 +20,9 @@ void main() async {
       runApp(const App());
     },
     (error, stack) {
-      // TODO: implement error handling
+      if (kDebugMode) {
+        print(error);
+      }
     },
   );
 }
@@ -48,10 +51,13 @@ Future<void> _initialization() async {
   );
 
   await _precacheAllSvg();
+
+  InternetCubit().monitorInternetConnection();
 }
 
 Future<void> _precacheAllSvg() async {
   final List<String> imageUrls = [
+    'assets/images/dino.svg',
     'assets/images/devfest_logo.svg',
     'assets/images/qr_marker.svg',
     'assets/images/icons/email.svg',

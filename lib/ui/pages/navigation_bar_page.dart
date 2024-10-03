@@ -14,56 +14,63 @@ class NavigationBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorPalette.black,
-        title: const Text(
-          'DevFest Bari 2024',
-          style: PresetTextStyle.white21w500,
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          Visibility(
-            visible: navigationShell.currentIndex == 1,
-            child: IconButton(
-              onPressed: () => context.read<AuthenticationCubit>().signOut(),
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.white,
+    return BlocListener<InternetCubit, InternetState>(
+      listener: (context, state) {
+        if (state is InternetConnected) {
+          navigationShell.goBranch(0, initialLocation: true);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: ColorPalette.black,
+          title: const Text(
+            'DevFest Bari 2024',
+            style: PresetTextStyle.white21w500,
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            Visibility(
+              visible: navigationShell.currentIndex == 1,
+              child: IconButton(
+                onPressed: () => context.read<AuthenticationCubit>().signOut(),
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: navigationShell,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.pushNamed(RouteNames.qrCodeRoute.name),
-        elevation: 1,
-        backgroundColor: ColorPalette.coreRed,
-        splashColor: ColorPalette.pastelRed,
-        shape: const CircleBorder(),
-        child: const Icon(
-          Icons.photo_camera_outlined,
-          color: Colors.white,
-          size: 26,
+          ],
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: ColorPalette.gray,
-        selectedItemColor: ColorPalette.coreRed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.leaderboard),
-            label: 'Leaderboard',
+        body: navigationShell,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => context.pushNamed(RouteNames.qrCodeRoute.name),
+          elevation: 1,
+          backgroundColor: ColorPalette.coreRed,
+          splashColor: ColorPalette.pastelRed,
+          shape: const CircleBorder(),
+          child: const Icon(
+            Icons.photo_camera_outlined,
+            color: Colors.white,
+            size: 26,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: navigationShell.currentIndex,
-        onTap: (int index) => _onTap(context, index),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: ColorPalette.gray,
+          selectedItemColor: ColorPalette.coreRed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.leaderboard),
+              label: 'Leaderboard',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: navigationShell.currentIndex,
+          onTap: (int index) => _onTap(context, index),
+        ),
       ),
     );
   }

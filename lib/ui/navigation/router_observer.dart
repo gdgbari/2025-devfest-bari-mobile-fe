@@ -22,6 +22,13 @@ class RouterObserver extends NavigatorObserver {
     Future.delayed(
       const Duration(milliseconds: 0),
       () {
+        if (route.settings.name == 'signUpRoute') {
+          SystemChrome.setSystemUIOverlayStyle(
+            const SystemUiOverlayStyle(
+              systemNavigationBarColor: ColorPalette.seaBlue,
+            ),
+          );
+        }
         if (route.settings.name == 'qrCodeRoute') {
           SystemChrome.setSystemUIOverlayStyle(
             const SystemUiOverlayStyle(
@@ -57,10 +64,24 @@ class RouterObserver extends NavigatorObserver {
 
 void _setSystemUIColor(String? routeName) {
   switch (routeName) {
+    case 'noInternetRoute':
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          systemNavigationBarColor: ColorPalette.white,
+        ),
+      );
+      break;
     case 'welcomeRoute':
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
           systemNavigationBarColor: ColorPalette.seaBlue,
+        ),
+      );
+      break;
+    case 'signUpRoute':
+      SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          systemNavigationBarColor: ColorPalette.white,
         ),
       );
       break;
