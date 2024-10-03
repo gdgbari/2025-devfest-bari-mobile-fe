@@ -15,7 +15,6 @@ class LeaderboardRepository {
       final response = await _leaderboardApi.getLeaderboard();
 
       if (response.error.code.isNotEmpty) {
-        // TODO: handle errors
         throw UnknownLeaderboardError();
       }
 
