@@ -18,45 +18,34 @@ class WelcomePage extends StatelessWidget {
         bottom: false,
         child: Column(
           children: <Widget>[
-            Flexible(
-              flex: 15,
-              child: SvgPicture.asset(
-                'assets/images/welcome.svg',
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.bottomCenter,
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: ColorPalette.pastelRed,
               ),
             ),
-            Flexible(
-              flex: 3,
+            SvgPicture.asset(
+              'assets/images/welcome.svg',
+              width: MediaQuery.of(context).size.width,
+            ),
+            Expanded(
+              flex: 2,
               child: Container(
-                color: Colors.white,
+                color: Color(0xFF96BCFC),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: OAuthButton(
-                      method: 'email',
-                      onPressed: () =>
-                          context.pushNamed(RouteNames.signUpRoute.name),
-                    ),
+                  child: OAuthButton(
+                    method: 'email',
+                    onPressed: () =>
+                        context.pushNamed(RouteNames.signUpRoute.name),
                   ),
                 ),
               ),
             ),
             Container(
-              color: Colors.white,
-              height: MediaQuery.of(context).padding.bottom,
+              color: Color(0xFF96BCFC),
+              height: 20 + MediaQuery.of(context).padding.bottom,
             ),
-            // TODO: future implementation
-            // const SizedBox(height: 10),
-            // OAuthButton(
-            //   method: 'google',
-            //   onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
-            // ),
-            // const SizedBox(height: 10),
-            // OAuthButton(
-            //   method: 'apple',
-            //   onPressed: () => context.pushNamed(RouteNames.loginRoute.name),
-            // ),
           ],
         ),
       ),
