@@ -51,7 +51,9 @@ class LeaderboardRepository {
 
             temp.sort((a, b) => b.value.score != a.value.score
                 ? b.value.score.compareTo(a.value.score)
-                : b.value.timestamp.compareTo(a.value.timestamp));
+                : b.value.timestamp != a.value.timestamp
+                    ? a.value.timestamp.compareTo(b.value.timestamp)
+                    : a.value.nickname.compareTo(b.value.nickname));
 
             final users = Map.fromEntries(temp);
 
@@ -74,7 +76,9 @@ class LeaderboardRepository {
 
             temp.sort((a, b) => b.value.score != a.value.score
                 ? b.value.score.compareTo(a.value.score)
-                : b.value.timestamp.compareTo(a.value.timestamp));
+                : b.value.timestamp != a.value.timestamp
+                    ? a.value.timestamp.compareTo(b.value.timestamp)
+                    : a.value.name.compareTo(b.value.name));
 
             final groups = Map.fromEntries(temp);
 
