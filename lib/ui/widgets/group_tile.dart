@@ -3,7 +3,7 @@ import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatelessWidget {
-  final Group group;
+  final LeaderboardGroup group;
   final int maxScore;
 
   const GroupTile({
@@ -24,7 +24,7 @@ class GroupTile extends StatelessWidget {
         Expanded(
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            color: group.colors.primaryColor,
+            color: group.color,
             width: width.toDouble(),
             child: Center(
               child: Text(

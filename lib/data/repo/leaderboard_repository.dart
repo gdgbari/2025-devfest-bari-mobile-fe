@@ -23,4 +23,87 @@ class LeaderboardRepository {
       throw UnknownLeaderboardError();
     }
   }
+
+  Stream<Leaderboard> leaderboardStream(String userId) async* {
+    await for (final event in _leaderboardApi.leaderboardStream) {
+      int currentUserIndex = -1;
+      var currentUser = LeaderboardUser();
+      List<LeaderboardUser> leaderboardUsers = [];
+      List<LeaderboardGroup> leaderboardGroups = [];
+      for (final child in event.snapshot.children) {
+        if (child.value == null) {
+          continue;
+        }
+        switch (child.key) {
+          case 'users':
+            final map = child.value as Map;
+
+            final keys = List<String>.from(map.keys);
+            final values = List<LeaderboardUser>.from(
+              map.values.map(
+                (user) => LeaderboardUser.fromMap(
+                  Map.from(user),
+                ),
+              ),
+            );
+
+            final temp = Map.fromIterables(keys, values).entries.toList();
+
+            temp.sort((a, b) => b.value.score != a.value.score
+                ? b.value.score.compareTo(a.value.score)
+                : b.value.timestamp.compareTo(a.value.timestamp));
+
+            final users = Map.fromEntries(temp);
+
+            currentUserIndex = users.keys.toList().indexOf(userId);
+            leaderboardUsers = users.values.toList();
+            break;
+          case 'groups':
+            final map = child.value as Map;
+
+            final keys = List<String>.from(map.keys);
+            final values = List<LeaderboardGroup>.from(
+              map.values.map(
+                (group) => LeaderboardGroup.fromMap(
+                  Map.from(group),
+                ),
+              ),
+            );
+
+            final temp = Map.fromIterables(keys, values).entries.toList();
+
+            temp.sort((a, b) => b.value.score != a.value.score
+                ? b.value.score.compareTo(a.value.score)
+                : b.value.timestamp.compareTo(a.value.timestamp));
+
+            final groups = Map.fromEntries(temp);
+
+            leaderboardGroups = groups.values.toList();
+            break;
+          default:
+            break;
+        }
+      }
+
+      for (var i = 0; i < leaderboardUsers.length; i++) {
+        leaderboardUsers[i] = leaderboardUsers[i].copyWith(
+          position: i + 1,
+        );
+      }
+
+      for (var i = 0; i < leaderboardGroups.length; i++) {
+        leaderboardGroups[i] = leaderboardGroups[i].copyWith(
+          position: i + 1,
+        );
+      }
+
+      currentUser = leaderboardUsers[currentUserIndex];
+
+      yield Leaderboard(
+        currentUser: currentUser,
+        users: leaderboardUsers,
+        groups: leaderboardGroups,
+      );
+    }
+  }
 }

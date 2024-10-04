@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 class Leaderboard extends Equatable {
   final LeaderboardUser currentUser;
   final List<LeaderboardUser> users;
-  final List<Group> groups;
+  final List<LeaderboardGroup> groups;
 
   const Leaderboard({
     this.currentUser = const LeaderboardUser(),
@@ -17,7 +17,7 @@ class Leaderboard extends Equatable {
   Leaderboard copyWith({
     LeaderboardUser? currentUser,
     List<LeaderboardUser>? users,
-    List<Group>? groups,
+    List<LeaderboardGroup>? groups,
   }) {
     return Leaderboard(
       currentUser: currentUser ?? this.currentUser,
@@ -28,17 +28,15 @@ class Leaderboard extends Equatable {
 
   factory Leaderboard.fromMap(Map<String, dynamic> map) {
     return Leaderboard(
-      currentUser: LeaderboardUser.fromMap(
-        Map<String, dynamic>.from(map['currentUser'] ?? {}),
-      ),
+      currentUser: LeaderboardUser(),
       users: List<LeaderboardUser>.from(
         List<Map<String, dynamic>>.from(map['users'] ?? []).map(
           (x) => LeaderboardUser.fromMap(x),
         ),
       ),
-      groups: List<Group>.from(
+      groups: List<LeaderboardGroup>.from(
         List<Map<String, dynamic>>.from(map['groups'] ?? []).map(
-          (x) => Group.fromMap(x),
+          (x) => LeaderboardGroup.fromMap(x),
         ),
       ),
     );
