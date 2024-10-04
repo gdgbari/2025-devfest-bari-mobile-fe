@@ -30,11 +30,15 @@ class LeaderboardRepository {
       var currentUser = LeaderboardUser();
       List<LeaderboardUser> leaderboardUsers = [];
       List<LeaderboardGroup> leaderboardGroups = [];
+      bool isOpen = true;
       for (final child in event.snapshot.children) {
         if (child.value == null) {
           continue;
         }
         switch (child.key) {
+          case 'isOpen':
+            isOpen = child.value as bool;
+            break;
           case 'users':
             final map = child.value as Map;
 
@@ -107,6 +111,7 @@ class LeaderboardRepository {
         currentUser: currentUser,
         users: leaderboardUsers,
         groups: leaderboardGroups,
+        isOpen: isOpen,
       );
     }
   }

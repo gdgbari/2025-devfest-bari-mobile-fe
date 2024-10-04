@@ -7,22 +7,26 @@ class Leaderboard extends Equatable {
   final LeaderboardUser currentUser;
   final List<LeaderboardUser> users;
   final List<LeaderboardGroup> groups;
+  final bool isOpen;
 
   const Leaderboard({
     this.currentUser = const LeaderboardUser(),
     this.users = const [],
     this.groups = const [],
+    this.isOpen = true,
   });
 
   Leaderboard copyWith({
     LeaderboardUser? currentUser,
     List<LeaderboardUser>? users,
     List<LeaderboardGroup>? groups,
+    bool? isOpen,
   }) {
     return Leaderboard(
       currentUser: currentUser ?? this.currentUser,
       users: users ?? this.users,
       groups: groups ?? this.groups,
+      isOpen: isOpen ?? this.isOpen,
     );
   }
 
@@ -39,6 +43,7 @@ class Leaderboard extends Equatable {
           (x) => LeaderboardGroup.fromMap(x),
         ),
       ),
+      isOpen: map['isOpen'] as bool? ?? true,
     );
   }
 
@@ -49,5 +54,5 @@ class Leaderboard extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [currentUser, users, groups];
+  List<Object> get props => [currentUser, users, groups, isOpen];
 }
