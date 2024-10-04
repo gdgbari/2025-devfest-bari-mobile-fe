@@ -4,11 +4,12 @@ import { Question } from "@models/Question";
 import { Quiz } from "@models/Quiz";
 import { QuizResult } from "@models/QuizResult";
 import { QuizStartTime } from "@models/QuizStartTime";
-import { parseQuestionListRef} from "../utils/firestoreHelpers";
+import {parseGroupRef, parseQuestionListRef} from "../utils/firestoreHelpers";
 import { db } from "../index";
 import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
 import { generateUniqueRandomStrings } from "../utils/stringHelpers";
+import * as admin from "firebase-admin";
 
 export const createQuiz = functions.https.onCall(async (data, context) => {
     const { questionList, type, talkId, sponsorId, title } = data;
@@ -262,6 +263,37 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             .collection("quizResults")
             .doc(quizId)
             .set(result);
+
+        const userDoc = await db.collection("users").doc(uid).get();
+        const userData = userDoc.data();
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "User data not found.");
+        }
+
+        const group =  (await parseGroupRef(userData.group)).data;
+        if (!group) {
+            return serializedErrorResponse("group-not-found", "Group data not found.");
+        }
+
+        // Update realtime database
+        await admin.database()
+            .ref(`leaderboard/users/${uid}`)
+            .transaction((currentUser) => {
+                return {
+                    ...currentUser,
+                    score: (currentUser?.score || 0) + score,
+                    timestamp: Date.now(),
+                };
+            })
+        await admin.database()
+            .ref(`leaderboard/groups/${group.groupId}`)
+            .transaction((currentGroup) => {
+                return {
+                    ...currentGroup,
+                    score: (currentGroup?.score || 0) + score,
+                    timestamp: Date.now(),
+                };
+            })
 
         return serializedSuccessResponse(result);
     } catch (error) {
