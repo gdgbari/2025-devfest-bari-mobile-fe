@@ -16,7 +16,6 @@ import {
 
 admin.initializeApp();
 export const db = admin.firestore();
-export const rtDb = admin.database();
 
 export {
     signUp,
