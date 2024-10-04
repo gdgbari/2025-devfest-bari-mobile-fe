@@ -3,7 +3,7 @@ import { UserProfile } from "@models/UserProfile";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
 import { getAuth } from "firebase-admin/auth";
 import * as functions from "firebase-functions";
-import { db } from "../index";
+import {db, rtDb} from "../index";
 import { parseGroupRef } from "../utils/firestoreHelpers";
 import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
 
@@ -39,6 +39,16 @@ export const signUp = functions.https.onCall(async (data, context) => {
             role: "attendee",
             score: 0
         });
+
+        const newUser = await usersRef.doc(uid).get();
+
+        // Initialize the user's score to 0
+        // await rtDb.ref(`leaderboard/users/${newUser.id}`).set({
+        //     groupColor: "red",
+        //     nickname: nickname,
+        //     score: 0,
+        //     timestamp: 0
+        // });
 
         return serializedSuccessResponse(uid);
     } catch (error) {
@@ -135,7 +145,16 @@ export const redeemAuthCode = functions.https.onCall(async (data, context) => {
             user: userReference,
         }, { merge: true });
 
-        const group = (await parseGroupRef(groupReference)).data;
+        const group = (await parseGroupRef(groupReference)).data as Group;
+        const user = (await userReference.get()).data() as UserProfile;
+
+        // Initialize the user's score to 0
+        // await rtDb.ref(`leaderboard/users/${user.userId}`).set({
+        //     groupColor: group.color,
+        //     nickname: user.nickname,
+        //     score: 0,
+        //     timestamp: 0
+        // });
 
         return serializedSuccessResponse(group);
     } catch (error) {

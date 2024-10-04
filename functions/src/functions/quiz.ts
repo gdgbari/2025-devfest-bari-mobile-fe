@@ -5,7 +5,8 @@ import { Quiz } from "@models/Quiz";
 import { QuizResult } from "@models/QuizResult";
 import { QuizStartTime } from "@models/QuizStartTime";
 import { parseQuestionListRef} from "../utils/firestoreHelpers";
-import { db } from "../index";
+import { db, rtDb } from "../index";
+// import { increment } from "@firebase/database"
 import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
 import { generateUniqueRandomStrings } from "../utils/stringHelpers";
@@ -262,6 +263,9 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             .collection("quizResults")
             .doc(quizId)
             .set(result);
+
+        // Update realtime database
+        // await rtDb.ref(`leaderboard/${uid}/score`).update(increment(score));
 
         return serializedSuccessResponse(result);
     } catch (error) {

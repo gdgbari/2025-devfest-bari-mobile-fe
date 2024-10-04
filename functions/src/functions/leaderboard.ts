@@ -26,9 +26,9 @@ export const getLeaderboard = functions.https.onCall(async (_, context) => {
             return serializedErrorResponse("user-not-found", "The user does not exist.");
         }
 
-        if (userData.role != "staff") {
-            return serializedErrorResponse("permission-denied", "User not authorized.");
-        }
+        // if (userData.role != "staff") {
+        //     return serializedErrorResponse("permission-denied", "User not authorized.");
+        // }
 
         const usersSnapshot = await db.collection("users").get();
 
