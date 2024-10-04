@@ -160,14 +160,10 @@ void _quizListener(
       break;
     case QuizStatus.submissionSuccess:
       context.loaderOverlay.hide();
-      showDialog(
-        context: context,
-        builder: (_) => QuizResultsDialog(
-          onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
-          content: Text(
-            'Score: ${state.results.score}/${state.results.maxScore}',
-          ),
-        ),
+      showQuizResultsDialog(
+        context,
+        state.results.score,
+        state.results.maxScore,
       );
       break;
     case QuizStatus.submissionFailure:
