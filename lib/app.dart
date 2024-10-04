@@ -54,6 +54,10 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
     lazy: false,
     create: (_) => AuthenticationCubit(),
   ),
+  BlocProvider<QrCodeCubit>(
+    lazy: false,
+    create: (_) => QrCodeCubit(),
+  ),
   BlocProvider<QuizCubit>(
     lazy: false,
     create: (_) => QuizCubit(),
