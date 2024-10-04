@@ -8,12 +8,16 @@ class Leaderboard extends Equatable {
   final List<LeaderboardUser> users;
   final List<LeaderboardGroup> groups;
   final bool isOpen;
+  final String winnerRoom;
+  final String winnerTime;
 
   const Leaderboard({
     this.currentUser = const LeaderboardUser(),
     this.users = const [],
     this.groups = const [],
     this.isOpen = true,
+    this.winnerRoom = '',
+    this.winnerTime = '',
   });
 
   Leaderboard copyWith({
@@ -21,12 +25,16 @@ class Leaderboard extends Equatable {
     List<LeaderboardUser>? users,
     List<LeaderboardGroup>? groups,
     bool? isOpen,
+    String? winnerRoom,
+    String? winnerTime,
   }) {
     return Leaderboard(
       currentUser: currentUser ?? this.currentUser,
       users: users ?? this.users,
       groups: groups ?? this.groups,
       isOpen: isOpen ?? this.isOpen,
+      winnerRoom: winnerRoom ?? this.winnerRoom,
+      winnerTime: winnerTime ?? this.winnerTime,
     );
   }
 
@@ -44,6 +52,8 @@ class Leaderboard extends Equatable {
         ),
       ),
       isOpen: map['isOpen'] as bool? ?? true,
+      winnerRoom: map['winnerRoom'] as String? ?? '',
+      winnerTime: map['winnerTime'] as String? ?? '',
     );
   }
 
@@ -54,5 +64,12 @@ class Leaderboard extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [currentUser, users, groups, isOpen];
+  List<Object> get props => [
+        currentUser,
+        users,
+        groups,
+        isOpen,
+        winnerRoom,
+        winnerTime,
+      ];
 }

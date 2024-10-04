@@ -10,20 +10,6 @@ class LeaderboardRepository {
 
   final LeaderboardApi _leaderboardApi = LeaderboardApi();
 
-  Future<Leaderboard> getLeaderboard() async {
-    try {
-      final response = await _leaderboardApi.getLeaderboard();
-
-      if (response.error.code.isNotEmpty) {
-        throw UnknownLeaderboardError();
-      }
-
-      return Leaderboard.fromJson(response.data);
-    } on Exception {
-      throw UnknownLeaderboardError();
-    }
-  }
-
   Stream<Leaderboard> leaderboardStream(String userId) async* {
     await for (final event in _leaderboardApi.leaderboardStream) {
       int currentUserIndex = -1;
@@ -31,6 +17,9 @@ class LeaderboardRepository {
       List<LeaderboardUser> leaderboardUsers = [];
       List<LeaderboardGroup> leaderboardGroups = [];
       bool isOpen = true;
+      String winnerRoom = '';
+      String winnerTime = '';
+
       for (final child in event.snapshot.children) {
         if (child.value == null) {
           continue;
@@ -38,6 +27,12 @@ class LeaderboardRepository {
         switch (child.key) {
           case 'isOpen':
             isOpen = child.value as bool;
+            break;
+          case 'winnerRoom':
+            winnerRoom = child.value as String;
+            break;
+          case 'winnerTime':
+            winnerTime = child.value as String;
             break;
           case 'users':
             final map = child.value as Map;
@@ -112,6 +107,8 @@ class LeaderboardRepository {
         users: leaderboardUsers,
         groups: leaderboardGroups,
         isOpen: isOpen,
+        winnerRoom: winnerRoom,
+        winnerTime: winnerTime,
       );
     }
   }
