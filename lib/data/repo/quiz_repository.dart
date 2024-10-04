@@ -9,8 +9,8 @@ class QuizRepository {
 
   final QuizApi _quizApi = QuizApi();
 
-  Future<Quiz> getQuiz(String quizId) async {
-    final response = await _quizApi.getQuiz(quizId);
+  Future<Quiz> getQuiz(String quizCode) async {
+    final response = await _quizApi.getQuiz(quizCode);
 
     if (response.error.code.isNotEmpty) {
       _quizErrorHandling(response.error.code);
@@ -35,6 +35,8 @@ class QuizRepository {
 
 void _quizErrorHandling(String errorCode) {
   switch (errorCode) {
+    case 'invalid-quiz-code':
+      throw QuizInvalidCode();
     case 'quiz-not-found':
       throw QuizNotFoundError();
     case 'quiz-not-open':

@@ -1,3 +1,6 @@
+/// Exception that occurs when the [quizId] is not in a valid format
+class QuizInvalidCode implements Exception {}
+
 /// Exception that occurs when the [quizId] does not exists on the server
 class QuizNotFoundError implements Exception {}
 

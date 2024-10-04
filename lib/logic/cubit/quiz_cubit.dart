@@ -38,11 +38,11 @@ class QuizCubit extends Cubit<QuizState> {
 
   void stopTimer() => _timer?.cancel();
 
-  Future<void> getQuiz(String quizId) async {
+  Future<void> getQuiz(String quizCode) async {
     emit(const QuizState().copyWith(status: QuizStatus.fetchInProgress));
 
     try {
-      final quiz = await _quizRepo.getQuiz(quizId);
+      final quiz = await _quizRepo.getQuiz(quizCode);
       emit(
         state.copyWith(
           status: QuizStatus.fetchSuccess,

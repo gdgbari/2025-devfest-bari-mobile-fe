@@ -1,15 +1,15 @@
-import * as functions from "firebase-functions";
-import { DocumentReference } from "firebase-admin/firestore";
 import { Question } from "@models/Question";
 import { Quiz } from "@models/Quiz";
 import { QuizResult } from "@models/QuizResult";
 import { QuizStartTime } from "@models/QuizStartTime";
-import {parseGroupRef, parseQuestionListRef} from "../utils/firestoreHelpers";
-import { db } from "../index";
-import { serializedErrorResponse, serializedSuccessResponse, serializedExceptionResponse } from "../utils/responseHelper";
 import { GenericResponse } from "@modelsresponse/GenericResponse";
-import { generateUniqueRandomStrings } from "../utils/stringHelpers";
 import * as admin from "firebase-admin";
+import { DocumentReference } from "firebase-admin/firestore";
+import * as functions from "firebase-functions";
+import { db } from "../index";
+import { parseGroupRef, parseQuestionListRef } from "../utils/firestoreHelpers";
+import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
+import { generateUniqueRandomStrings } from "../utils/stringHelpers";
 
 export const createQuiz = functions.https.onCall(async (data, context) => {
     const { questionList, type, talkId, sponsorId, title } = data;
@@ -87,7 +87,7 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
 
 
 export const getQuiz = functions.https.onCall(async (data, context) => {
-    const { quizId } = data;
+    const { code } = data;
 
     if (!context.auth) {
         return serializedErrorResponse("unauthenticated", "User must be authenticated.");
@@ -95,11 +95,17 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
 
     const uid = context.auth.uid;
 
-    if (!quizId) {
+    if (!code) {
         return serializedErrorResponse("invalid-argument", "The function must be called with a valid quizId.");
     }
 
+    if (!code.startsWith("quiz:")) {
+        return serializedErrorResponse("invalid-quiz-code", "The string is not a valid quizId.");
+    }
+
     try {
+        const codeParts = code.split(":");
+        const quizId = codeParts[codeParts.length - 1];
         const quizDoc = await db.collection("quizzes").doc(quizId).get();
 
         if (!quizDoc.exists) {
@@ -270,7 +276,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
             return serializedErrorResponse("user-not-found", "User data not found.");
         }
 
-        const group =  (await parseGroupRef(userData.group)).data;
+        const group = (await parseGroupRef(userData.group)).data;
         if (!group) {
             return serializedErrorResponse("group-not-found", "Group data not found.");
         }
@@ -400,7 +406,7 @@ export const getQuizList = functions.https.onCall(async (_, context) => {
         let quizQuery;
         if (userData.role === "staff") {
             quizQuery = db.collection("quizzes");
-        }else{
+        } else {
             return serializedErrorResponse("permission-denied", "User not authorized to view quizzes.");
         };
 
@@ -418,7 +424,7 @@ export const getQuizList = functions.https.onCall(async (_, context) => {
                     quizData.questionList,
                     true
                 );
-        
+
                 if (questionListResponse.error) {
                     return serializedErrorResponse(questionListResponse.error.errorCode, questionListResponse.error.details);
                 }
@@ -428,7 +434,7 @@ export const getQuizList = functions.https.onCall(async (_, context) => {
                 const quiz: Quiz = {
                     quizId: quizDoc.id,
                     title: quizData.title,
-                    creatorUid: quizData.creatorUid, 
+                    creatorUid: quizData.creatorUid,
                     type: quizData.type,
                     talkId: quizData.talkId,
                     sponsorId: quizData.sponsorId,
