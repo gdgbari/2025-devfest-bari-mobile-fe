@@ -157,4 +157,8 @@ class QuizCubit extends Cubit<QuizState> {
       );
     }
   }
+
+  void completeSubmission() {
+    emit(state.copyWith(status: QuizStatus.submissionComplete));
+  }
 }

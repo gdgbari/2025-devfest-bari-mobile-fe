@@ -1,16 +1,16 @@
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-Future<void> showQuizResultsDialog(
-  BuildContext context,
-  int score,
-  int maxScore,
-) async {
+Future<void> showQuizResultsDialog({
+  required BuildContext context,
+  required void Function()? onPressed,
+  required int score,
+  required int maxScore,
+}) async {
   showDialog(
     context: context,
     builder: (_) => QuizResultsDialog(
-      onPressed: () => context.pop(),
+      onPressed: onPressed,
       score: score,
       maxScore: maxScore,
     ),

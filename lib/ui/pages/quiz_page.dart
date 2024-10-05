@@ -153,7 +153,7 @@ class QuizPage extends StatelessWidget {
 void _quizListener(
   BuildContext context,
   QuizState state,
-) {
+) async {
   switch (state.status) {
     case QuizStatus.submissionInProgress:
       context.loaderOverlay.show();
@@ -161,10 +161,12 @@ void _quizListener(
     case QuizStatus.submissionSuccess:
       context.loaderOverlay.hide();
       showQuizResultsDialog(
-        context,
-        state.results.score,
-        state.results.maxScore,
+        context: context,
+        onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
+        score: state.results.score,
+        maxScore: state.results.maxScore,
       );
+      context.read<QuizCubit>().completeSubmission();
       break;
     case QuizStatus.submissionFailure:
       context.loaderOverlay.hide();
