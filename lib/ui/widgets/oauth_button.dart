@@ -23,28 +23,23 @@ class OAuthButton extends StatelessWidget {
           overlayColor: Colors.white,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
-        child: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 40,
-                right: 10,
-                top: 10,
-                bottom: 10,
-              ),
-              child: SvgPicture.asset(
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(width: 30),
+              SvgPicture.asset(
                 'assets/images/icons/$method.svg',
                 width: 30,
               ),
-            ),
-            const SizedBox(width: 30),
-            Expanded(
-              child: Text(
+              const SizedBox(width: 30),
+              Text(
                 'Sign in with ${method.capitalize()}',
                 style: PresetTextStyle.white19w400,
               ),
-            ),
-          ],
+              const SizedBox(width: 30),
+            ],
+          ),
         ),
       ),
     );
