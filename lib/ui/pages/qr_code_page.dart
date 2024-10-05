@@ -38,20 +38,6 @@ class QrCodePage extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.read<QrCodeCubit>().validateQrCode(
-                      'quiz:JEVjQGRtfo7pDyZntRSR',
-                      QrCodeType.quiz,
-                    );
-              },
-              icon: const Icon(
-                Icons.abc_sharp,
-                color: Colors.white,
-              ),
-            ),
-          ],
         ),
         body: SafeArea(
           bottom: false,
