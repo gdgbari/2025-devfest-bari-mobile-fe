@@ -49,7 +49,7 @@ class NavigationBarPage extends StatelessWidget {
           splashColor: ColorPalette.pastelRed,
           shape: const CircleBorder(),
           child: const Icon(
-            Icons.photo_camera_outlined,
+            Icons.qr_code_scanner_rounded,
             color: Colors.white,
             size: 26,
           ),
