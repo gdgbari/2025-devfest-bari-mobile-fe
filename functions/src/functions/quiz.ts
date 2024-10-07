@@ -416,3 +416,60 @@ export const getQuizList = functions.https.onCall(async (_, context) => {
         return serializedExceptionResponse(error);
     }
 });
+
+
+export const addPointsToUsers = functions.https.onCall(async (data, context) => {
+    const { title, value, userIdList } = data;
+
+    if (!context.auth) {
+        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
+    }
+
+    try {
+        const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "User not found.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "User data not found.");
+        }
+
+        if (userData.role != "staff") {
+            return serializedErrorResponse("permission-denied", "User not authorized.");
+        }
+
+        const quizRef = db.collection("quizzes");
+        const quizDoc = await quizRef.add({
+            questionList: [],
+            type: "hidden",
+            talkId: "",
+            sponsorId: "",
+            title: title,
+            maxScore: value,
+            isOpen: false,
+            timerDuration: 0,
+            creatorUid: context.auth.uid,
+        });
+
+        const quizId = quizDoc.id;
+
+        const batch = db.batch();
+
+        userIdList.forEach((userId: string) => {
+            const result: QuizResult = { score: value, maxScore: value, quizTitle: title };
+            const userQuizResultRef = db.collection("users").doc(userId).collection("quizResults").doc(quizId);
+            batch.set(userQuizResultRef, result);
+        });
+
+        await batch.commit();
+
+        return serializedSuccessResponse({ quizId });
+    } catch (error) {
+        console.error("An error occurred while adding points to users.", error);
+        return serializedExceptionResponse(error);
+    }
+});

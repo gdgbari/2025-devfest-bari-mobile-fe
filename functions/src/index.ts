@@ -12,6 +12,7 @@ import {
     submitQuiz,
     deleteQuiz,
     getQuizList,
+    addPointsToUsers,
 } from "./functions/quiz";
 
 admin.initializeApp();
@@ -31,4 +32,5 @@ export {
     getQuizList,
     getLeaderboard,
     redeemAuthCode,
+    addPointsToUsers,
 };
