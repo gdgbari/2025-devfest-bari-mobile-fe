@@ -1,4 +1,3 @@
-import 'package:devfest_bari_2024/data.dart';
 import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ class LeaderboardPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20).copyWith(bottom: 0),
           child: BlocConsumer<LeaderboardCubit, LeaderboardState>(
             listenWhen: (previous, current) =>
                 previous.pageIndex != current.pageIndex,
@@ -22,29 +21,82 @@ class LeaderboardPage extends StatelessWidget {
               pageController.jumpToPage(state.pageIndex);
             },
             builder: (context, state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CustomSegmentedButton(
-                    index: state.pageIndex,
-                    onValueChanged: (value) => context
-                        .read<LeaderboardCubit>()
-                        .changeLeaderboard(value),
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: PageView(
-                      controller: pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: const <Widget>[
-                        UserLeaderboard(),
-                        TeamLeaderboard(),
-                      ],
+              switch (state.status) {
+                case LeaderboardStatus.initial:
+                case LeaderboardStatus.fetchInProgress:
+                  return Center(child: CustomLoader());
+                case LeaderboardStatus.fetchFailure:
+                  return Center(
+                    child: Text(
+                      'The leaderboard\nis not available',
+                      style: PresetTextStyle.black23w400,
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              );
+                  );
+                case LeaderboardStatus.fetchSuccess:
+                  return state.leaderboard.isOpen
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            CustomSegmentedButton(
+                              index: state.pageIndex,
+                              onValueChanged: (value) => context
+                                  .read<LeaderboardCubit>()
+                                  .changeLeaderboard(value),
+                            ),
+                            const SizedBox(height: 20),
+                            Expanded(
+                              child: PageView(
+                                controller: pageController,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: const <Widget>[
+                                  UserLeaderboard(),
+                                  TeamLeaderboard(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : Center(
+                          child: Text.rich(
+                            TextSpan(
+                              text: '🏆 ANNOUNCEMENT 🏆\n\n',
+                              style: PresetTextStyle.black23w700,
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: 'Join us in ',
+                                  style: PresetTextStyle.black21w400,
+                                  children: <InlineSpan>[
+                                    TextSpan(
+                                      text: state.leaderboard.winnerRoom,
+                                      style: PresetTextStyle.black21w700,
+                                    ),
+                                    TextSpan(
+                                      text: ' at ',
+                                      style: PresetTextStyle.black21w400,
+                                    ),
+                                    TextSpan(
+                                      text: state.leaderboard.winnerTime,
+                                      style: PresetTextStyle.black21w700,
+                                    ),
+                                    TextSpan(
+                                      text: ' to find out who the winners are.',
+                                      style: PresetTextStyle.black21w400,
+                                    ),
+                                  ],
+                                ),
+                                TextSpan(text: '\n\n'),
+                                TextSpan(
+                                  text:
+                                      'Don\'t miss it because this could be your moment! 😉',
+                                  style: PresetTextStyle.black21w400,
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+              }
             },
           ),
         ),
@@ -58,71 +110,42 @@ class UserLeaderboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: const <Widget>[
-        Text(
-          'Your score',
-          style: PresetTextStyle.black23w500,
-        ),
-        SizedBox(height: 10),
-        UserTile(
-          user: LeaderboardUser(
-            nickname: 'pippobaudo555',
-            position: 13,
-            score: 100,
-            groupColor: ColorPalette.coreRed,
-          ),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Top 5',
-          style: PresetTextStyle.black23w500,
-        ),
-        SizedBox(height: 10),
-        UserTile(
-          user: LeaderboardUser(
-            nickname: 'pippobaudo123',
-            position: 1,
-            score: 344,
-            groupColor: ColorPalette.coreGreen,
-          ),
-        ),
-        SizedBox(height: 10),
-        UserTile(
-          user: LeaderboardUser(
-            nickname: 'pippobaudo321',
-            position: 2,
-            score: 286,
-            groupColor: ColorPalette.coreYellow,
-          ),
-        ),
-        SizedBox(height: 10),
-        UserTile(
-          user: LeaderboardUser(
-              nickname: 'pippobaudo000',
-              position: 3,
-              score: 254,
-              groupColor: ColorPalette.coreBlue),
-        ),
-        SizedBox(height: 10),
-        UserTile(
-          user: LeaderboardUser(
-            nickname: 'pippobaudo777',
-            position: 4,
-            score: 191,
-            groupColor: ColorPalette.coreRed,
-          ),
-        ),
-        SizedBox(height: 10),
-        UserTile(
-          user: LeaderboardUser(
-            nickname: 'pippobaudo888',
-            position: 5,
-            score: 155,
-            groupColor: ColorPalette.coreYellow,
-          ),
-        ),
-      ],
+    return BlocBuilder<LeaderboardCubit, LeaderboardState>(
+      builder: (context, state) {
+        final users = state.leaderboard.users;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Your score',
+              style: PresetTextStyle.black23w500,
+            ),
+            SizedBox(height: 10),
+            UserTile(user: state.leaderboard.currentUser),
+            SizedBox(height: 20),
+            Text(
+              'Top users',
+              style: PresetTextStyle.black23w500,
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index == users.length - 1 ? 40 : 0,
+                    ),
+                    child: UserTile(user: users[index]),
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(height: 10),
+                itemCount: users.length,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -132,62 +155,45 @@ class TeamLeaderboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Team rankings',
-          style: PresetTextStyle.black23w500,
-        ),
-        SizedBox(height: 10),
-        Expanded(
-          child: GroupTile(
-            group: Group(
-              name: 'Polpo',
-              colors: GroupColors.blue,
-              position: 1,
-              score: 100,
+    return BlocBuilder<LeaderboardCubit, LeaderboardState>(
+      builder: (context, state) {
+        final groups = state.leaderboard.groups;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Team rankings',
+              style: PresetTextStyle.black23w500,
             ),
-            maxScore: 100,
-          ),
-        ),
-        SizedBox(height: 20),
-        Expanded(
-          child: GroupTile(
-            group: Group(
-              name: 'Orecchiette',
-              colors: GroupColors.green,
-              position: 2,
-              score: 80,
+            SizedBox(height: 10),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  ...List<Widget>.generate(
+                    groups.length,
+                    (index) {
+                      return Expanded(
+                        child: Container(
+                          width: double.maxFinite,
+                          margin: EdgeInsets.only(
+                            bottom: index != groups.length ? 10 : 0,
+                          ),
+                          child: GroupTile(
+                            group: groups[index],
+                            maxScore: state.groupMaxScore,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 40),
+                ],
+              ),
             ),
-            maxScore: 100,
-          ),
-        ),
-        SizedBox(height: 20),
-        Expanded(
-          child: GroupTile(
-            group: Group(
-              name: 'Focaccia',
-              colors: GroupColors.red,
-              position: 3,
-              score: 60,
-            ),
-            maxScore: 100,
-          ),
-        ),
-        SizedBox(height: 20),
-        Expanded(
-          child: GroupTile(
-            group: Group(
-              name: 'Panzerotto',
-              colors: GroupColors.yellow,
-              position: 4,
-              score: 40,
-            ),
-            maxScore: 100,
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

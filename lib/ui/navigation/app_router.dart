@@ -11,6 +11,11 @@ final appRouter = GoRouter(
   initialLocation: RouteNames.welcomeRoute.path,
   routes: <RouteBase>[
     GoRoute(
+      name: RouteNames.noInternetRoute.name,
+      path: RouteNames.noInternetRoute.path,
+      builder: (context, state) => const NoInternetPage(),
+    ),
+    GoRoute(
       name: RouteNames.welcomeRoute.name,
       path: RouteNames.welcomeRoute.path,
       builder: (context, state) => const WelcomePage(),

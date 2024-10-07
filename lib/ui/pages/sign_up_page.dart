@@ -73,6 +73,14 @@ class SignUpPage extends StatelessWidget {
                 controller: passwordTextController,
                 obscureText: true,
               ),
+              const SizedBox(height: 5),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: const Text(
+                  'Minimum 8 characters',
+                  style: PresetTextStyle.black13w400,
+                ),
+              ),
               const SizedBox(height: 20),
               SizedBox(
                 height: 50,

@@ -3,7 +3,7 @@ import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatelessWidget {
-  final Group group;
+  final LeaderboardGroup group;
   final int maxScore;
 
   const GroupTile({
@@ -15,7 +15,9 @@ class GroupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseWidth = MediaQuery.of(context).size.width - 40;
-    final width = (baseWidth * group.score) / maxScore;
+    const minWidth = 30.0;
+    final width =
+        maxScore != 0 ? (baseWidth * group.score) / maxScore : minWidth;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,8 +25,8 @@ class GroupTile extends StatelessWidget {
         Expanded(
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            color: group.colors.primaryColor,
-            width: width,
+            color: group.color,
+            width: width == 0 ? minWidth : width,
             child: Center(
               child: Text(
                 '${group.position}°',

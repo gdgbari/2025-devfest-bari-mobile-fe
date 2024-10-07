@@ -14,8 +14,15 @@ class QrCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<QuizCubit, QuizState>(
-      listener: _quizListener,
+    return MultiBlocListener(
+      listeners: <BlocListener>[
+        BlocListener<QuizCubit, QuizState>(
+          listener: _quizListener,
+        ),
+        BlocListener<QrCodeCubit, QrCodeState>(
+          listener: _qrCodeListener,
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorPalette.black,
@@ -31,18 +38,6 @@ class QrCodePage extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                // TODO: only for testing => move all to "onDetect"
-                context.read<QuizCubit>().getQuiz('UNOLeIPMt0DPFwgMn4g1');
-              },
-              icon: const Icon(
-                Icons.qr_code,
-                color: Colors.white,
-              ),
-            ),
-          ],
         ),
         body: SafeArea(
           bottom: false,
@@ -53,10 +48,10 @@ class QrCodePage extends StatelessWidget {
                 onDetect: (barcodes) {
                   final qrData = barcodes.barcodes.first;
                   if (qrData.type == BarcodeType.text) {
-                    if (qrData.rawValue != null &&
-                        qrData.rawValue!.isNotEmpty) {
-                      print('QR DATA:\n${qrData.rawValue!}');
-                    }
+                    context.read<QrCodeCubit>().validateQrCode(
+                          qrData.rawValue,
+                          QrCodeType.quiz,
+                        );
                   }
                 },
               ),
@@ -79,6 +74,30 @@ class QrCodePage extends StatelessWidget {
   }
 }
 
+void _qrCodeListener(
+  BuildContext context,
+  QrCodeState state,
+) {
+  switch (state.status) {
+    case QrCodeStatus.validationInProgress:
+      context.loaderOverlay.show();
+      break;
+    case QrCodeStatus.validationSuccess:
+      context.loaderOverlay.hide();
+      context.read<QuizCubit>().getQuiz(state.value);
+      break;
+    case QrCodeStatus.validationFailure:
+      context.loaderOverlay.hide();
+      showCustomErrorDialog(
+        context,
+        'Hey, this QR code doesn\'t work.\nPlease try with another one.',
+      );
+      break;
+    default:
+      break;
+  }
+}
+
 void _quizListener(
   BuildContext context,
   QuizState state,
@@ -93,7 +112,29 @@ void _quizListener(
       break;
     case QuizStatus.fetchFailure:
       context.loaderOverlay.hide();
-      // TODO: show error message
+      late String errorMessage;
+      switch (state.error) {
+        case QuizError.quizNotFound:
+          errorMessage = 'Quiz not found.\nPlease try onother one.';
+          break;
+        case QuizError.quizNotOpen:
+          errorMessage = 'Quiz not open.\nPlease scan the right one.';
+          break;
+        case QuizError.quizTimeIsUp:
+          errorMessage = 'Oops, you ran out of time.\n'
+              'We can\'t consider your answers.';
+          break;
+        case QuizError.quizAlreadySubmitted:
+          errorMessage = 'You have already answered to this quiz.\n'
+              'There are a lot of them, go and find another one!';
+          break;
+        case QuizError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      showCustomErrorDialog(context, errorMessage);
       break;
     default:
   }

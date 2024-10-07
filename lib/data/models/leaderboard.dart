@@ -6,41 +6,54 @@ import 'package:equatable/equatable.dart';
 class Leaderboard extends Equatable {
   final LeaderboardUser currentUser;
   final List<LeaderboardUser> users;
-  final List<Group> groups;
+  final List<LeaderboardGroup> groups;
+  final bool isOpen;
+  final String winnerRoom;
+  final String winnerTime;
 
   const Leaderboard({
     this.currentUser = const LeaderboardUser(),
     this.users = const [],
     this.groups = const [],
+    this.isOpen = true,
+    this.winnerRoom = '',
+    this.winnerTime = '',
   });
 
   Leaderboard copyWith({
     LeaderboardUser? currentUser,
     List<LeaderboardUser>? users,
-    List<Group>? groups,
+    List<LeaderboardGroup>? groups,
+    bool? isOpen,
+    String? winnerRoom,
+    String? winnerTime,
   }) {
     return Leaderboard(
       currentUser: currentUser ?? this.currentUser,
       users: users ?? this.users,
       groups: groups ?? this.groups,
+      isOpen: isOpen ?? this.isOpen,
+      winnerRoom: winnerRoom ?? this.winnerRoom,
+      winnerTime: winnerTime ?? this.winnerTime,
     );
   }
 
   factory Leaderboard.fromMap(Map<String, dynamic> map) {
     return Leaderboard(
-      currentUser: LeaderboardUser.fromMap(
-        (map['currentUser'] ?? {}) as Map<String, dynamic>,
-      ),
+      currentUser: LeaderboardUser(),
       users: List<LeaderboardUser>.from(
-        (map['users'] ?? [] as List<Map<String, dynamic>>).map<LeaderboardUser>(
+        List<Map<String, dynamic>>.from(map['users'] ?? []).map(
           (x) => LeaderboardUser.fromMap(x),
         ),
       ),
-      groups: List<Group>.from(
-        (map['groups'] ?? [] as List<Map<String, dynamic>>).map<Group>(
-          (x) => Group.fromMap(x),
+      groups: List<LeaderboardGroup>.from(
+        List<Map<String, dynamic>>.from(map['groups'] ?? []).map(
+          (x) => LeaderboardGroup.fromMap(x),
         ),
       ),
+      isOpen: map['isOpen'] as bool? ?? true,
+      winnerRoom: map['winnerRoom'] as String? ?? '',
+      winnerTime: map['winnerTime'] as String? ?? '',
     );
   }
 
@@ -51,5 +64,12 @@ class Leaderboard extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object> get props => [currentUser, users, groups];
+  List<Object> get props => [
+        currentUser,
+        users,
+        groups,
+        isOpen,
+        winnerRoom,
+        winnerTime,
+      ];
 }

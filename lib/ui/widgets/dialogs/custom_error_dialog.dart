@@ -2,24 +2,24 @@ import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-Future<void> showAuthenticationErrorDialog(
+Future<void> showCustomErrorDialog(
   BuildContext context,
   String errorMessage,
 ) async {
   showDialog(
     context: context,
-    builder: (_) => AuthenticationErrorDialog(
+    builder: (_) => CustomErrorDialog(
       onPressed: () => context.pop(),
       errorMessage: errorMessage,
     ),
   );
 }
 
-class AuthenticationErrorDialog extends StatelessWidget {
+class CustomErrorDialog extends StatelessWidget {
   final void Function()? onPressed;
   final String errorMessage;
 
-  const AuthenticationErrorDialog({
+  const CustomErrorDialog({
     super.key,
     required this.onPressed,
     required this.errorMessage,

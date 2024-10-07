@@ -12,8 +12,6 @@ class QuizCubit extends Cubit<QuizState> {
 
   QuizCubit() : super(const QuizState());
 
-  void resetQuiz() => emit(const QuizState());
-
   void startTimer() {
     emit(state.copyWith(status: QuizStatus.timerInProgress));
     stopTimer();
@@ -40,11 +38,11 @@ class QuizCubit extends Cubit<QuizState> {
 
   void stopTimer() => _timer?.cancel();
 
-  Future<void> getQuiz(String quizId) async {
+  Future<void> getQuiz(String quizCode) async {
     emit(const QuizState().copyWith(status: QuizStatus.fetchInProgress));
 
     try {
-      final quiz = await _quizRepo.getQuiz(quizId);
+      final quiz = await _quizRepo.getQuiz(quizCode);
       emit(
         state.copyWith(
           status: QuizStatus.fetchSuccess,
@@ -56,8 +54,41 @@ class QuizCubit extends Cubit<QuizState> {
         ),
       );
       startTimer();
-    } catch (e) {
-      emit(state.copyWith(status: QuizStatus.fetchFailure));
+    } on QuizNotFoundError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizNotFound,
+        ),
+      );
+    } on QuizNotOpenError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizNotOpen,
+        ),
+      );
+    } on QuizTimeIsUpError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizTimeIsUp,
+        ),
+      );
+    } on QuizAlreadySubmittedError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizAlreadySubmitted,
+        ),
+      );
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.unknown,
+        ),
+      );
     }
   }
 
@@ -89,8 +120,45 @@ class QuizCubit extends Cubit<QuizState> {
           results: results,
         ),
       );
-    } catch (e) {
-      emit(state.copyWith(status: QuizStatus.submissionFailure));
+    } on QuizNotFoundError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizNotFound,
+        ),
+      );
+    } on QuizNotOpenError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizNotOpen,
+        ),
+      );
+    } on QuizTimeIsUpError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizTimeIsUp,
+        ),
+      );
+    } on QuizAlreadySubmittedError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.quizAlreadySubmitted,
+        ),
+      );
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.unknown,
+        ),
+      );
     }
+  }
+
+  void completeSubmission() {
+    emit(state.copyWith(status: QuizStatus.submissionComplete));
   }
 }

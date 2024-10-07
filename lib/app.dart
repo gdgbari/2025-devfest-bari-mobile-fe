@@ -20,8 +20,15 @@ class App extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
         ),
         builder: (context, child) {
-          return BlocListener<AuthenticationCubit, AuthenticationState>(
-            listener: _authListener,
+          return MultiBlocListener(
+            listeners: <BlocListener>[
+              BlocListener<AuthenticationCubit, AuthenticationState>(
+                listener: _authListener,
+              ),
+              BlocListener<InternetCubit, InternetState>(
+                listener: _internetListener,
+              ),
+            ],
             child: LoaderOverlay(
               overlayColor: Colors.black.withOpacity(.4),
               overlayWidgetBuilder: (_) {
@@ -39,24 +46,32 @@ class App extends StatelessWidget {
 }
 
 List<BlocProvider> _topLevelProviders = <BlocProvider>[
+  BlocProvider<InternetCubit>(
+    lazy: false,
+    create: (_) => InternetCubit(),
+  ),
   BlocProvider<AuthenticationCubit>(
     lazy: false,
-    create: (context) => AuthenticationCubit(),
+    create: (_) => AuthenticationCubit(),
+  ),
+  BlocProvider<QrCodeCubit>(
+    lazy: false,
+    create: (_) => QrCodeCubit(),
   ),
   BlocProvider<QuizCubit>(
     lazy: false,
-    create: (context) => QuizCubit(),
+    create: (_) => QuizCubit(),
   ),
   BlocProvider<LeaderboardCubit>(
     lazy: false,
-    create: (context) => LeaderboardCubit(),
+    create: (_) => LeaderboardCubit(),
   ),
 ];
 
 void _authListener(
   BuildContext context,
   AuthenticationState state,
-) async {
+) {
   switch (state.status) {
     case AuthenticationStatus.initialAuthFailure:
       context.loaderOverlay.hide();
@@ -76,39 +91,76 @@ void _authListener(
     case AuthenticationStatus.checkInSuccess:
     case AuthenticationStatus.authenticationSuccess:
       context.loaderOverlay.hide();
+      context
+          .read<LeaderboardCubit>()
+          .fetchLeaderboard(state.userProfile.userId);
       appRouter.goNamed(RouteNames.leaderboardRoute.name);
       FlutterNativeSplash.remove();
       break;
     case AuthenticationStatus.signUpFailure:
       context.loaderOverlay.hide();
-      // TODO: implement error message
-      break;
-    case AuthenticationStatus.checkInFailure:
-      context.loaderOverlay.hide();
-      // TODO: implement error message
-      break;
-    case AuthenticationStatus.authenticationFailure:
-      context.loaderOverlay.hide();
       String errorMessage = '';
       switch (state.error) {
+        case AuthenticationError.userAlreadyRegistered:
+          errorMessage =
+              'Email already registered.\nPlease use a different email or login.';
+          break;
         case AuthenticationError.invalidCredentials:
-          errorMessage = 'Invalid credentials';
-          break;
-        case AuthenticationError.userNotFound:
-          errorMessage = 'User not found';
-          break;
-        case AuthenticationError.missingUserData:
-          errorMessage = 'Missing user data';
+          errorMessage = 'Invalid data entered.\nPlease try again.';
           break;
         case AuthenticationError.unknown:
-          errorMessage = 'Unknown error';
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
           break;
         default:
           break;
       }
       final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
       if (ctx != null) {
-        showAuthenticationErrorDialog(ctx, errorMessage);
+        showCustomErrorDialog(ctx, errorMessage);
+      }
+      break;
+    case AuthenticationStatus.checkInFailure:
+      context.loaderOverlay.hide();
+      String errorMessage = '';
+      switch (state.error) {
+        case AuthenticationError.checkInCodeExpired:
+          errorMessage =
+              'Check-in code has expired.\nPlease request a new code.';
+          break;
+        case AuthenticationError.checkInCodeNotFound:
+          errorMessage =
+              'Check-in code not found.\nPlease verify and scan again.';
+          break;
+        case AuthenticationError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
+      if (ctx != null) {
+        showCustomErrorDialog(ctx, errorMessage);
+      }
+      break;
+    case AuthenticationStatus.authenticationFailure:
+      context.loaderOverlay.hide();
+      String errorMessage = '';
+      switch (state.error) {
+        case AuthenticationError.userNotFound:
+          errorMessage = 'Email not registered.\nPlease try again.';
+          break;
+        case AuthenticationError.invalidCredentials:
+          errorMessage = 'Invalid data entered.\nPlease try again.';
+          break;
+        case AuthenticationError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
+      if (ctx != null) {
+        showCustomErrorDialog(ctx, errorMessage);
       }
       break;
     case AuthenticationStatus.signOutSuccess:
@@ -117,5 +169,25 @@ void _authListener(
       break;
     default:
       break;
+  }
+}
+
+void _internetListener(
+  BuildContext context,
+  InternetState state,
+) {
+  if (state is InternetDisconnected) {
+    context.loaderOverlay.hide();
+    appRouter.goNamed(RouteNames.noInternetRoute.name);
+    FlutterNativeSplash.remove();
+  }
+
+  if (state is InternetConnected) {
+    context.read<LeaderboardCubit>().changeLeaderboard(0);
+    final route = context.read<AuthenticationCubit>().state.isAuthenticated
+        ? RouteNames.leaderboardRoute
+        : RouteNames.welcomeRoute;
+
+    appRouter.goNamed(route.name);
   }
 }

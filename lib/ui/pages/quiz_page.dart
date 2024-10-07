@@ -153,26 +153,46 @@ class QuizPage extends StatelessWidget {
 void _quizListener(
   BuildContext context,
   QuizState state,
-) {
+) async {
   switch (state.status) {
     case QuizStatus.submissionInProgress:
       context.loaderOverlay.show();
       break;
     case QuizStatus.submissionSuccess:
       context.loaderOverlay.hide();
-      showDialog(
+      showQuizResultsDialog(
         context: context,
-        builder: (_) => QuizResultsDialog(
-          onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
-          content: Text(
-            'Score: ${state.results.score}/${state.results.maxScore}',
-          ),
-        ),
+        onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
+        score: state.results.score,
+        maxScore: state.results.maxScore,
       );
+      context.read<QuizCubit>().completeSubmission();
       break;
     case QuizStatus.submissionFailure:
       context.loaderOverlay.hide();
-      // TODO: show error message
+      late String errorMessage;
+      switch (state.error) {
+        case QuizError.quizNotFound:
+          errorMessage = 'Quiz not found.\nPlease try onother one.';
+          break;
+        case QuizError.quizNotOpen:
+          errorMessage = 'Quiz not open.\nPlease scan the right one.';
+          break;
+        case QuizError.quizTimeIsUp:
+          errorMessage = 'Oops, you ran out of time.\n'
+              'We can\'t consider your answers.';
+          break;
+        case QuizError.quizAlreadySubmitted:
+          errorMessage = 'You have already answered to this quiz.\n'
+              'There are a lot of them, go and find another one!';
+          break;
+        case QuizError.unknown:
+          errorMessage = 'An unknown error occurred.\nPlease try again later.';
+          break;
+        default:
+          break;
+      }
+      showCustomErrorDialog(context, errorMessage);
       break;
     case QuizStatus.timerExpired:
       context.read<QuizCubit>().submitQuiz();

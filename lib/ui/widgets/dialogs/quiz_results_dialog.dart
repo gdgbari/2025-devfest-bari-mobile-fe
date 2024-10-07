@@ -1,39 +1,64 @@
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
 
+Future<void> showQuizResultsDialog({
+  required BuildContext context,
+  required void Function()? onPressed,
+  required int score,
+  required int maxScore,
+}) async {
+  showDialog(
+    context: context,
+    builder: (_) => QuizResultsDialog(
+      onPressed: onPressed,
+      score: score,
+      maxScore: maxScore,
+    ),
+  );
+}
+
 class QuizResultsDialog extends StatelessWidget {
   final void Function()? onPressed;
-  final Widget content;
+  final int score;
+  final int maxScore;
 
   const QuizResultsDialog({
     super.key,
     required this.onPressed,
-    required this.content,
+    required this.score,
+    required this.maxScore,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('SCORE'),
-      content: SizedBox(
-        height: MediaQuery.of(context).size.height / 10,
-        width: MediaQuery.of(context).size.width - 40,
-        child: content,
+      title: Text(
+        'QUIZ RESULTS',
+        style: PresetTextStyle.black23w500,
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        '$score/$maxScore',
+        style: PresetTextStyle.black23w400.copyWith(
+          fontSize: 40,
+        ),
+        textAlign: TextAlign.center,
       ),
       actions: <Widget>[
         TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
             backgroundColor: ColorPalette.black,
+            overlayColor: Colors.white,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           child: const SizedBox(
-            height: 50,
+            height: 40,
             width: double.maxFinite,
             child: Center(
               child: Text(
                 'OK',
-                style: PresetTextStyle.white15w400,
+                style: PresetTextStyle.white19w400,
               ),
             ),
           ),

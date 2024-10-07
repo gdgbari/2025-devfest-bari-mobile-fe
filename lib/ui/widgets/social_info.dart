@@ -6,32 +6,37 @@ class SocialInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          'Follow us on our social media',
-          style: PresetTextStyle.black21w500,
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Center(
+      child: SizedBox(
+        width: 240,
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SocialMediaButton(
-              name: 'instagram',
-              url: 'https://www.instagram.com/gdgbari/',
+            Text(
+              'Follow us on our social media',
+              style: PresetTextStyle.black17w500,
             ),
-            SocialMediaButton(
-              name: 'x',
-              url: 'https://x.com/gdgbari/',
-            ),
-            SocialMediaButton(
-              name: 'linkedin',
-              url: 'https://www.linkedin.com/company/gdgbari/',
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SocialMediaButton(
+                  name: 'instagram',
+                  url: 'https://www.instagram.com/gdgbari/',
+                ),
+                SocialMediaButton(
+                  name: 'x',
+                  url: 'https://x.com/gdgbari/',
+                ),
+                SocialMediaButton(
+                  name: 'linkedin',
+                  url: 'https://www.linkedin.com/company/gdgbari/',
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }
