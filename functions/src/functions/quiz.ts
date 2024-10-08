@@ -505,6 +505,43 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
 
         await batch.commit();
 
+        // Update realtime database
+        await Promise.all(userIdList.map(async (userId: string) => {
+            const userDoc = await db.collection("users").doc(userId).get();
+            const userData = userDoc.data();
+
+            if (!userData) {
+                return serializedErrorResponse("user-not-found", "User data not found.");
+            }
+
+            const group = (await parseGroupRef(userData.group)).data;
+            if (!group) {
+                return serializedErrorResponse("group-not-found", "Group data not found.");
+            }
+            
+            
+            await admin.database()
+                .ref(`leaderboard/users/${userId}`)
+                .transaction((currentUser) => {
+                    return {
+                        ...currentUser,
+                        score: (currentUser?.score || 0) + value,
+                        timestamp: Date.now(),
+                    };
+                });
+            await admin.database()
+                .ref(`leaderboard/groups/${group.groupId}`)
+                .transaction((currentGroup) => {
+                    return {
+                        ...currentGroup,
+                        score: (currentGroup?.score || 0) + value,
+                        timestamp: Date.now(),
+                    };
+                });
+
+            return null; 
+        }));
+
         return serializedSuccessResponse({ quizId });
     } catch (error) {
         console.error("An error occurred while adding points to users.", error);
