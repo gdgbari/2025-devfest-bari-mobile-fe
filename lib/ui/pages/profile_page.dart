@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
             final qrImage = QrImage(
               QrCode.fromData(
                 data: 'user:${state.userProfile.userId}',
-                errorCorrectLevel: QrErrorCorrectLevel.M,
+                errorCorrectLevel: QrErrorCorrectLevel.H,
               ),
             );
 
