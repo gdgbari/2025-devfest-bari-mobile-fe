@@ -1,7 +1,7 @@
 require("module-alias/register");
 
 import * as admin from "firebase-admin";
-import { getUserProfile, signUp, redeemAuthCode } from "./functions/auth";
+import { getUserProfile, signUp, redeemAuthCode, getUserProfileById } from "./functions/auth";
 import { createTalk, getTalkList } from "./functions/talk";
 import { getSponsorList } from "./functions/sponsor";
 import { getLeaderboard, refreshLeaderboard } from "./functions/leaderboard";
@@ -34,4 +34,5 @@ export {
     refreshLeaderboard,
     redeemAuthCode,
     addPointsToUsers,
+    getUserProfileById,
 };

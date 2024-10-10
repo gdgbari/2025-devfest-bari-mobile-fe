@@ -48,6 +48,7 @@ export const signUp = functions.https.onCall(async (data, context) => {
 });
 
 export const getUserProfile = functions.https.onCall(async (_, context) => {
+
     if (!context.auth) {
         return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
     }
@@ -96,6 +97,78 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
         return serializedExceptionResponse(error);
     }
 });
+
+export const getUserProfileById = functions.https.onCall(async (data, context) => {
+
+    const {userId} = data;
+
+    if (!context.auth?.uid) {
+        return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
+    }
+
+    const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+    if (!userDoc.exists) {
+        return serializedErrorResponse("user-not-found", "User not found.");
+    }
+
+    const userData = userDoc.data();
+
+    if (!userData) {
+        return serializedErrorResponse("user-not-found", "User data not found.");
+    }
+
+    if (userData.role != "staff") {
+        return serializedErrorResponse("permission-denied", "User not authorized.");
+    }
+
+
+    try {
+        const userDoc = await db.collection("users").doc(userId).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "The user does not exist.");
+        }
+
+        var group: Group | null = null;
+
+        if (userData.group != null) {
+            const groupResponse: GenericResponse<Group> = await parseGroupRef(userData.group);
+
+            if (groupResponse.error) {
+                return serializedErrorResponse(groupResponse.error.errorCode, groupResponse.error.details);
+            }
+
+            group = groupResponse.data as Group;
+        }
+
+        const userProfile: UserProfile = {
+            userId: userDoc.id,
+            nickname: userData.nickname,
+            email: userData.email,
+            name: userData.name,
+            surname: userData.surname,
+            group: group,
+            groupId: group ? group.groupId : null,
+            position: null,
+            score: userData.score,
+            role: null
+        };
+
+        return serializedSuccessResponse(userProfile);
+    } catch (error) {
+        console.error("An error occurred while fetching the user profile.", error);
+        return serializedExceptionResponse(error);
+    }
+
+});
+
 
 export const redeemAuthCode = functions.https.onCall(async (data, context) => {
     const {code} = data;
