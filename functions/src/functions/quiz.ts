@@ -479,6 +479,8 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
         if (userData.role != "staff") {
             return serializedErrorResponse("permission-denied", "User not authorized.");
         }
+        
+        let valueNum = parseFloat(value);
 
         const quizRef = db.collection("quizzes");
         const quizDoc = await quizRef.add({
@@ -487,7 +489,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
             talkId: "",
             sponsorId: "",
             title: title,
-            maxScore: value,
+            maxScore: valueNum,
             isOpen: false,
             timerDuration: 0,
             creatorUid: context.auth.uid,
@@ -498,7 +500,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
         const batch = db.batch();
 
         userIdList.forEach((userId: string) => {
-            const result: QuizResult = { score: value, maxScore: value, quizTitle: title };
+            const result: QuizResult = { score: valueNum, maxScore: valueNum, quizTitle: title };
             const userQuizResultRef = db.collection("users").doc(userId).collection("quizResults").doc(quizId);
             batch.set(userQuizResultRef, result);
         });
@@ -525,7 +527,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
                 .transaction((currentUser) => {
                     return {
                         ...currentUser,
-                        score: (currentUser?.score || 0) + value,
+                        score: (currentUser?.score || 0) + valueNum,
                         timestamp: Date.now(),
                     };
                 });
@@ -534,7 +536,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
                 .transaction((currentGroup) => {
                     return {
                         ...currentGroup,
-                        score: (currentGroup?.score || 0) + value,
+                        score: (currentGroup?.score || 0) + valueNum,
                         timestamp: Date.now(),
                     };
                 });
