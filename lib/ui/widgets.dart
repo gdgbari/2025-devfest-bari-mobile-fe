@@ -1,5 +1,6 @@
 export 'widgets/answer_list_tile.dart';
 export 'widgets/custom_loader.dart';
+export 'widgets/custom_qr_view.dart';
 export 'widgets/custom_segmented_button.dart';
 export 'widgets/custom_text_field.dart';
 export 'widgets/dialogs/custom_error_dialog.dart';

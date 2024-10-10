@@ -20,21 +20,7 @@ Future<void> zoomQrCode(
               color: ColorPalette.white,
               padding: EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width * 0.6,
-              child: PrettyQrView(
-                qrImage: qrImage,
-                decoration: const PrettyQrDecoration(
-                  shape: PrettyQrSmoothSymbol(
-                    color: ColorPalette.black,
-                    roundFactor: 0,
-                  ),
-                  image: PrettyQrDecorationImage(
-                    image: AssetImage(
-                      'assets/images/user.png',
-                    ),
-                    scale: 0.3,
-                  ),
-                ),
-              ),
+              child: CustomQrView(qrImage: qrImage),
             ),
           ),
         );

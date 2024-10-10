@@ -21,21 +21,7 @@ class UserQrCode extends StatelessWidget {
               child: Container(
                 color: ColorPalette.white,
                 padding: EdgeInsets.all(5),
-                child: PrettyQrView(
-                  qrImage: qrImage,
-                  decoration: const PrettyQrDecoration(
-                    shape: PrettyQrSmoothSymbol(
-                      color: ColorPalette.black,
-                      roundFactor: 0,
-                    ),
-                    image: PrettyQrDecorationImage(
-                      image: AssetImage(
-                        'assets/images/user.png',
-                      ),
-                      scale: 0.3,
-                    ),
-                  ),
-                ),
+                child: CustomQrView(qrImage: qrImage),
               ),
             ),
           ),
