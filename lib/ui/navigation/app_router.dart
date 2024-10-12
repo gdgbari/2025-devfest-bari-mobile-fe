@@ -65,6 +65,11 @@ final appRouter = GoRouter(
       ],
     ),
     GoRoute(
+      name: RouteNames.easterEggRoute.name,
+      path: RouteNames.easterEggRoute.path,
+      builder: (context, state) => const EasterEggPage(),
+    ),
+    GoRoute(
       name: RouteNames.qrCodeRoute.name,
       path: RouteNames.qrCodeRoute.path,
       builder: (context, state) => QrCodePage(),

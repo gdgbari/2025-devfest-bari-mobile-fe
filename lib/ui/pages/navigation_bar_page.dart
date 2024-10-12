@@ -28,6 +28,15 @@ class NavigationBarPage extends StatelessWidget {
             style: PresetTextStyle.white21w500,
           ),
           centerTitle: true,
+          leading: Visibility(
+            visible: navigationShell.currentIndex == 1,
+            child: GestureDetector(
+              onTap: () => context.pushNamed(RouteNames.easterEggRoute.name),
+              child: Container(
+                color: ColorPalette.black,
+              ),
+            ),
+          ),
           actions: <Widget>[
             Visibility(
               visible: navigationShell.currentIndex == 1,
