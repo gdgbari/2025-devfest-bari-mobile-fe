@@ -43,16 +43,27 @@ class QrCodePage extends StatelessWidget {
           bottom: false,
           child: Stack(
             children: <Widget>[
-              MobileScanner(
-                controller: controller,
-                onDetect: (barcodes) {
-                  final qrData = barcodes.barcodes.first;
-                  if (qrData.type == BarcodeType.text) {
-                    context.read<QrCodeCubit>().validateQrCode(
-                          qrData.rawValue,
-                          QrCodeType.quiz,
-                        );
-                  }
+              Builder(
+                builder: (context) {
+                  final qrState = context.watch<QrCodeCubit>().state;
+                  final quizState = context.watch<QuizCubit>().state;
+
+                  return MobileScanner(
+                    controller: controller,
+                    onDetect: (barcodes) {
+                      final qrData = barcodes.barcodes.first;
+                      if (qrData.type == BarcodeType.text) {
+                        if (qrState.status !=
+                                QrCodeStatus.validationInProgress &&
+                            quizState.status != QuizStatus.fetchInProgress) {
+                          context.read<QrCodeCubit>().validateQrCode(
+                                qrData.rawValue,
+                                QrCodeType.quiz,
+                              );
+                        }
+                      }
+                    },
+                  );
                 },
               ),
               const QRCodeBackground(),

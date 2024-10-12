@@ -30,16 +30,29 @@ class CheckInPage extends StatelessWidget {
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    MobileScanner(
-                      controller: controller,
-                      onDetect: (barcodes) {
-                        final qrData = barcodes.barcodes.first;
-                        if (qrData.type == BarcodeType.text) {
-                          context.read<QrCodeCubit>().validateQrCode(
-                                qrData.rawValue,
-                                QrCodeType.checkin,
-                              );
-                        }
+                    Builder(
+                      builder: (context) {
+                        final qrState = context.watch<QrCodeCubit>().state;
+                        final authState =
+                            context.watch<AuthenticationCubit>().state;
+
+                        return MobileScanner(
+                          controller: controller,
+                          onDetect: (barcodes) {
+                            final qrData = barcodes.barcodes.first;
+                            if (qrData.type == BarcodeType.text) {
+                              if (qrState.status !=
+                                      QrCodeStatus.validationInProgress &&
+                                  authState.status !=
+                                      AuthenticationStatus.checkInInProgress) {
+                                context.read<QrCodeCubit>().validateQrCode(
+                                      qrData.rawValue,
+                                      QrCodeType.checkin,
+                                    );
+                              }
+                            }
+                          },
+                        );
                       },
                     ),
                     const QRCodeBackground(),
