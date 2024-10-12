@@ -1,15 +1,15 @@
-import {Group} from "@models/Group";
-import {UserProfile} from "@models/UserProfile";
-import {GenericResponse} from "@modelsresponse/GenericResponse";
-import {getAuth} from "firebase-admin/auth";
-import * as functions from "firebase-functions";
-import {db} from "../index";
-import {parseGroupRef} from "../utils/firestoreHelpers";
-import {serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse} from "../utils/responseHelper";
+import { Group } from "@models/Group";
+import { UserProfile } from "@models/UserProfile";
+import { GenericResponse } from "@modelsresponse/GenericResponse";
 import * as admin from "firebase-admin";
+import { getAuth } from "firebase-admin/auth";
+import * as functions from "firebase-functions";
+import { db } from "../index";
+import { parseGroupRef } from "../utils/firestoreHelpers";
+import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
 
 export const signUp = functions.https.onCall(async (data, context) => {
-    const {name, surname, nickname, email, password} = data;
+    const { name, surname, nickname, email, password } = data;
 
     try {
         const userRecord = await getAuth()
@@ -39,6 +39,16 @@ export const signUp = functions.https.onCall(async (data, context) => {
             group: null,
             role: "attendee"
         });
+
+        // Initialize the user's score to 0
+        await admin.database()
+            .ref(`leaderboard/users/${uid}`)
+            .set({
+                groupColor: 'black',
+                nickname: nickname,
+                score: 0,
+                timestamp: Date.now()
+            });
 
         return serializedSuccessResponse(uid);
     } catch (error) {
@@ -100,7 +110,7 @@ export const getUserProfile = functions.https.onCall(async (_, context) => {
 
 export const getUserProfileById = functions.https.onCall(async (data, context) => {
 
-    const {userId} = data;
+    const { userId } = data;
 
     if (!context.auth?.uid) {
         return serializedErrorResponse("unauthenticated", "The request has to be authenticated.");
@@ -171,7 +181,7 @@ export const getUserProfileById = functions.https.onCall(async (data, context) =
 
 
 export const redeemAuthCode = functions.https.onCall(async (data, context) => {
-    const {code} = data;
+    const { code } = data;
 
     if (!context.auth?.uid) {
         return serializedErrorResponse("unauthenticated", "User must be authenticated.");
@@ -201,12 +211,12 @@ export const redeemAuthCode = functions.https.onCall(async (data, context) => {
 
         await db.collection("users").doc(context.auth.uid).set({
             group: groupReference,
-        }, {merge: true});
+        }, { merge: true });
 
         await db.collection("authorizationCodes").doc(codeId).set({
             expired: true,
             user: userReference,
-        }, {merge: true});
+        }, { merge: true });
 
         const group = (await parseGroupRef(groupReference)).data as Group;
         const userDoc = await userReference.get();
@@ -215,15 +225,10 @@ export const redeemAuthCode = functions.https.onCall(async (data, context) => {
             return serializedErrorResponse("user-not-found", "User data not found.");
         }
 
-        // Initialize the user's score to 0
+        // set group color in leaderboard's user
         await admin.database()
             .ref(`leaderboard/users/${context.auth.uid}`)
-            .set({
-                groupColor: group.color,
-                nickname: userData.nickname,
-                score: 0,
-                timestamp: Date.now()
-            });
+            .update({ groupColor: group.color });
 
         return serializedSuccessResponse(group);
     } catch (error) {
