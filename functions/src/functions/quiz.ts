@@ -422,7 +422,7 @@ export const getQuizList = functions.https.onCall(async (_, context) => {
 
                 const questionListResponse: GenericResponse<Question[]> = await parseQuestionListRef(
                     quizData.questionList,
-                    true
+                    false
                 );
 
                 if (questionListResponse.error) {
@@ -439,7 +439,7 @@ export const getQuizList = functions.https.onCall(async (_, context) => {
                     talkId: quizData.talkId,
                     sponsorId: quizData.sponsorId,
                     maxScore: quizData.maxScore,
-                    isOpen: null,
+                    isOpen: quizData.isOpen,
                     questionList: questionList,
                     timerDuration: quizData.timerDuration,
                 };
