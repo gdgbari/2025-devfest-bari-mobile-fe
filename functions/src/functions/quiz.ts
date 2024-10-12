@@ -12,7 +12,7 @@ import { serializedErrorResponse, serializedExceptionResponse, serializedSuccess
 import { generateUniqueRandomStrings } from "../utils/stringHelpers";
 
 export const createQuiz = functions.https.onCall(async (data, context) => {
-    const { questionList, type, talkId, sponsorId, title } = data;
+    const { questionList, type, talkId, sponsorId, title, isOpen } = data;
 
     if (!context.auth) {
         return serializedErrorResponse("unauthenticated", "User must be authenticated.");
@@ -73,7 +73,7 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
             sponsorId: sponsorId ?? "",
             title: title ?? "",
             maxScore: maxScore,
-            isOpen: false,
+            isOpen: isOpen ?? false,
             timerDuration: 1000 * 60 * 3, // 3 minutes
             creatorUid: context.auth.uid,
         });
