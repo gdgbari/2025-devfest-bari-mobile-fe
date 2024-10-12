@@ -57,45 +57,7 @@ class LeaderboardPage extends StatelessWidget {
                             ),
                           ],
                         )
-                      : Center(
-                          child: Text.rich(
-                            TextSpan(
-                              text: '🏆 ANNOUNCEMENT 🏆\n\n',
-                              style: PresetTextStyle.black23w700,
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text: 'Join us in ',
-                                  style: PresetTextStyle.black21w400,
-                                  children: <InlineSpan>[
-                                    TextSpan(
-                                      text: state.leaderboard.winnerRoom,
-                                      style: PresetTextStyle.black21w700,
-                                    ),
-                                    TextSpan(
-                                      text: ' at ',
-                                      style: PresetTextStyle.black21w400,
-                                    ),
-                                    TextSpan(
-                                      text: state.leaderboard.winnerTime,
-                                      style: PresetTextStyle.black21w700,
-                                    ),
-                                    TextSpan(
-                                      text: ' to find out who the winners are.',
-                                      style: PresetTextStyle.black21w400,
-                                    ),
-                                  ],
-                                ),
-                                TextSpan(text: '\n\n'),
-                                TextSpan(
-                                  text:
-                                      'Don\'t miss it because this could be your moment! 😉',
-                                  style: PresetTextStyle.black21w400,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        );
+                      : _LeaderboardClosed(state);
               }
             },
           ),
@@ -194,6 +156,51 @@ class TeamLeaderboard extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _LeaderboardClosed extends StatelessWidget {
+  final LeaderboardState state;
+
+  const _LeaderboardClosed(this.state);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text.rich(
+        TextSpan(
+          text: '🏆 ANNOUNCEMENT 🏆\n\n',
+          style: PresetTextStyle.black23w700,
+          children: <InlineSpan>[
+            TextSpan(
+              text: 'The final leaderboard will be shown in ',
+              style: PresetTextStyle.black21w400,
+              children: <InlineSpan>[
+                TextSpan(
+                  text: state.leaderboard.winnerRoom,
+                  style: PresetTextStyle.black21w700,
+                ),
+                TextSpan(
+                  text: ' at ',
+                  style: PresetTextStyle.black21w400,
+                ),
+                TextSpan(
+                  text: state.leaderboard.winnerTime,
+                  style: PresetTextStyle.black21w700,
+                ),
+              ],
+            ),
+            TextSpan(text: '\n\n'),
+            TextSpan(
+              text:
+                  'Join us to discover the winners and get amazing prizes! 🏅',
+              style: PresetTextStyle.black21w400,
+            ),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }
