@@ -485,7 +485,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
         const quizRef = db.collection("quizzes");
         const quizDoc = await quizRef.add({
             questionList: [],
-            type: "hidden",
+            type: "custom",
             talkId: "",
             sponsorId: "",
             title: title,
