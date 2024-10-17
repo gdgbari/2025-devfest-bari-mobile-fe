@@ -36,10 +36,6 @@ class Quiz extends Equatable {
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
-    const backOffTime = 30000;
-    final timerDuration = map['timerDuration'] != null
-        ? (map['timerDuration'] as int) - backOffTime
-        : 0;
     return Quiz(
       quizId: map['quizId'] as String? ?? '',
       title: map['title'] as String? ?? '',
@@ -49,7 +45,9 @@ class Quiz extends Equatable {
           map['questionList'] ?? [],
         ).map((x) => Question.fromMap(x)),
       ),
-      timerDuration: Duration(milliseconds: timerDuration),
+      timerDuration: Duration(
+        milliseconds: (map['timerDuration'] as int?) ?? 0,
+      ),
     );
   }
 

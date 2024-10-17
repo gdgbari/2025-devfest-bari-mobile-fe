@@ -11,8 +11,11 @@ import { parseGroupRef, parseQuestionListRef } from "../utils/firestoreHelpers";
 import { serializedErrorResponse, serializedExceptionResponse, serializedSuccessResponse } from "../utils/responseHelper";
 import { generateUniqueRandomStrings } from "../utils/stringHelpers";
 
+const timePerQuestion = 60 * 1000;
+const backoffTime = 30 * 1000;
+
 export const createQuiz = functions.https.onCall(async (data, context) => {
-    const { questionList, type, talkId, sponsorId, title, isOpen } = data;
+    const { questionList, type, title, isOpen } = data;
 
     if (!context.auth) {
         return serializedErrorResponse("unauthenticated", "User must be authenticated.");
@@ -69,12 +72,10 @@ export const createQuiz = functions.https.onCall(async (data, context) => {
         const quizDoc = await quizRef.add({
             questionList: questionListRef,
             type: type,
-            talkId: talkId ?? "",
-            sponsorId: sponsorId ?? "",
             title: title ?? "",
             maxScore: maxScore,
             isOpen: isOpen ?? false,
-            timerDuration: 1000 * 60 * 3, // 3 minutes
+            timerDuration: timePerQuestion * questionList.length,
             creatorUid: context.auth.uid,
         });
 
@@ -263,10 +264,9 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
         }
 
         if (
-            startTimeData.startTimestamp + quizData.timerDuration - 10000 <
+            startTimeData.startTimestamp + quizData.timerDuration - backoffTime <
             Date.now()
         ) {
-            // 10 seconds buffer for network latency
             return serializedErrorResponse("quiz-time-up", "Quiz time is up.");
         }
 
