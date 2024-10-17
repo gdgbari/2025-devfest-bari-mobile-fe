@@ -133,14 +133,25 @@ export const getQuiz = functions.https.onCall(async (data, context) => {
             quizId: quizDoc.id,
             title: quizData.title,
             type: quizData.type,
-            talkId: quizData.talkId,
-            sponsorId: quizData.sponsorId,
+            talkId: null,
+            sponsorId: null,
             maxScore: quizData.maxScore,
             isOpen: null,
             questionList: questionList,
             timerDuration: quizData.timerDuration,
             creatorUid: null,
         };
+
+        const answerDoc = await db
+            .collection("users")
+            .doc(uid)
+            .collection("quizResults")
+            .doc(quizId)
+            .get();
+
+        if (answerDoc.exists) {
+            return serializedErrorResponse("quiz-already-submitted", "Quiz already submitted.");
+        }
 
         const startTimeDoc = db
             .collection("users")
@@ -479,7 +490,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
         if (userData.role != "staff") {
             return serializedErrorResponse("permission-denied", "User not authorized.");
         }
-        
+
         let valueNum = parseFloat(value);
 
         const quizRef = db.collection("quizzes");
@@ -520,8 +531,8 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
             if (!group) {
                 return serializedErrorResponse("group-not-found", "Group data not found.");
             }
-            
-            
+
+
             await admin.database()
                 .ref(`leaderboard/users/${userId}`)
                 .transaction((currentUser) => {
@@ -541,7 +552,7 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
                     };
                 });
 
-            return null; 
+            return null;
         }));
 
         return serializedSuccessResponse({ quizId });
