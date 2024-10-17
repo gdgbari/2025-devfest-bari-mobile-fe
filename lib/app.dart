@@ -71,7 +71,7 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
 void _authListener(
   BuildContext context,
   AuthenticationState state,
-) {
+) async {
   switch (state.status) {
     case AuthenticationStatus.initialAuthFailure:
       context.loaderOverlay.hide();
@@ -116,30 +116,7 @@ void _authListener(
       }
       final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
       if (ctx != null) {
-        showCustomErrorDialog(ctx, errorMessage);
-      }
-      break;
-    case AuthenticationStatus.checkInFailure:
-      context.loaderOverlay.hide();
-      String errorMessage = '';
-      switch (state.error) {
-        case AuthenticationError.checkInCodeExpired:
-          errorMessage =
-              'Check-in code has expired.\nPlease request a new code.';
-          break;
-        case AuthenticationError.checkInCodeNotFound:
-          errorMessage =
-              'Check-in code not found.\nPlease verify and scan again.';
-          break;
-        case AuthenticationError.unknown:
-          errorMessage = 'An unknown error occurred.\nPlease try again later.';
-          break;
-        default:
-          break;
-      }
-      final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
-      if (ctx != null) {
-        showCustomErrorDialog(ctx, errorMessage);
+        await showCustomErrorDialog(ctx, errorMessage);
       }
       break;
     case AuthenticationStatus.authenticationFailure:
@@ -160,7 +137,7 @@ void _authListener(
       }
       final ctx = appRouter.routerDelegate.navigatorKey.currentContext;
       if (ctx != null) {
-        showCustomErrorDialog(ctx, errorMessage);
+        await showCustomErrorDialog(ctx, errorMessage);
       }
       break;
     case AuthenticationStatus.signOutSuccess:

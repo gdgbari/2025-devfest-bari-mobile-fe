@@ -38,6 +38,7 @@ class AnswerListTile extends StatelessWidget {
               activeColor: selectionColor,
             ),
             Expanded(child: Text(title)),
+            SizedBox(width: 10),
           ],
         ),
       ),

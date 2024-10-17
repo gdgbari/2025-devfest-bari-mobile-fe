@@ -6,7 +6,7 @@ Future<void> showCustomErrorDialog(
   BuildContext context,
   String errorMessage,
 ) async {
-  showDialog(
+  await showDialog(
     context: context,
     builder: (_) => CustomErrorDialog(
       onPressed: () => context.pop(),

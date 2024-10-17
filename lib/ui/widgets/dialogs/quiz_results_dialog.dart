@@ -7,7 +7,7 @@ Future<void> showQuizResultsDialog({
   required int score,
   required int maxScore,
 }) async {
-  showDialog(
+  await showDialog(
     context: context,
     builder: (_) => QuizResultsDialog(
       onPressed: onPressed,

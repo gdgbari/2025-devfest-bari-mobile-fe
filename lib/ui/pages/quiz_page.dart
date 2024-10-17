@@ -192,7 +192,7 @@ void _quizListener(
         default:
           break;
       }
-      showCustomErrorDialog(context, errorMessage);
+      await showCustomErrorDialog(context, errorMessage);
       break;
     case QuizStatus.timerExpired:
       context.read<QuizCubit>().submitQuiz();

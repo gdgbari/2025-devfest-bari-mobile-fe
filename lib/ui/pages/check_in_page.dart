@@ -13,8 +13,59 @@ class CheckInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<QrCodeCubit, QrCodeState>(
-      listener: _qrCodeListener,
+    return MultiBlocListener(
+      listeners: <BlocListener>[
+        BlocListener<QrCodeCubit, QrCodeState>(
+          listener: (context, state) async {
+            switch (state.status) {
+              case QrCodeStatus.validationInProgress:
+                context.loaderOverlay.show();
+                break;
+              case QrCodeStatus.validationSuccess:
+                context.loaderOverlay.hide();
+                context.read<AuthenticationCubit>().checkIn(state.value);
+                break;
+              case QrCodeStatus.validationFailure:
+                context.loaderOverlay.hide();
+                await showCustomErrorDialog(
+                  context,
+                  'Hey, this QR code doesn\'t work.\nPlease try with another one.',
+                );
+                controller.start();
+                break;
+              default:
+                break;
+            }
+          },
+        ),
+        BlocListener<AuthenticationCubit, AuthenticationState>(
+          listenWhen: (previous, current) =>
+              previous.status == AuthenticationStatus.checkInInProgress &&
+              current.status == AuthenticationStatus.checkInFailure,
+          listener: (context, state) async {
+            context.loaderOverlay.hide();
+            String errorMessage = '';
+            switch (state.error) {
+              case AuthenticationError.checkInCodeExpired:
+                errorMessage =
+                    'Check-in code has expired.\nPlease request a new code.';
+                break;
+              case AuthenticationError.checkInCodeNotFound:
+                errorMessage =
+                    'Check-in code not found.\nPlease verify and scan again.';
+                break;
+              case AuthenticationError.unknown:
+                errorMessage =
+                    'An unknown error occurred.\nPlease try again later.';
+                break;
+              default:
+                break;
+            }
+            await showCustomErrorDialog(context, errorMessage);
+            controller.start();
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorPalette.black,
@@ -30,29 +81,17 @@ class CheckInPage extends StatelessWidget {
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    Builder(
-                      builder: (context) {
-                        final qrState = context.watch<QrCodeCubit>().state;
-                        final authState =
-                            context.watch<AuthenticationCubit>().state;
-
-                        return MobileScanner(
-                          controller: controller,
-                          onDetect: (barcodes) {
-                            final qrData = barcodes.barcodes.first;
-                            if (qrData.type == BarcodeType.text) {
-                              if (qrState.status !=
-                                      QrCodeStatus.validationInProgress &&
-                                  authState.status !=
-                                      AuthenticationStatus.checkInInProgress) {
-                                context.read<QrCodeCubit>().validateQrCode(
-                                      qrData.rawValue,
-                                      QrCodeType.checkin,
-                                    );
-                              }
-                            }
-                          },
-                        );
+                    MobileScanner(
+                      controller: controller,
+                      onDetect: (barcodes) {
+                        final qrData = barcodes.barcodes.first;
+                        if (qrData.type == BarcodeType.text) {
+                          controller.stop();
+                          context.read<QrCodeCubit>().validateQrCode(
+                                qrData.rawValue,
+                                QrCodeType.checkin,
+                              );
+                        }
                       },
                     ),
                     const QRCodeBackground(),
@@ -82,29 +121,5 @@ class CheckInPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-void _qrCodeListener(
-  BuildContext context,
-  QrCodeState state,
-) {
-  switch (state.status) {
-    case QrCodeStatus.validationInProgress:
-      context.loaderOverlay.show();
-      break;
-    case QrCodeStatus.validationSuccess:
-      context.loaderOverlay.hide();
-      context.read<AuthenticationCubit>().checkIn(state.value);
-      break;
-    case QrCodeStatus.validationFailure:
-      context.loaderOverlay.hide();
-      showCustomErrorDialog(
-        context,
-        'Hey, this QR code doesn\'t work.\nPlease try with another one.',
-      );
-      break;
-    default:
-      break;
   }
 }
