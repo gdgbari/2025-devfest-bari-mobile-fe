@@ -48,11 +48,15 @@ class LeaderboardRepository {
 
             final temp = Map.fromIterables(keys, values).entries.toList();
 
-            temp.sort((a, b) => b.value.score != a.value.score
-                ? b.value.score.compareTo(a.value.score)
-                : b.value.timestamp != a.value.timestamp
-                    ? a.value.timestamp.compareTo(b.value.timestamp)
-                    : a.value.nickname.compareTo(b.value.nickname));
+            temp.sort(
+              (a, b) => b.value.score != a.value.score
+                  ? b.value.score.compareTo(a.value.score)
+                  : b.value.timestamp != a.value.timestamp
+                      ? a.value.timestamp.compareTo(b.value.timestamp)
+                      : a.value.nickname.toLowerCase().compareTo(
+                            b.value.nickname.toLowerCase(),
+                          ),
+            );
 
             final users = Map.fromEntries(temp);
 
@@ -73,11 +77,15 @@ class LeaderboardRepository {
 
             final temp = Map.fromIterables(keys, values).entries.toList();
 
-            temp.sort((a, b) => b.value.score != a.value.score
-                ? b.value.score.compareTo(a.value.score)
-                : b.value.timestamp != a.value.timestamp
-                    ? a.value.timestamp.compareTo(b.value.timestamp)
-                    : a.value.name.compareTo(b.value.name));
+            temp.sort(
+              (a, b) => b.value.score != a.value.score
+                  ? b.value.score.compareTo(a.value.score)
+                  : b.value.timestamp != a.value.timestamp
+                      ? a.value.timestamp.compareTo(b.value.timestamp)
+                      : a.value.name.toLowerCase().compareTo(
+                            b.value.name.toLowerCase(),
+                          ),
+            );
 
             final groups = Map.fromEntries(temp);
 
