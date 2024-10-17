@@ -66,6 +66,10 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
     lazy: false,
     create: (_) => LeaderboardCubit(),
   ),
+  BlocProvider<ContestRulesCubit>(
+    lazy: false,
+    create: (_) => ContestRulesCubit(),
+  ),
 ];
 
 void _authListener(

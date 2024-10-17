@@ -3,6 +3,7 @@ export 'widgets/custom_loader.dart';
 export 'widgets/custom_qr_view.dart';
 export 'widgets/custom_segmented_button.dart';
 export 'widgets/custom_text_field.dart';
+export 'widgets/dialogs/contest_rules_dialog.dart';
 export 'widgets/dialogs/custom_error_dialog.dart';
 export 'widgets/dialogs/quiz_results_dialog.dart';
 export 'widgets/group_info.dart';

@@ -1,4 +1,5 @@
 export 'models/answer.dart';
+export 'models/contest_rules.dart';
 export 'models/group.dart';
 export 'models/leaderboard.dart';
 export 'models/leaderboard_group.dart';

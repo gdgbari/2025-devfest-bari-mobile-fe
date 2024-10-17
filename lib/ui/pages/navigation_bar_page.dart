@@ -38,6 +38,25 @@ class NavigationBarPage extends StatelessWidget {
             ),
           ),
           actions: <Widget>[
+            BlocBuilder<ContestRulesCubit, ContestRulesState>(
+              builder: (context, state) {
+                return Visibility(
+                  visible: navigationShell.currentIndex == 0 &&
+                      state.rules.showRules,
+                  child: IconButton(
+                    onPressed: () => showContestRulesDialog(
+                      context,
+                      state.rules.title,
+                      state.rules.content,
+                    ),
+                    icon: Icon(
+                      Icons.info_outline,
+                      color: ColorPalette.white,
+                    ),
+                  ),
+                );
+              },
+            ),
             Visibility(
               visible: navigationShell.currentIndex == 1,
               child: IconButton(
