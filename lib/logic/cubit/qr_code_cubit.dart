@@ -6,6 +6,8 @@ part 'qr_code_state.dart';
 class QrCodeCubit extends Cubit<QrCodeState> {
   QrCodeCubit() : super(QrCodeState());
 
+  void resetQrCode() => emit(QrCodeState());
+
   void validateQrCode(String? value, QrCodeType expectedType) {
     emit(state.copyWith(status: QrCodeStatus.validationInProgress));
 

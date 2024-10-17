@@ -12,6 +12,11 @@ class QuizCubit extends Cubit<QuizState> {
 
   QuizCubit() : super(const QuizState());
 
+  void resetQuiz() {
+    stopTimer();
+    emit(const QuizState());
+  }
+
   void startTimer() {
     emit(state.copyWith(status: QuizStatus.timerInProgress));
     stopTimer();

@@ -52,7 +52,11 @@ class NavigationBarPage extends StatelessWidget {
         ),
         body: navigationShell,
         floatingActionButton: FloatingActionButton(
-          onPressed: () => context.pushNamed(RouteNames.qrCodeRoute.name),
+          onPressed: () {
+            context.read<QrCodeCubit>().resetQrCode();
+            context.read<QuizCubit>().resetQuiz();
+            context.pushNamed(RouteNames.qrCodeRoute.name);
+          },
           elevation: 1,
           backgroundColor: ColorPalette.coreRed,
           splashColor: ColorPalette.pastelRed,

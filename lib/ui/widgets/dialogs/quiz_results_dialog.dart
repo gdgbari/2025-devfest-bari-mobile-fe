@@ -9,6 +9,7 @@ Future<void> showQuizResultsDialog({
 }) async {
   await showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (_) => QuizResultsDialog(
       onPressed: onPressed,
       score: score,
