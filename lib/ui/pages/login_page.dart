@@ -56,7 +56,7 @@ class LoginPage extends StatelessWidget {
                     context
                         .read<AuthenticationCubit>()
                         .signInWithEmailAndPassword(
-                          email: emailTextController.text,
+                          email: emailTextController.text.trim(),
                           password: passwordTextController.text,
                         );
                   },

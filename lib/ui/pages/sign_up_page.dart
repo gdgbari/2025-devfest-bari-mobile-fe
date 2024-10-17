@@ -90,10 +90,10 @@ class SignUpPage extends StatelessWidget {
                     FocusManager.instance.primaryFocus?.unfocus();
 
                     context.read<AuthenticationCubit>().signUp(
-                          nickname: nicknameController.text,
-                          name: nameController.text,
-                          surname: surnameController.text,
-                          email: emailTextController.text,
+                          nickname: nicknameController.text.trim(),
+                          name: nameController.text.trim(),
+                          surname: surnameController.text.trim(),
+                          email: emailTextController.text.trim(),
                           password: passwordTextController.text,
                         );
                   },
