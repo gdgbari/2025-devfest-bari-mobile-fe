@@ -264,7 +264,7 @@ export const submitQuiz = functions.https.onCall(async (data, context) => {
         }
 
         if (
-            startTimeData.startTimestamp + quizData.timerDuration - backoffTime <
+            startTimeData.startTimestamp + quizData.timerDuration + backoffTime <
             Date.now()
         ) {
             return serializedErrorResponse("quiz-time-up", "Quiz time is up.");
