@@ -193,6 +193,8 @@ void _quizListener(
           break;
       }
       await showCustomErrorDialog(context, errorMessage);
+      // ignore: use_build_context_synchronously
+      context.goNamed(RouteNames.leaderboardRoute.name);
       break;
     case QuizStatus.timerExpired:
       context.read<QuizCubit>().submitQuiz();

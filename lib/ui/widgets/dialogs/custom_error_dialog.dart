@@ -8,6 +8,7 @@ Future<void> showCustomErrorDialog(
 ) async {
   await showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (_) => CustomErrorDialog(
       onPressed: () => context.pop(),
       errorMessage: errorMessage,
