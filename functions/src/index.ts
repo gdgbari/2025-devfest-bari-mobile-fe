@@ -13,6 +13,7 @@ import {
     deleteQuiz,
     getQuizList,
     addPointsToUsers,
+    toggleIsOpen,
 } from "./functions/quiz";
 
 admin.initializeApp();
@@ -35,4 +36,5 @@ export {
     redeemAuthCode,
     addPointsToUsers,
     getUserProfileById,
+    toggleIsOpen,
 };

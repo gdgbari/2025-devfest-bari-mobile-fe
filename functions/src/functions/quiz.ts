@@ -561,3 +561,50 @@ export const addPointsToUsers = functions.https.onCall(async (data, context) => 
         return serializedExceptionResponse(error);
     }
 });
+
+export const toggleIsOpen = functions.https.onCall(async (data, context) => {
+    const { quizId } = data;
+
+    if (!context.auth) {
+        return serializedErrorResponse("unauthenticated", "User must be authenticated.");
+    }
+
+    try {
+        const userDoc = await db.collection("users").doc(context.auth.uid).get();
+
+        if (!userDoc.exists) {
+            return serializedErrorResponse("user-not-found", "User not found.");
+        }
+
+        const userData = userDoc.data();
+
+        if (!userData) {
+            return serializedErrorResponse("user-not-found", "User data not found.");
+        }
+
+        if (userData.role != "staff") {
+            return serializedErrorResponse("permission-denied", "User not authorized.");
+        }
+
+        const quizRef = db.collection("quizzes").doc(quizId);
+        const quizDoc = await quizRef.get();
+
+        if (!quizDoc.exists) {
+            return serializedErrorResponse("quiz-not-found", "Quiz not found.");
+        }
+
+        const quizData = quizDoc.data();
+
+        if (!quizData) {
+            return serializedErrorResponse("quiz-data-not-found", "Quiz data not found.");
+        }
+
+        const newIsOpen = !quizData.isOpen;
+        await quizRef.update({ isOpen: newIsOpen });
+
+        return serializedSuccessResponse({ quizId, isOpen: newIsOpen });
+    } catch (error) {
+        console.error("An error occurred while toggling the quiz open state.", error);
+        return serializedExceptionResponse(error);
+    }
+});
