@@ -67,7 +67,7 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
     create: (_) => LeaderboardCubit(),
   ),
   BlocProvider<ContestRulesCubit>(
-    lazy: false,
+    lazy: true,
     create: (_) => ContestRulesCubit(),
   ),
 ];
