@@ -110,9 +110,11 @@ class LeaderboardRepository {
 
       currentUser = leaderboardUsers[currentUserIndex];
 
+      final upperLimit = leaderboardUsers.length < 20 ? leaderboardUsers.length : 20;
+
       yield Leaderboard(
         currentUser: currentUser,
-        users: leaderboardUsers,
+        users: leaderboardUsers.sublist(0, upperLimit),
         groups: leaderboardGroups,
         isOpen: isOpen,
         winnerRoom: winnerRoom,
