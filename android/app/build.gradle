@@ -52,7 +52,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 23
         targetSdk = 34
-        versionCode = 5 // TODO: always update manually
+        versionCode = 6 // TODO: always update manually
         versionName = flutterVersionName
     }
 
