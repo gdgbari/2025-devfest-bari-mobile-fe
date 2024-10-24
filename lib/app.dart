@@ -70,6 +70,10 @@ List<BlocProvider> _topLevelProviders = <BlocProvider>[
     lazy: true,
     create: (_) => ContestRulesCubit(),
   ),
+  BlocProvider<EasterEggCubit>(
+    lazy: true,
+    create: (_) => EasterEggCubit(),
+  ),
 ];
 
 void _authListener(

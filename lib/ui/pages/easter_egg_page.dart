@@ -1,5 +1,7 @@
+import 'package:devfest_bari_2024/logic.dart';
 import 'package:devfest_bari_2024/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class EasterEggPage extends StatelessWidget {
@@ -27,26 +29,30 @@ class EasterEggPage extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text.rich(
-                TextSpan(
-                  text: '🎉 CONGRATULATIONS 🎉\n\n',
-                  style: PresetTextStyle.black23w700,
-                  children: <InlineSpan>[
+            BlocBuilder<EasterEggCubit, EasterEggState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text.rich(
                     TextSpan(
-                      text: 'You found the easter egg!',
-                      style: PresetTextStyle.black21w400,
+                      text: '🎉 CONGRATULATIONS 🎉\n\n',
+                      style: PresetTextStyle.black23w700,
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: 'You found the easter egg!',
+                          style: PresetTextStyle.black21w400,
+                        ),
+                        TextSpan(text: '\n\n'),
+                        TextSpan(
+                          text: state.easterEggMessage,
+                          style: PresetTextStyle.black21w400,
+                        ),
+                      ],
                     ),
-                    TextSpan(text: '\n\n'),
-                    TextSpan(
-                      text: 'Show this screen to the staff\nto get a reward!',
-                      style: PresetTextStyle.black21w400,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
             ),
             Expanded(child: SizedBox()),
             SizedBox(

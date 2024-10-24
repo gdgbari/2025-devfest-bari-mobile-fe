@@ -1,5 +1,6 @@
 export 'cubit/authentication_cubit.dart';
 export 'cubit/contest_rules_cubit.dart';
+export 'cubit/easter_egg_cubit.dart';
 export 'cubit/internet_cubit.dart';
 export 'cubit/leaderboard_cubit.dart';
 export 'cubit/qr_code_cubit.dart';
