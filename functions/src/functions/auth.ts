@@ -168,7 +168,7 @@ export const getUserProfileById = functions.https.onCall(async (data, context) =
             groupId: group ? group.groupId : null,
             position: null,
             score: userData.score,
-            role: null
+            role: userData.role
         };
 
         return serializedSuccessResponse(userProfile);
