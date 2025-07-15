@@ -1,9 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 
-class EasterEggApi {
-  Stream<DatabaseEvent> get easterEggStream {
+class ContestRulesService {
+  Stream<DatabaseEvent> get contestRulesStream {
     return FirebaseDatabase.instance
-        .ref('easterEggMessage')
+        .ref('contestRules')
         .onValue
         .asBroadcastStream();
   }

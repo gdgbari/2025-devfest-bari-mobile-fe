@@ -8,10 +8,10 @@ class ContestRulesRepository {
 
   factory ContestRulesRepository() => _instance;
 
-  final ContestRulesApi _contestRulesApi = ContestRulesApi();
+  final ContestRulesService _contestRulesService = ContestRulesService();
 
   Stream<ContestRules> contestRulesStream() async* {
-    await for (final event in _contestRulesApi.contestRulesStream) {
+    await for (final event in _contestRulesService.contestRulesStream) {
       String title = '';
       String content = '';
       bool showRules = true;

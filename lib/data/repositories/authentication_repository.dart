@@ -9,10 +9,10 @@ class AuthenticationRepository {
 
   factory AuthenticationRepository() => _instance;
 
-  final AuthenticationApi _authApi = AuthenticationApi();
+  final AuthenticationService _authService = AuthenticationService();
 
   Future<UserProfile> getInitialAuthState() async {
-    final firebaseUser = await _authApi.getInitialAuthState();
+    final firebaseUser = await _authService.getInitialAuthState();
     if (firebaseUser != null) {
       return await getUserProfile(firebaseUser);
     } else {
@@ -21,7 +21,7 @@ class AuthenticationRepository {
   }
 
   Future<UserProfile> getUserProfile(User user) async {
-    final response = await _authApi.getUserProfile(user);
+    final response = await _authService.getUserProfile(user);
 
     if (response.error.code.isNotEmpty) {
       signOut();
@@ -43,7 +43,7 @@ class AuthenticationRepository {
     required String email,
     required String password,
   }) async {
-    final response = await _authApi.signUp(
+    final response = await _authService.signUp(
       nickname: nickname,
       name: name,
       surname: surname,
@@ -62,7 +62,7 @@ class AuthenticationRepository {
   }
 
   Future<Group> checkIn(String authorizationCode) async {
-    final response = await _authApi.checkIn(authorizationCode);
+    final response = await _authService.checkIn(authorizationCode);
 
     if (response.error.code.isNotEmpty) {
       switch (response.error.code) {
@@ -83,7 +83,7 @@ class AuthenticationRepository {
     required String password,
   }) async {
     try {
-      final userCredential = await _authApi.signInWithEmailAndPassword(
+      final userCredential = await _authService.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -107,5 +107,5 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> signOut() async => await _authApi.signOut();
+  Future<void> signOut() async => await _authService.signOut();
 }

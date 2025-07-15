@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 
-class LeaderboardApi {
+class LeaderboardService {
   Stream<DatabaseEvent> get leaderboardStream {
     return FirebaseDatabase.instance
         .ref('leaderboard')

@@ -8,10 +8,10 @@ class LeaderboardRepository {
 
   factory LeaderboardRepository() => _instance;
 
-  final LeaderboardApi _leaderboardApi = LeaderboardApi();
+  final LeaderboardService _leaderboardService = LeaderboardService();
 
   Stream<Leaderboard> leaderboardStream(String userId) async* {
-    await for (final event in _leaderboardApi.leaderboardStream) {
+    await for (final event in _leaderboardService.leaderboardStream) {
       int currentUserIndex = -1;
       var currentUser = LeaderboardUser();
       List<LeaderboardUser> leaderboardUsers = [];

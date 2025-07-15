@@ -7,10 +7,10 @@ class QuizRepository {
 
   factory QuizRepository() => _instance;
 
-  final QuizApi _quizApi = QuizApi();
+  final QuizService _quizService = QuizService();
 
   Future<Quiz> getQuiz(String quizCode) async {
-    final response = await _quizApi.getQuiz(quizCode);
+    final response = await _quizService.getQuiz(quizCode);
 
     if (response.error.code.isNotEmpty) {
       _quizErrorHandling(response.error.code);
@@ -23,7 +23,7 @@ class QuizRepository {
     String quizId,
     List<String?> answerList,
   ) async {
-    final response = await _quizApi.submitQuiz(quizId, answerList);
+    final response = await _quizService.submitQuiz(quizId, answerList);
 
     if (response.error.code.isNotEmpty) {
       _quizErrorHandling(response.error.code);

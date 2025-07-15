@@ -7,10 +7,10 @@ class EasterEggRepository {
 
   factory EasterEggRepository() => _instance;
 
-  final EasterEggApi _easterEggApi = EasterEggApi();
+  final EasterEggService _easterEggService = EasterEggService();
 
   Stream<String> easterEggStream() async* {
-    await for (final event in _easterEggApi.easterEggStream) {
+    await for (final event in _easterEggService.easterEggStream) {
       final easterEggMessage = event.snapshot.value as String? ?? '';
       yield easterEggMessage.replaceAll('\\n', '\n');
     }
