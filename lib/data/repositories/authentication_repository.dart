@@ -2,14 +2,9 @@ import 'package:devfest_bari_2025/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationRepository {
-  AuthenticationRepository._internal();
+  final AuthenticationService _authService;
 
-  static final AuthenticationRepository _instance =
-      AuthenticationRepository._internal();
-
-  factory AuthenticationRepository() => _instance;
-
-  final AuthenticationService _authService = AuthenticationService();
+  const AuthenticationRepository(this._authService);
 
   Future<UserProfile> getInitialAuthState() async {
     final firebaseUser = await _authService.getInitialAuthState();

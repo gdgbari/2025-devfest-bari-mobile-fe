@@ -1,14 +1,9 @@
 import 'package:devfest_bari_2025/data.dart';
 
 class ContestRulesRepository {
-  ContestRulesRepository._internal();
+  final ContestRulesService _contestRulesService;
 
-  static final ContestRulesRepository _instance =
-      ContestRulesRepository._internal();
-
-  factory ContestRulesRepository() => _instance;
-
-  final ContestRulesService _contestRulesService = ContestRulesService();
+  const ContestRulesRepository(this._contestRulesService);
 
   Stream<ContestRules> contestRulesStream() async* {
     await for (final event in _contestRulesService.contestRulesStream) {

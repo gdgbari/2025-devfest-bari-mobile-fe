@@ -1,13 +1,9 @@
 import 'package:devfest_bari_2025/data.dart';
 
 class QuizRepository {
-  QuizRepository._internal();
+  final QuizService _quizService;
 
-  static final QuizRepository _instance = QuizRepository._internal();
-
-  factory QuizRepository() => _instance;
-
-  final QuizService _quizService = QuizService();
+  const QuizRepository(this._quizService);
 
   Future<Quiz> getQuiz(String quizCode) async {
     final response = await _quizService.getQuiz(quizCode);

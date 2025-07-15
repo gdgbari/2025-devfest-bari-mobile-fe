@@ -7,10 +7,10 @@ import 'package:equatable/equatable.dart';
 part 'quiz_state.dart';
 
 class QuizCubit extends Cubit<QuizState> {
-  final _quizRepo = QuizRepository();
+  final QuizRepository _quizRepo;
   Timer? _timer;
 
-  QuizCubit() : super(const QuizState());
+  QuizCubit(this._quizRepo) : super(const QuizState());
 
   void resetQuiz() {
     stopTimer();

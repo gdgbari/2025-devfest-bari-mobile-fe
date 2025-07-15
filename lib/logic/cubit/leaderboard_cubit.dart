@@ -7,10 +7,10 @@ import 'package:equatable/equatable.dart';
 part 'leaderboard_state.dart';
 
 class LeaderboardCubit extends Cubit<LeaderboardState> {
-  final _leaderboardRepo = LeaderboardRepository();
+  final LeaderboardRepository _leaderboardRepo;
   StreamSubscription? _streamSub;
 
-  LeaderboardCubit() : super(const LeaderboardState());
+  LeaderboardCubit(this._leaderboardRepo) : super(const LeaderboardState());
 
   void changeLeaderboard(int index) => emit(state.copyWith(pageIndex: index));
 

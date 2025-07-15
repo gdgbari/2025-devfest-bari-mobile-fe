@@ -6,9 +6,9 @@ import 'package:equatable/equatable.dart';
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
-  final _authRepo = AuthenticationRepository();
+  final AuthenticationRepository _authRepo;
 
-  AuthenticationCubit() : super(const AuthenticationState()) {
+  AuthenticationCubit(this._authRepo) : super(const AuthenticationState()) {
     _getInitialAuthState();
   }
 

@@ -7,10 +7,10 @@ import 'package:equatable/equatable.dart';
 part 'contest_rules_state.dart';
 
 class ContestRulesCubit extends Cubit<ContestRulesState> {
-  final _contestRulesRepo = ContestRulesRepository();
+  final ContestRulesRepository _contestRulesRepo;
   StreamSubscription? _streamSub;
 
-  ContestRulesCubit() : super(ContestRulesState()) {
+  ContestRulesCubit(this._contestRulesRepo) : super(ContestRulesState()) {
     fetchContestRules();
   }
 

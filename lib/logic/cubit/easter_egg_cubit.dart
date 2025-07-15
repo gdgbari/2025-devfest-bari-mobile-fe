@@ -7,10 +7,10 @@ import 'package:equatable/equatable.dart';
 part 'easter_egg_state.dart';
 
 class EasterEggCubit extends Cubit<EasterEggState> {
-  final _contestRulesRepo = EasterEggRepository();
+  final EasterEggRepository _easterEggRepo;
   StreamSubscription? _streamSub;
 
-  EasterEggCubit() : super(EasterEggState()) {
+  EasterEggCubit(this._easterEggRepo) : super(EasterEggState()) {
     fetchEasterEgg();
   }
 
@@ -19,7 +19,7 @@ class EasterEggCubit extends Cubit<EasterEggState> {
     stopEasterEggFetch();
 
     try {
-      final stream = _contestRulesRepo.easterEggStream().asBroadcastStream();
+      final stream = _easterEggRepo.easterEggStream().asBroadcastStream();
       _streamSub = stream.listen(
         (easterEgg) {
           emit(

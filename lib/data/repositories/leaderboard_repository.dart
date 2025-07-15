@@ -1,14 +1,9 @@
 import 'package:devfest_bari_2025/data.dart';
 
 class LeaderboardRepository {
-  LeaderboardRepository._internal();
+  final LeaderboardService _leaderboardService;
 
-  static final LeaderboardRepository _instance =
-      LeaderboardRepository._internal();
-
-  factory LeaderboardRepository() => _instance;
-
-  final LeaderboardService _leaderboardService = LeaderboardService();
+  const LeaderboardRepository(this._leaderboardService);
 
   Stream<Leaderboard> leaderboardStream(String userId) async* {
     await for (final event in _leaderboardService.leaderboardStream) {
@@ -110,7 +105,8 @@ class LeaderboardRepository {
 
       currentUser = leaderboardUsers[currentUserIndex];
 
-      final upperLimit = leaderboardUsers.length < 20 ? leaderboardUsers.length : 20;
+      final upperLimit =
+          leaderboardUsers.length < 20 ? leaderboardUsers.length : 20;
 
       yield Leaderboard(
         currentUser: currentUser,

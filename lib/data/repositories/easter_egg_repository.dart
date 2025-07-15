@@ -1,13 +1,9 @@
 import 'package:devfest_bari_2025/data.dart';
 
 class EasterEggRepository {
-  EasterEggRepository._internal();
+  final EasterEggService _easterEggService;
 
-  static final EasterEggRepository _instance = EasterEggRepository._internal();
-
-  factory EasterEggRepository() => _instance;
-
-  final EasterEggService _easterEggService = EasterEggService();
+  const EasterEggRepository(this._easterEggService);
 
   Stream<String> easterEggStream() async* {
     await for (final event in _easterEggService.easterEggStream) {
