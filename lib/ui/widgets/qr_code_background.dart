@@ -32,7 +32,7 @@ class _BackgroundPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black.withOpacity(.7);
+    final paint = Paint()..color = Colors.black.withValues(alpha: 0.7);
     canvas.drawPath(
       Path.combine(
         PathOperation.difference,

@@ -49,3 +49,7 @@ app.*.map.json
 /android/app/google-services.json
 /ios/firebase_app_id_file.json
 /ios/Runner/GoogleService-Info.plist
+
+# FVM Version Cache
+.fvm/
+.fvmrc

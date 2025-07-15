@@ -1,4 +1,4 @@
-import 'package:devfest_bari_2024/ui.dart';
+import 'package:devfest_bari_2025/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
@@ -10,7 +10,7 @@ Future<void> zoomQrCode(
     PageRouteBuilder(
       fullscreenDialog: true,
       opaque: false,
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       barrierDismissible: true,
       pageBuilder: (BuildContext context, _, __) {
         return Center(
