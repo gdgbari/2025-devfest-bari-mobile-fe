@@ -14,27 +14,27 @@ class AppProvider extends StatelessWidget {
       providers: <RepositoryProvider>[
         RepositoryProvider<AuthenticationRepository>(
           create: (_) => AuthenticationRepository(
-            AuthenticationService(),
+            AuthenticationServiceImpl(),
           ),
         ),
         RepositoryProvider<QuizRepository>(
           create: (_) => QuizRepository(
-            QuizService(),
+            QuizServiceImpl(),
           ),
         ),
         RepositoryProvider<LeaderboardRepository>(
           create: (_) => LeaderboardRepository(
-            LeaderboardService(),
+            LeaderboardServiceImpl(),
           ),
         ),
         RepositoryProvider<ContestRulesRepository>(
           create: (_) => ContestRulesRepository(
-            ContestRulesService(),
+            ContestRulesServiceImpl(),
           ),
         ),
         RepositoryProvider<EasterEggRepository>(
           create: (_) => EasterEggRepository(
-            EasterEggService(),
+            EasterEggServiceImpl(),
           ),
         ),
       ],
