@@ -1,0 +1,37 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "flutter clean",
+			"type": "shell",
+			"command": "fvm flutter clean"
+		},
+		{
+			"label": "flutter pub get",
+			"type": "shell",
+			"command": "fvm flutter pub get"
+		},
+		{
+			"label": "build runner",
+			"type": "shell",
+			"command": "fvm dart run build_runner build --delete-conflicting-outputs"
+		},
+		{
+			"label": "Refresh project",
+			"dependsOn": ["flutter clean", "flutter pub get", "build runner"],
+			"dependsOrder": "sequence",
+			"type": "shell",
+			"command": ""
+		},
+		{
+			"label": "firebase login",
+			"type": "shell",
+			"command": "firebase login --reauth"
+		},
+		{
+			"label": "flutterfire configure",
+			"type": "shell",
+			"command": "fvm dart pub global run flutterfire_cli:flutterfire configure"
+		}
+	],
+}
