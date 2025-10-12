@@ -1,8 +1,10 @@
-import 'dart:convert';
-
 import 'package:devfest_bari_2025/data/models.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'quiz.g.dart';
+
+@JsonSerializable()
 class Quiz extends Equatable {
   final String quizId;
   final String title;
@@ -35,24 +37,9 @@ class Quiz extends Equatable {
     );
   }
 
-  factory Quiz.fromMap(Map<String, dynamic> map) {
-    return Quiz(
-      quizId: map['quizId'] as String? ?? '',
-      title: map['title'] as String? ?? '',
-      type: map['type'] as String? ?? '',
-      questionList: List<Question>.from(
-        List<Map<String, dynamic>>.from(
-          map['questionList'] ?? [],
-        ).map((x) => Question.fromMap(x)),
-      ),
-      timerDuration: Duration(
-        milliseconds: (map['timerDuration'] as int?) ?? 0,
-      ),
-    );
-  }
-
-  factory Quiz.fromJson(String source) =>
-      Quiz.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Quiz.fromJson(Map<String, dynamic> json) => _$QuizFromJson(json);
+  
+  Map<String, dynamic> toJson() => _$QuizToJson(this);
 
   @override
   bool get stringify => true;

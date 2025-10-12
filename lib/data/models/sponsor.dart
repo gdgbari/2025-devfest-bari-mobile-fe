@@ -1,7 +1,9 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'sponsor.g.dart';
+
+@JsonSerializable()
 class Sponsor extends Equatable {
   final String sponsorId;
   final String name;
@@ -29,39 +31,11 @@ class Sponsor extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'sponsorId': sponsorId,
-      'name': name,
-      'description': description,
-      'websiteUrl': websiteUrl,
-    };
-  }
+  factory Sponsor.fromJson(Map<String, dynamic> json) =>
+      _$SponsorFromJson(json);
 
-  factory Sponsor.fromMap(Map<String, dynamic> map) {
-    return Sponsor(
-      sponsorId: map['sponsorId'] as String? ?? '',
-      name: map['name'] as String? ?? '',
-      description: map['description'] as String? ?? '',
-      websiteUrl: map['websiteUrl'] as String? ?? '',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Sponsor.fromJson(String source) =>
-      Sponsor.fromMap(json.decode(source) as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$SponsorToJson(this);
 
   @override
-  bool get stringify => true;
-
-  @override
-  List<Object> get props {
-    return [
-      sponsorId,
-      name,
-      description,
-      websiteUrl,
-    ];
-  }
+  List<Object> get props => [sponsorId, name, description, websiteUrl];
 }

@@ -1,8 +1,10 @@
-import 'dart:convert';
-
 import 'package:devfest_bari_2025/ui.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'group.g.dart';
+
+@JsonSerializable()
 class Group extends Equatable {
   final String groupId;
   final String name;
@@ -15,7 +17,7 @@ class Group extends Equatable {
     this.groupId = '',
     this.name = '',
     this.imageUrl = '',
-    this.colors = GroupColors.red,
+    this.colors = GroupColors.black,
     this.position = 0,
     this.score = 0,
   });
@@ -38,34 +40,12 @@ class Group extends Equatable {
     );
   }
 
-  factory Group.fromMap(Map<String, dynamic> map) {
-    return Group(
-      groupId: map['groupId'] as String? ?? '',
-      name: map['name'] as String? ?? '',
-      imageUrl: map['imageUrl'] as String? ?? '',
-      colors: GroupColors.values.singleWhere(
-        (element) => element.name == (map['color'] ?? 'black'),
-      ),
-      position: map['position'] as int? ?? 0,
-      score: map['score'] as int? ?? 0,
-    );
-  }
+  factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
-  factory Group.fromJson(String source) =>
-      Group.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool get stringify => true;
+  Map<String, dynamic> toJson() => _$GroupToJson(this);
 
   @override
   List<Object> get props {
-    return [
-      groupId,
-      name,
-      imageUrl,
-      colors,
-      position,
-      score,
-    ];
+    return [groupId, name, imageUrl, colors, position, score];
   }
 }

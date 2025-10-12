@@ -1,8 +1,10 @@
-import 'dart:convert';
-
 import 'package:devfest_bari_2025/data.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user_profile.g.dart';
+
+@JsonSerializable()
 class UserProfile extends Equatable {
   final String userId;
   final String nickname;
@@ -42,34 +44,13 @@ class UserProfile extends Equatable {
     );
   }
 
-  factory UserProfile.fromMap(Map<String, dynamic> map) {
-    return UserProfile(
-      userId: map['userId'] as String? ?? '',
-      nickname: map['nickname'] as String? ?? '',
-      name: map['name'] as String? ?? '',
-      surname: map['surname'] as String? ?? '',
-      email: map['email'] as String? ?? '',
-      group: Group.fromMap(Map<String, dynamic>.from(map['group'] ?? {})),
-      score: map['score'] as int? ?? 0,
-    );
-  }
+  factory UserProfile.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileFromJson(json);
 
-  factory UserProfile.fromJson(String source) =>
-      UserProfile.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool get stringify => true;
+  Map<String, dynamic> toJson() => _$UserProfileToJson(this);
 
   @override
   List<Object> get props {
-    return [
-      userId,
-      nickname,
-      name,
-      surname,
-      email,
-      group,
-      score,
-    ];
+    return [userId, nickname, name, surname, email, group, score];
   }
 }

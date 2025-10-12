@@ -1,8 +1,10 @@
-import 'dart:convert';
-
 import 'package:devfest_bari_2025/data.dart';
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'question.g.dart';
+
+@JsonSerializable()
 class Question extends Equatable {
   final String questionId;
   final String text;
@@ -26,23 +28,10 @@ class Question extends Equatable {
     );
   }
 
-  factory Question.fromMap(Map<String, dynamic> map) {
-    return Question(
-      questionId: map['questionId'] as String? ?? '',
-      text: map['text'] as String? ?? '',
-      answerList: List<Answer>.from(
-        (map['answerList'] ?? []).map(
-          (x) => Answer.fromMap(x),
-        ),
-      ),
-    );
-  }
+  factory Question.fromJson(Map<String, dynamic> json) =>
+      _$QuestionFromJson(json);
 
-  factory Question.fromJson(String source) =>
-      Question.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool get stringify => true;
+  Map<String, dynamic> toJson() => _$QuestionToJson(this);
 
   @override
   List<Object> get props => [questionId, text, answerList];

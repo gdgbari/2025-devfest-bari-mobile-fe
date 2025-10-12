@@ -1,7 +1,9 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'talk.g.dart';
+
+@JsonSerializable()
 class Talk extends Equatable {
   final String talkId;
   final String title;
@@ -41,52 +43,18 @@ class Talk extends Equatable {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'talkId': talkId,
-      'title': title,
-      'description': description,
-      'track': track,
-      'room': room,
-      'startTime': startTime?.millisecondsSinceEpoch,
-      'endTime': endTime?.millisecondsSinceEpoch,
-    };
-  }
+  factory Talk.fromJson(Map<String, dynamic> json) => _$TalkFromJson(json);
 
-  factory Talk.fromMap(Map<String, dynamic> map) {
-    return Talk(
-      talkId: map['talkId'] as String? ?? '',
-      title: map['title'] as String? ?? '',
-      description: map['description'] as String? ?? '',
-      track: map['track'] as String? ?? '',
-      room: map['room'] as String? ?? '',
-      startTime: DateTime.fromMillisecondsSinceEpoch(
-        map['startTime'] as int? ?? 0,
-      ),
-      endTime: DateTime.fromMillisecondsSinceEpoch(
-        map['endTime'] as int? ?? 0,
-      ),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Talk.fromJson(String source) =>
-      Talk.fromMap(json.decode(source) as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$TalkToJson(this);
 
   @override
-  bool get stringify => true;
-
-  @override
-  List<Object?> get props {
-    return [
-      talkId,
-      title,
-      description,
-      track,
-      room,
-      startTime,
-      endTime,
-    ];
-  }
+  List<Object?> get props => [
+    talkId,
+    title,
+    description,
+    track,
+    room,
+    startTime,
+    endTime,
+  ];
 }
