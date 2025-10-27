@@ -12,7 +12,7 @@ class SuccessLog extends TalkerLog {
 final logger = Talker(
   settings: TalkerSettings(
     colors: {
-      TalkerLogType.info.key: AnsiPen()..cyan(),
+      'info': AnsiPen()..cyan(),
       SuccessLog.logKey: AnsiPen()..green(),
     },
   ),

@@ -52,4 +52,7 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
-.fvmrc
+
+# Env file and generated files
+.env
+*.g.dart
