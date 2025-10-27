@@ -1,10 +1,8 @@
 export 'services/authentication/authentication_service.dart';
 export 'services/authentication/authentication_service_impl.dart';
-export 'services/contest_rules/contest_rules_service.dart';
-export 'services/contest_rules/contest_rules_service_impl.dart';
-export 'services/easter_egg/easter_egg_service.dart';
-export 'services/easter_egg/easter_egg_service_impl.dart';
+export 'services/authentication/user_service.dart';
+export 'services/authentication/user_service_impl.dart';
 export 'services/leaderboard/leaderboard_service.dart';
-export 'services/leaderboard/leaderboard_service_impl.dart';
+export 'services/leaderboard/leaderboard_service_mock.dart';
 export 'services/quiz/quiz_service.dart';
-export 'services/quiz/quiz_service_impl.dart';
+export 'services/quiz/quiz_service_mock.dart';

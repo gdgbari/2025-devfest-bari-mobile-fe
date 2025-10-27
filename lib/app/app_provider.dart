@@ -1,4 +1,5 @@
 import 'package:devfest_bari_2025/data.dart';
+import 'package:devfest_bari_2025/data/repositories/user_repository.dart';
 import 'package:devfest_bari_2025/logic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,16 +28,6 @@ class AppProvider extends StatelessWidget {
             LeaderboardServiceImpl(),
           ),
         ),
-        RepositoryProvider<ContestRulesRepository>(
-          create: (_) => ContestRulesRepository(
-            ContestRulesServiceImpl(),
-          ),
-        ),
-        RepositoryProvider<EasterEggRepository>(
-          create: (_) => EasterEggRepository(
-            EasterEggServiceImpl(),
-          ),
-        ),
       ],
       child: MultiBlocProvider(
         providers: <BlocProvider>[
@@ -48,6 +39,7 @@ class AppProvider extends StatelessWidget {
             lazy: false,
             create: (context) => AuthenticationCubit(
               context.read<AuthenticationRepository>(),
+              context.read<UserRepository>(),
             ),
           ),
           BlocProvider<QrCodeCubit>(
@@ -64,18 +56,6 @@ class AppProvider extends StatelessWidget {
             lazy: false,
             create: (context) => LeaderboardCubit(
               context.read<LeaderboardRepository>(),
-            ),
-          ),
-          BlocProvider<ContestRulesCubit>(
-            lazy: true,
-            create: (context) => ContestRulesCubit(
-              context.read<ContestRulesRepository>(),
-            ),
-          ),
-          BlocProvider<EasterEggCubit>(
-            lazy: true,
-            create: (context) => EasterEggCubit(
-              context.read<EasterEggRepository>(),
             ),
           ),
         ],
