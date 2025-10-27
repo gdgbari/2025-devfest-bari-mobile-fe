@@ -77,7 +77,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     emit(state.copyWith(status: AuthenticationStatus.checkInInProgress));
 
     try {
-      final group = await _userRepo.checkIn(authorizationCode);
+      final group = await _userRepo.checkIn();
 
       emit(
         state.copyWith(
