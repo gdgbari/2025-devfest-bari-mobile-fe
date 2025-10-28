@@ -1,5 +1,4 @@
 import 'package:devfest_bari_2025/data.dart';
-import 'package:devfest_bari_2025/data/repositories/user_repository.dart';
 import 'package:devfest_bari_2025/logic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +39,12 @@ class AppProvider extends StatelessWidget {
             create: (context) => AuthenticationCubit(
               context.read<AuthenticationRepository>(),
               context.read<UserRepository>(),
+            ),
+          ),
+          BlocProvider<RemoteConfigCubit>(
+            lazy: false,
+            create: (_) => RemoteConfigCubit(
+              context.read<RemoteConfigRepository>(),
             ),
           ),
           BlocProvider<QrCodeCubit>(

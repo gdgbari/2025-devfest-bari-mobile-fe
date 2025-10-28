@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'global_config.g.dart';
+part 'remote_config.g.dart';
 
 @JsonSerializable()
-class GlobalConfig extends Equatable {
+class RemoteConfig extends Equatable {
   final bool leaderboardOpen;
   final String winnerRoom;
   final String winnerTime;
   final String infoTitle;
   final String infoContent;
 
-  const GlobalConfig({
+  const RemoteConfig({
     this.leaderboardOpen = false,
     this.winnerRoom = '',
     this.winnerTime = '',
@@ -19,14 +19,14 @@ class GlobalConfig extends Equatable {
     this.infoContent = '',
   });
 
-  GlobalConfig copyWith({
+  RemoteConfig copyWith({
     bool? leaderboardOpen,
     String? winnerRoom,
     String? winnerTime,
     String? infoTitle,
     String? infoContent,
   }) {
-    return GlobalConfig(
+    return RemoteConfig(
       leaderboardOpen: leaderboardOpen ?? this.leaderboardOpen,
       winnerRoom: winnerRoom ?? this.winnerRoom,
       winnerTime: winnerTime ?? this.winnerTime,
@@ -35,10 +35,10 @@ class GlobalConfig extends Equatable {
     );
   }
 
-  factory GlobalConfig.fromJson(Map<String, dynamic> json) =>
-      _$GlobalConfigFromJson(json);
+  factory RemoteConfig.fromJson(Map<String, dynamic> json) =>
+      _$RemoteConfigFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GlobalConfigToJson(this);
+  Map<String, dynamic> toJson() => _$RemoteConfigToJson(this);
 
   @override
   List<Object> get props => [

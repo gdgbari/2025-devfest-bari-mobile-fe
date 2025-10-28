@@ -5,10 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class NavigationBarPage extends StatelessWidget {
-  const NavigationBarPage({
-    super.key,
-    required this.navigationShell,
-  });
+  const NavigationBarPage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
@@ -28,45 +25,26 @@ class NavigationBarPage extends StatelessWidget {
             style: PresetTextStyle.white21w500,
           ),
           centerTitle: true,
-          leading: Visibility(
-            visible: navigationShell.currentIndex == 1,
-            child: GestureDetector(
-              onTap: () => context.pushNamed(RouteNames.easterEggRoute.name),
-              child: Container(
-                color: ColorPalette.black,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            BlocBuilder<ContestRulesCubit, ContestRulesState>(
-              builder: (context, state) {
-                return Visibility(
-                  visible: navigationShell.currentIndex == 0 &&
-                      state.rules.showRules,
-                  child: IconButton(
-                    onPressed: () => showContestRulesDialog(
-                      context,
-                      state.rules.title,
-                      state.rules.content,
-                    ),
-                    icon: Icon(
-                      Icons.info_outline,
-                      color: ColorPalette.white,
-                    ),
+          actions: [
+            if (navigationShell.currentIndex == 0)
+              BlocBuilder<RemoteConfigCubit, RemoteConfigState>(
+                builder: (context, state) => IconButton(
+                  onPressed: () => showAppInfoDialog(
+                    context,
+                    state.config.infoTitle,
+                    state.config.infoContent,
                   ),
-                );
-              },
-            ),
-            Visibility(
-              visible: navigationShell.currentIndex == 1,
-              child: IconButton(
-                onPressed: () => context.read<AuthenticationCubit>().signOut(),
-                icon: const Icon(
-                  Icons.logout,
-                  color: Colors.white,
+                  icon: const Icon(
+                    Icons.info_outline,
+                    color: ColorPalette.white,
+                  ),
                 ),
               ),
-            ),
+            if (navigationShell.currentIndex == 1)
+              IconButton(
+                onPressed: () => context.read<AuthenticationCubit>().signOut(),
+                icon: const Icon(Icons.logout, color: Colors.white),
+              ),
           ],
         ),
         body: navigationShell,
@@ -95,10 +73,7 @@ class NavigationBarPage extends StatelessWidget {
               icon: Icon(Icons.leaderboard),
               label: 'Leaderboard',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
           currentIndex: navigationShell.currentIndex,
           onTap: (int index) => _onTap(context, index),

@@ -1,6 +1,6 @@
 export 'models/authentication/group.dart';
 export 'models/authentication/user_profile.dart';
-export 'models/global_config.dart';
+export 'models/remote_config/remote_config.dart';
 export 'models/leaderboard/leaderboard.dart';
 export 'models/leaderboard/leaderboard_group.dart';
 export 'models/leaderboard/leaderboard_user.dart';

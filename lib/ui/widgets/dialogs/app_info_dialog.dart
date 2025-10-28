@@ -2,14 +2,14 @@ import 'package:devfest_bari_2025/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-Future<void> showContestRulesDialog(
+Future<void> showAppInfoDialog(
   BuildContext context,
   String title,
   String content,
 ) async {
   await showDialog(
     context: context,
-    builder: (_) => ContestRulesDialog(
+    builder: (_) => AppInfoDialog(
       onPressed: () => context.pop(),
       title: title,
       content: content,
@@ -17,12 +17,12 @@ Future<void> showContestRulesDialog(
   );
 }
 
-class ContestRulesDialog extends StatelessWidget {
+class AppInfoDialog extends StatelessWidget {
   final void Function()? onPressed;
   final String title;
   final String content;
 
-  const ContestRulesDialog({
+  const AppInfoDialog({
     super.key,
     required this.onPressed,
     required this.title,
