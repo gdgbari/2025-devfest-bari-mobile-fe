@@ -1,9 +1,6 @@
-import 'package:devfest_bari_2025/data.dart';
+import 'package:dio/dio.dart';
 
 abstract class QuizService {
-  Future<ServerResponse> getQuiz(String quizCode);
-  Future<ServerResponse> submitQuiz(
-    String quizId,
-    List<String?> answerList,
-  );
+  Future<Response> getQuiz(String quizCode);
+  Future<Response> submitQuiz(String quizId, List<String?> answerList);
 }

@@ -8,7 +8,7 @@ class QuizResults extends Equatable {
   final int score;
   final int maxScore;
 
-  const QuizResults({required this.score, required this.maxScore});
+  const QuizResults({this.score = 0, this.maxScore = 0});
 
   QuizResults copyWith({int? score, int? maxScore}) {
     return QuizResults(
