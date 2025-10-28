@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:devfest_bari_2025/data.dart';
-import 'package:devfest_bari_2025/data/repositories/user_repository.dart';
 import 'package:devfest_bari_2025/logic.dart';
 import 'package:equatable/equatable.dart';
 

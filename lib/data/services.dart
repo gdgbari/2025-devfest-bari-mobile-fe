@@ -5,6 +5,7 @@ export 'services/authentication/user_service_impl.dart';
 export 'services/leaderboard/leaderboard_service.dart';
 export 'services/leaderboard/leaderboard_service_mock.dart';
 export 'services/quiz/quiz_service.dart';
+export 'services/quiz/quiz_service_impl.dart';
 export 'services/quiz/quiz_service_mock.dart';
 export 'services/remote_config/remote_config_service.dart';
 export 'services/remote_config/remote_config_service_impl.dart';

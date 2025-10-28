@@ -43,7 +43,7 @@ class AppInfoDialog extends StatelessWidget {
               child: Center(child: CustomLoader()),
             )
           : Text(
-              content,
+              content.replaceAll(r'\n', '\n').replaceAll(r'\t', '\t'),
               style: PresetTextStyle.black19w400,
             ),
       actions: <Widget>[

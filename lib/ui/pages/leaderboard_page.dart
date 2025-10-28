@@ -34,175 +34,76 @@ class LeaderboardPage extends StatelessWidget {
                     ),
                   );
                 case LeaderboardStatus.fetchSuccess:
-                  return state.leaderboard.isOpen
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            CustomSegmentedButton(
-                              index: state.pageIndex,
-                              onValueChanged: (value) => context
-                                  .read<LeaderboardCubit>()
-                                  .changeLeaderboard(value),
-                            ),
-                            const SizedBox(height: 20),
-                            Expanded(
-                              child: PageView(
-                                controller: pageController,
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: const <Widget>[
-                                  UserLeaderboard(),
-                                  TeamLeaderboard(),
-                                ],
+                  final pageIndex = state.pageIndex;
+
+                  return BlocBuilder<RemoteConfigCubit, RemoteConfigState>(
+                    builder: (context, state) {
+                      return state.config.leaderboardOpen
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                CustomSegmentedButton(
+                                  index: pageIndex,
+                                  onValueChanged: (value) => context
+                                      .read<LeaderboardCubit>()
+                                      .changeLeaderboard(value),
+                                ),
+                                const SizedBox(height: 20),
+                                Expanded(
+                                  child: PageView(
+                                    controller: pageController,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    children: const <Widget>[
+                                      UserLeaderboardView(),
+                                      GroupLeaderboardView(),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Center(
+                              child: Text.rich(
+                                TextSpan(
+                                  text: '🏆 ANNOUNCEMENT 🏆\n\n',
+                                  style: PresetTextStyle.black23w700,
+                                  children: <InlineSpan>[
+                                    TextSpan(
+                                      text:
+                                          'The final leaderboard will be shown in ',
+                                      style: PresetTextStyle.black21w400,
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: state.config.winnerRoom,
+                                          style: PresetTextStyle.black21w700,
+                                        ),
+                                        TextSpan(
+                                          text: ' at ',
+                                          style: PresetTextStyle.black21w400,
+                                        ),
+                                        TextSpan(
+                                          text: state.config.winnerTime,
+                                          style: PresetTextStyle.black21w700,
+                                        ),
+                                      ],
+                                    ),
+                                    TextSpan(text: '\n\n'),
+                                    TextSpan(
+                                      text:
+                                          'Join us to discover the winners and get amazing prizes! 🏅',
+                                      style: PresetTextStyle.black21w400,
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
-                          ],
-                        )
-                      : _LeaderboardClosed(state);
+                            );
+                    },
+                  );
               }
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class UserLeaderboard extends StatelessWidget {
-  const UserLeaderboard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LeaderboardCubit, LeaderboardState>(
-      builder: (context, state) {
-        final users = state.leaderboard.users;
-
-        return AnimatedContainer(
-          duration: Duration(milliseconds: 100),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Your score',
-                style: PresetTextStyle.black23w500,
-              ),
-              SizedBox(height: 10),
-              UserTile(user: state.leaderboard.currentUser),
-              SizedBox(height: 20),
-              Text(
-                'Top users',
-                style: PresetTextStyle.black23w500,
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: index == users.length - 1 ? 40 : 0,
-                      ),
-                      child: UserTile(user: users[index]),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 10),
-                  itemCount: users.length,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class TeamLeaderboard extends StatelessWidget {
-  const TeamLeaderboard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LeaderboardCubit, LeaderboardState>(
-      builder: (context, state) {
-        final groups = state.leaderboard.groups;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Team rankings',
-              style: PresetTextStyle.black23w500,
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  ...List<Widget>.generate(
-                    groups.length,
-                    (index) {
-                      return Expanded(
-                        child: Container(
-                          width: double.maxFinite,
-                          margin: EdgeInsets.only(
-                            bottom: index != groups.length ? 10 : 0,
-                          ),
-                          child: GroupTile(
-                            group: groups[index],
-                            maxScore: state.groupMaxScore,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(height: 40),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _LeaderboardClosed extends StatelessWidget {
-  final LeaderboardState state;
-
-  const _LeaderboardClosed(this.state);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text.rich(
-        TextSpan(
-          text: '🏆 ANNOUNCEMENT 🏆\n\n',
-          style: PresetTextStyle.black23w700,
-          children: <InlineSpan>[
-            TextSpan(
-              text: 'The final leaderboard will be shown in ',
-              style: PresetTextStyle.black21w400,
-              children: <InlineSpan>[
-                TextSpan(
-                  text: state.leaderboard.winnerRoom,
-                  style: PresetTextStyle.black21w700,
-                ),
-                TextSpan(
-                  text: ' at ',
-                  style: PresetTextStyle.black21w400,
-                ),
-                TextSpan(
-                  text: state.leaderboard.winnerTime,
-                  style: PresetTextStyle.black21w700,
-                ),
-              ],
-            ),
-            TextSpan(text: '\n\n'),
-            TextSpan(
-              text:
-                  'Join us to discover the winners and get amazing prizes! 🏅',
-              style: PresetTextStyle.black21w400,
-            ),
-          ],
-        ),
-        textAlign: TextAlign.center,
       ),
     );
   }
