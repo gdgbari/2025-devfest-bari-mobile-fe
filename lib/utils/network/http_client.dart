@@ -9,7 +9,7 @@ class HttpClient {
   static final HttpClient _instance = HttpClient._internal(
     Dio(
       BaseOptions(
-        baseUrl: Env.baseUrl,
+        baseUrl: '${Env.baseUrl}/api',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
