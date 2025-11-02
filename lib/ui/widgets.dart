@@ -10,7 +10,6 @@ export 'widgets/group_info.dart';
 export 'widgets/group_tile.dart';
 export 'widgets/leaderboard/group_leaderboard_view.dart';
 export 'widgets/leaderboard/user_leaderboard_view.dart';
-export 'widgets/oauth_button.dart';
 export 'widgets/qr_code_background.dart';
 export 'widgets/social_info.dart';
 export 'widgets/social_media_button.dart';

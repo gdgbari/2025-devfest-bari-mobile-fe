@@ -1,7 +1,6 @@
-export 'pages/check_in_page.dart';
+export 'pages/home_page.dart';
 export 'pages/leaderboard_page.dart';
 export 'pages/login_page.dart';
-export 'pages/navigation_bar_page.dart';
 export 'pages/no_internet_page.dart';
 export 'pages/profile_page.dart';
 export 'pages/qr_code_page.dart';

@@ -4,13 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class NavigationBarPage extends StatelessWidget {
-  const NavigationBarPage({super.key, required this.navigationShell});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
   @override
   Widget build(BuildContext context) {
+    final tabTitle = switch (navigationShell.currentIndex) {
+      0 => 'Leaderboard',
+      1 => 'Profile',
+      _ => 'DevFest Bari 2025',
+    };
+
     return BlocListener<InternetCubit, InternetState>(
       listener: (context, state) {
         if (state is InternetConnected) {
@@ -19,14 +25,11 @@ class NavigationBarPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ColorPalette.black,
-          title: const Text(
-            'DevFest Bari 2025',
-            style: PresetTextStyle.white21w500,
-          ),
-          centerTitle: true,
-          actions: [
-            if (navigationShell.currentIndex == 0)
+          backgroundColor: ColorPalette.gray,
+          title: Text(tabTitle, style: PresetTextStyle.black23w500),
+          centerTitle: false,
+          actions: <Widget>[
+            if (navigationShell.currentIndex != 1)
               BlocBuilder<RemoteConfigCubit, RemoteConfigState>(
                 builder: (context, state) => IconButton(
                   onPressed: () => showAppInfoDialog(
@@ -36,15 +39,16 @@ class NavigationBarPage extends StatelessWidget {
                   ),
                   icon: const Icon(
                     Icons.info_outline,
-                    color: ColorPalette.white,
+                    color: ColorPalette.black,
                   ),
                 ),
               ),
             if (navigationShell.currentIndex == 1)
               IconButton(
                 onPressed: () => context.read<AuthenticationCubit>().signOut(),
-                icon: const Icon(Icons.logout, color: Colors.white),
+                icon: const Icon(Icons.logout, color: ColorPalette.black),
               ),
+            SizedBox(width: 4),
           ],
         ),
         body: navigationShell,
@@ -55,8 +59,8 @@ class NavigationBarPage extends StatelessWidget {
             context.pushNamed(RouteNames.qrCodeRoute.name);
           },
           elevation: 1,
-          backgroundColor: ColorPalette.coreRed,
-          splashColor: ColorPalette.pastelRed,
+          backgroundColor: ColorPalette.coreYellow,
+          splashColor: ColorPalette.pastelYellow,
           shape: const CircleBorder(),
           child: const Icon(
             Icons.qr_code_scanner_rounded,
@@ -66,14 +70,22 @@ class NavigationBarPage extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: ColorPalette.gray,
-          selectedItemColor: ColorPalette.coreRed,
+          backgroundColor: ColorPalette.white,
+          selectedItemColor: ColorPalette.coreYellow,
+          selectedLabelStyle: PresetTextStyle.black13w400.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+          // unselectedItemColor: Color(0xFF956700),
+          selectedIconTheme: IconThemeData(size: 26),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard),
+              icon: Icon(Icons.leaderboard_outlined),
               label: 'Leaderboard',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: 'Profile',
+            ),
           ],
           currentIndex: navigationShell.currentIndex,
           onTap: (int index) => _onTap(context, index),

@@ -59,6 +59,7 @@ Future<void> _precacheAllSvg() async {
   final List<String> imageUrls = [
     'assets/images/dino.svg',
     'assets/images/devfest_logo.svg',
+    'assets/images/skyline_10_years.svg',
     'assets/images/qr_marker.svg',
     'assets/images/icons/email.svg',
     'assets/images/icons/google.svg',

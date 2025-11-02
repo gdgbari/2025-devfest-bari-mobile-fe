@@ -85,13 +85,6 @@ void _setSystemUIColor(String? routeName) {
         ),
       );
       break;
-    case 'checkInRoute':
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          systemNavigationBarColor: ColorPalette.white,
-        ),
-      );
-      break;
     case 'leaderboardRoute':
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(

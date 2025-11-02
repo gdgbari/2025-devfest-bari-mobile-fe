@@ -30,14 +30,9 @@ final appRouter = GoRouter(
       path: RouteNames.signUpRoute.path,
       builder: (context, state) => SignUpPage(),
     ),
-    GoRoute(
-      name: RouteNames.checkInRoute.name,
-      path: RouteNames.checkInRoute.path,
-      builder: (context, state) => CheckInPage(),
-    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
-        return NavigationBarPage(navigationShell: navigationShell);
+        return HomePage(navigationShell: navigationShell);
       },
       branches: <StatefulShellBranch>[
         StatefulShellBranch(

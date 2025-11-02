@@ -43,7 +43,7 @@ void _authListener(
       break;
     case AuthenticationStatus.checkInRequired:
       context.loaderOverlay.hide();
-      appRouter.goNamed(RouteNames.checkInRoute.name);
+      appRouter.goNamed(RouteNames.welcomeRoute.name);
       FlutterNativeSplash.remove();
       break;
     case AuthenticationStatus.checkInSuccess:
@@ -103,6 +103,7 @@ void _authListener(
       appRouter.goNamed(RouteNames.welcomeRoute.name);
       break;
     default:
+      context.loaderOverlay.hide();
       break;
   }
 }
