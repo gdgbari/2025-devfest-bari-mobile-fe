@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'quiz_results.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class QuizResults extends Equatable {
   final int score;
   final int maxScore;

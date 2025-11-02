@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'sponsor.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Sponsor extends Equatable {
   final String sponsorId;
   final String name;

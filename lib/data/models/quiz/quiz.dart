@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'quiz.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Quiz extends Equatable {
   final String quizId;
   final String title;

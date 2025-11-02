@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_profile.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class UserProfile extends Equatable {
   final String userId;
   final String nickname;

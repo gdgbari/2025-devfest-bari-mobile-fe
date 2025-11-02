@@ -7,7 +7,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'leaderboard_group.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class LeaderboardGroup extends Equatable {
   final String name;
   final int score;

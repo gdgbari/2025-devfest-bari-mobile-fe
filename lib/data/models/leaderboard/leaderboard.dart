@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'leaderboard.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Leaderboard extends Equatable {
   final LeaderboardUser currentUser;
   final List<LeaderboardUser> users;

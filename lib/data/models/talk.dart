@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'talk.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Talk extends Equatable {
   final String talkId;
   final String title;

@@ -3,8 +3,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'remote_config.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class RemoteConfig extends Equatable {
+  final bool checkInOpen;
   final bool leaderboardOpen;
   final String winnerRoom;
   final String winnerTime;
@@ -12,6 +13,7 @@ class RemoteConfig extends Equatable {
   final String infoContent;
 
   const RemoteConfig({
+    this.checkInOpen = false,
     this.leaderboardOpen = false,
     this.winnerRoom = '',
     this.winnerTime = '',
@@ -20,6 +22,7 @@ class RemoteConfig extends Equatable {
   });
 
   RemoteConfig copyWith({
+    bool? checkInOpen,
     bool? leaderboardOpen,
     String? winnerRoom,
     String? winnerTime,
@@ -27,6 +30,7 @@ class RemoteConfig extends Equatable {
     String? infoContent,
   }) {
     return RemoteConfig(
+      checkInOpen: checkInOpen ?? this.checkInOpen,
       leaderboardOpen: leaderboardOpen ?? this.leaderboardOpen,
       winnerRoom: winnerRoom ?? this.winnerRoom,
       winnerTime: winnerTime ?? this.winnerTime,
@@ -42,6 +46,7 @@ class RemoteConfig extends Equatable {
 
   @override
   List<Object> get props => [
+    checkInOpen,
     leaderboardOpen,
     winnerRoom,
     winnerTime,

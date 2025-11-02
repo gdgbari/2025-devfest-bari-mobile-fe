@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'group.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Group extends Equatable {
   @JsonKey(name: 'gid')
   final String groupId;
