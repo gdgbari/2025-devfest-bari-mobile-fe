@@ -7,10 +7,21 @@ import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class QrCodePage extends StatelessWidget {
-  QrCodePage({super.key});
+class QrCodePage extends StatefulWidget {
+  const QrCodePage({super.key});
 
-  final controller = MobileScannerController();
+  @override
+  State<QrCodePage> createState() => _QrCodePageState();
+}
+
+class _QrCodePageState extends State<QrCodePage> {
+  late final MobileScannerController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = MobileScannerController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,17 +95,11 @@ class QrCodePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorPalette.black,
-          title: const Text(
-            'QR code',
-            style: PresetTextStyle.white21w500,
-          ),
+          title: const Text('QR code', style: PresetTextStyle.white21w500),
           centerTitle: true,
           leading: IconButton(
             onPressed: () => context.pop(),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
         ),
         body: SafeArea(
@@ -108,9 +113,9 @@ class QrCodePage extends StatelessWidget {
                   if (qrData.type == BarcodeType.text) {
                     controller.stop();
                     context.read<QrCodeCubit>().validateQrCode(
-                          qrData.rawValue,
-                          QrCodeType.quiz,
-                        );
+                      qrData.rawValue,
+                      QrCodeType.quiz,
+                    );
                   }
                 },
               ),
@@ -130,5 +135,11 @@ class QrCodePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
