@@ -7,17 +7,10 @@ class AuthenticationRepository {
 
   const AuthenticationRepository(this._authService);
 
-  Future<void> _updateToken(User user) async {
-    final token = await user.getIdToken();
-    if (token != null) {
-      HttpClient().updateAccessToken(token);
-    }
-  }
-
   Future<User?> getInitialAuthState() async {
     final user = await _authService.getInitialAuthState();
     if (user == null) return null;
-    await _updateToken(user);
+    await _authService.updateToken();
     return user;
   }
 
@@ -31,7 +24,7 @@ class AuthenticationRepository {
         password: password,
       );
       final user = userCredential.user!;
-      await _updateToken(user);
+      await _authService.updateToken();
       return user;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -48,6 +41,10 @@ class AuthenticationRepository {
     } on Exception {
       throw UnknownAuthenticationError();
     }
+  }
+
+  Future<void> refreshToken() async {
+    await _authService.updateToken(forceRefresh: true);
   }
 
   Future<void> signOut() async {

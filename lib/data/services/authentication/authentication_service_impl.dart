@@ -1,4 +1,5 @@
 import 'package:devfest_bari_2025/data.dart';
+import 'package:devfest_bari_2025/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationServiceImpl implements AuthenticationService {
@@ -15,6 +16,14 @@ class AuthenticationServiceImpl implements AuthenticationService {
   }
 
   @override
+  Future<void> updateToken({bool forceRefresh = false}) async {
+    final token = await _firebaseAuth.currentUser?.getIdToken(forceRefresh);
+    if (token != null) {
+      HttpClient().updateAccessToken(token);
+    }
+  }
+
+  @override
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,
@@ -25,6 +34,11 @@ class AuthenticationServiceImpl implements AuthenticationService {
     );
   }
 
+  
+
   @override
-  Future<void> signOut() async => await _firebaseAuth.signOut();
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+    HttpClient().removeAccessToken();
+  }
 }

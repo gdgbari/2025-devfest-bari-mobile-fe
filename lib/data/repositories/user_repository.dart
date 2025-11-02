@@ -15,13 +15,14 @@ class UserRepository {
     required String password,
   }) async {
     try {
-      await _userService.signUp({
-        nickname: nickname,
-        name: name,
-        surname: surname,
-        email: email,
-        password: password,
-      });
+      final Map<String, dynamic> userData = {
+        'nickname': nickname,
+        'name': name,
+        'surname': surname,
+        'email': email,
+        'password': password,
+      };
+      await _userService.signUp(userData);
     } on DioException catch (e) {
       if (e.response != null) {
         switch (e.response?.statusCode) {

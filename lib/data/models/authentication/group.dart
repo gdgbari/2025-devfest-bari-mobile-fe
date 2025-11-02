@@ -6,6 +6,7 @@ part 'group.g.dart';
 
 @JsonSerializable()
 class Group extends Equatable {
+  @JsonKey(name: 'gid')
   final String groupId;
   final String name;
   final String imageUrl;
