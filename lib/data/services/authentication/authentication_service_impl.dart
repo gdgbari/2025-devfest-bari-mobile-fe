@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthenticationServiceImpl implements AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  AuthenticationServiceImpl();
+  AuthenticationServiceImpl() {
+    HttpClient().dio.interceptors.add(AuthenticationInterceptor(this));
+  }
 
   @override
   Future<User?> getInitialAuthState() async {
@@ -33,8 +35,6 @@ class AuthenticationServiceImpl implements AuthenticationService {
       password: password,
     );
   }
-
-  
 
   @override
   Future<void> signOut() async {
