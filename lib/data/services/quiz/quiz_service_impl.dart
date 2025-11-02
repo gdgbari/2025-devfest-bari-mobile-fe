@@ -6,7 +6,7 @@ class QuizServiceImpl implements QuizService {
   QuizServiceImpl();
 
   final Dio _dio = HttpClient().dio;
-  final String _endpoint = '/quiz';
+  final String _endpoint = '/quizzes';
 
   @override
   Future<Response> getQuiz(String quizCode) async {
