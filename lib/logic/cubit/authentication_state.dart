@@ -20,8 +20,6 @@ enum AuthenticationStatus {
 enum AuthenticationError {
   none,
   userAlreadyRegistered,
-  checkInCodeNotFound,
-  checkInCodeExpired,
   userNotFound,
   invalidCredentials,
   unknown,

@@ -22,16 +22,6 @@ class QrCodeCubit extends Cubit<QrCodeState> {
         );
       }
 
-      if (value.startsWith('checkin:') && expectedType == QrCodeType.checkin) {
-        return emit(
-          state.copyWith(
-            status: QrCodeStatus.validationSuccess,
-            type: QrCodeType.checkin,
-            value: value,
-          ),
-        );
-      }
-
       if (value.startsWith('quiz:') && expectedType == QrCodeType.quiz) {
         return emit(
           state.copyWith(

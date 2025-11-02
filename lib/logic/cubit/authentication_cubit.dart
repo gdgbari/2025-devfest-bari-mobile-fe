@@ -72,7 +72,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }
   }
 
-  Future<void> checkIn(String authorizationCode) async {
+  Future<void> checkIn() async {
     emit(state.copyWith(status: AuthenticationStatus.checkInInProgress));
 
     try {
@@ -86,8 +86,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       );
     } on Exception catch (e) {
       final error = switch (e) {
-        CheckInCodeNotFoundError _ => AuthenticationError.checkInCodeNotFound,
-        CheckInCodeExpiredError _ => AuthenticationError.checkInCodeExpired,
         _ => AuthenticationError.unknown,
       };
 
@@ -124,6 +122,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       await _getUserProfile();
     } on Exception catch (e) {
+      await signOut();
+
       final error = switch (e) {
         UserNotFoundError _ => AuthenticationError.userNotFound,
         InvalidDataError _ => AuthenticationError.invalidCredentials,

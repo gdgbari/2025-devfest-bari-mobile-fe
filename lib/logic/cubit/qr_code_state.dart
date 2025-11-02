@@ -1,6 +1,6 @@
 part of 'qr_code_cubit.dart';
 
-enum QrCodeType { none, user, checkin, quiz }
+enum QrCodeType { none, user, quiz }
 
 enum QrCodeStatus {
   initial,
