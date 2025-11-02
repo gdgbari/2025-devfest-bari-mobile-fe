@@ -7,7 +7,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   @override
   Stream<Map<String, dynamic>> get config {
     return _firestore
-        .collection('remoteConfig')
+        .collection('remote_config')
         .doc('config')
         .snapshots()
         .map((event) => event.data() ?? {});
