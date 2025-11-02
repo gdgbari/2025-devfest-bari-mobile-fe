@@ -18,6 +18,6 @@ class UserServiceImpl extends UserService {
 
   @override
   Future<Response> checkIn() async {
-    return await _dio.get('$_endpoint/check-in');
+    return await _dio.post('$_endpoint/check-in');
   }
 }
