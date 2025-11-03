@@ -27,8 +27,8 @@ class UserQrCode extends StatelessWidget {
           ),
         ),
         Text(
-          'Click to expand',
-          style: PresetTextStyle.black15w500,
+          'Expand',
+          style: PresetTextStyle.black13w500,
         ),
       ],
     );
