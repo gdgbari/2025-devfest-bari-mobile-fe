@@ -38,8 +38,13 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           observers: [RouterObserver()],
           navigatorKey: _shellNavigatorKey,
-          initialLocation: RouteNames.leaderboardRoute.path,
+          initialLocation: RouteNames.dashboardRoute.path,
           routes: <RouteBase>[
+            GoRoute(
+              name: RouteNames.dashboardRoute.name,
+              path: RouteNames.dashboardRoute.path,
+              builder: (context, state) => DashboardPage(),
+            ),
             GoRoute(
               name: RouteNames.leaderboardRoute.name,
               path: RouteNames.leaderboardRoute.path,

@@ -52,7 +52,7 @@ void _authListener(
       context
           .read<LeaderboardCubit>()
           .fetchLeaderboard(state.userProfile.userId);
-      appRouter.goNamed(RouteNames.leaderboardRoute.name);
+      appRouter.goNamed(RouteNames.dashboardRoute.name);
       FlutterNativeSplash.remove();
       break;
     case AuthenticationStatus.signUpFailure:
@@ -121,7 +121,7 @@ void _internetListener(
   if (state is InternetConnected) {
     context.read<LeaderboardCubit>().changeLeaderboard(0);
     final route = context.read<AuthenticationCubit>().state.isAuthenticated
-        ? RouteNames.leaderboardRoute
+        ? RouteNames.dashboardRoute
         : RouteNames.welcomeRoute;
 
     appRouter.goNamed(route.name);
