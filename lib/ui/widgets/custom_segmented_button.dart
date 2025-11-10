@@ -13,6 +13,43 @@ class CustomSegmentedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Center(
+      child: CupertinoSlidingSegmentedControl<int>(
+        groupValue: index,
+        thumbColor: ColorPalette.white.withValues(alpha: 0.8),
+        children: <int, Widget>{
+          0: SizedBox(
+            height: 35,
+            width: double.maxFinite,
+            child: Center(
+              child: Text(
+                'Users',
+                style: index == 0
+                    ? PresetTextStyle.black15w700
+                    : PresetTextStyle.black15w400,
+              ),
+            ),
+          ),
+          1: SizedBox(
+            height: 35,
+            width: double.maxFinite,
+            child: Center(
+              child: Text(
+                'Teams',
+                style: index == 1
+                    ? PresetTextStyle.black15w700
+                    : PresetTextStyle.black15w400,
+              ),
+            ),
+          ),
+        },
+        onValueChanged: (value) {
+          if (value != null) {
+            onValueChanged(value);
+          }
+        },
+      ),
+    );
     return SizedBox(
       width: double.maxFinite,
       child: CupertinoSegmentedControl(

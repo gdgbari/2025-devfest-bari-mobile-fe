@@ -15,7 +15,7 @@ class GroupLeaderboardView extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Team rankings', style: PresetTextStyle.black23w500),
+            Text('Team rankings', style: PresetTextStyle.black21w500),
             SizedBox(height: 10),
             Expanded(
               child: Column(

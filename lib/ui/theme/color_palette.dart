@@ -21,4 +21,7 @@ class ColorPalette {
   // Custom section
   static const Color transparent = Color(0x00000000);
   static const Color seaBlue = Color(0xFF96BCFC);
+  static const Color gold = Color(0xFFD4AF37);
+  static const Color silver = Color(0xFFC0C0C0);
+  static const Color bronze = Color(0xFFCD7F32);
 }

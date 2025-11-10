@@ -17,11 +17,11 @@ class UserLeaderboardView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Your score', style: PresetTextStyle.black23w500),
+              Text('Your score', style: PresetTextStyle.black21w500),
               SizedBox(height: 10),
               UserTile(user: state.leaderboard.currentUser),
               SizedBox(height: 20),
-              Text('Top users', style: PresetTextStyle.black23w500),
+              Text('Top users', style: PresetTextStyle.black21w500),
               SizedBox(height: 10),
               Expanded(
                 child: ListView.separated(
