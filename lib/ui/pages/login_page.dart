@@ -13,34 +13,35 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: ColorPalette.black,
+        backgroundColor: ColorPalette.white,
+        forceMaterialTransparency: true,
         title: const Text(
           'Sign in with Email',
-          style: PresetTextStyle.white21w500,
+          style: PresetTextStyle.black21w500,
         ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
+          icon: const Icon(Icons.arrow_back, color: ColorPalette.black),
         ),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              const Text('Email', style: PresetTextStyle.black13w500),
+              const SizedBox(height: 5),
               CustomTextField(
                 hint: 'Email',
                 controller: emailTextController,
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 10),
+              const Text('Password', style: PresetTextStyle.black13w500),
+              const SizedBox(height: 5),
               CustomTextField(
                 hint: 'Password',
                 controller: passwordTextController,
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
                         );
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor: ColorPalette.black,
+                    backgroundColor: ColorPalette.coreYellow,
                     overlayColor: Colors.white,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     shape: RoundedRectangleBorder(
@@ -70,7 +71,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   child: const Text(
                     'SIGN IN',
-                    style: PresetTextStyle.white19w400,
+                    style: PresetTextStyle.white19w500,
                   ),
                 ),
               ),
