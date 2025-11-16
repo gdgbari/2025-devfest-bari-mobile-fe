@@ -94,11 +94,11 @@ class _QrCodePageState extends State<QrCodePage> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('QR code', style: PresetTextStyle.white21w500),
+          title: const Text('QR code', style: PresetTextStyle.black21w500),
           centerTitle: true,
           leading: IconButton(
             onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: ColorPalette.black),
           ),
         ),
         body: SafeArea(
@@ -123,10 +123,10 @@ class _QrCodePageState extends State<QrCodePage> {
                 child: SvgPicture.asset(
                   'assets/images/qr_marker.svg',
                   width: MediaQuery.of(context).size.width / 1.75,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
+                  // colorFilter: const ColorFilter.mode(
+                  //   Colors.white,
+                  //   BlendMode.srcIn,
+                  // ),
                 ),
               ),
             ],
