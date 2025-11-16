@@ -34,7 +34,6 @@ class HomePage extends StatelessWidget {
 
               return Scaffold(
                 appBar: AppBar(
-                  backgroundColor: ColorPalette.gray,
                   title: Text(tabTitle, style: PresetTextStyle.black23w500),
                   centerTitle: false,
                   leading: isOnLeaderboard

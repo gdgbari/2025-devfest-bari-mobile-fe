@@ -17,9 +17,9 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.white,
       appBar: AppBar(
         backgroundColor: ColorPalette.white,
-        forceMaterialTransparency: true,
         title: const Text(
           'Create your account',
           style: PresetTextStyle.black21w500,

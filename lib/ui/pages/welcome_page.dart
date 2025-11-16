@@ -11,7 +11,10 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: ColorPalette.black, toolbarHeight: 0),
+      appBar: AppBar(
+        backgroundColor: ColorPalette.black,
+        toolbarHeight: 0,
+      ),
       backgroundColor: ColorPalette.black,
       body: SafeArea(
         bottom: false,

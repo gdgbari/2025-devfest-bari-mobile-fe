@@ -17,7 +17,6 @@ class QuizPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: ColorPalette.black,
             title: Text(
               state.quiz.title,
               style: PresetTextStyle.white21w500,

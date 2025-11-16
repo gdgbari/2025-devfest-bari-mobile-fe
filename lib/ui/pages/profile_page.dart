@@ -20,6 +20,7 @@ class ProfilePage extends StatelessWidget {
               UserInfo(userProfile: state.userProfile),
               SizedBox(height: 15),
               SocialInfo(),
+              SizedBox(height: 20),
             ],
           );
         },

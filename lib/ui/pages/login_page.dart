@@ -13,9 +13,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.white,
       appBar: AppBar(
         backgroundColor: ColorPalette.white,
-        forceMaterialTransparency: true,
         title: const Text(
           'Sign in with Email',
           style: PresetTextStyle.black21w500,

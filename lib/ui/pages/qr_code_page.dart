@@ -94,7 +94,6 @@ class _QrCodePageState extends State<QrCodePage> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ColorPalette.black,
           title: const Text('QR code', style: PresetTextStyle.white21w500),
           centerTitle: true,
           leading: IconButton(
