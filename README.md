@@ -22,18 +22,19 @@
   fvm dart pub global activate flutterfire_cli
   ```
 3. **Set up the project**
-  - Clean any previous builds and install project dependencies:
-    ```bash
-    fvm flutter clean
-    fvm flutter pub get
-    ```
-  - Run build runner to generate necessary files:
-    ```bash
-    fvm dart run build_runner build --delete-conflicting-outputs
-    ```
-  - Configure Firebase for your project using FlutterFire CLI:
-    ```bash
-    fvm dart pub global run flutterfire_cli:flutterfire configure
-    ```
+   - Configure your local `.env` file using the given `.env-template`
+   - Clean any previous builds and install project dependencies:
+     ```bash
+     fvm flutter clean
+     fvm flutter pub get
+     ```
+   - Run build runner to generate necessary files:
+     ```bash
+     fvm dart run build_runner build --delete-conflicting-outputs
+     ```
+   - Configure Firebase for your project using FlutterFire CLI:
+     ```bash
+     fvm dart pub global run flutterfire_cli:flutterfire configure
+     ```
 4. **Enjoy**
 
