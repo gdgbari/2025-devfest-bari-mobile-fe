@@ -10,7 +10,7 @@ class GroupLeaderboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LeaderboardCubit, LeaderboardState>(
       builder: (context, state) {
-        final groups = state.leaderboard.groups;
+        final groups = state.leaderboardGroups;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -29,12 +29,12 @@ class AppProvider extends StatelessWidget {
         ),
         RepositoryProvider<QuizRepository>(
           create: (_) => QuizRepository(
-            QuizServiceMock(),
+            QuizServiceImpl(),
           ),
         ),
         RepositoryProvider<LeaderboardRepository>(
           create: (_) => LeaderboardRepository(
-            LeaderboardServiceMock(),
+            LeaderboardServiceImpl(),
           ),
         ),
       ],

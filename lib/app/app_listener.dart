@@ -51,7 +51,7 @@ void _authListener(
       context.loaderOverlay.hide();
       context
           .read<LeaderboardCubit>()
-          .fetchLeaderboard(state.userProfile.userId);
+          .fetchLeaderboard(state.userProfile.nickname);
       appRouter.goNamed(RouteNames.dashboardRoute.name);
       FlutterNativeSplash.remove();
       break;
