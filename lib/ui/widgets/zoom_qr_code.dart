@@ -12,7 +12,7 @@ Future<void> zoomQrCode(
       opaque: false,
       barrierColor: Colors.black.withValues(alpha: 0.4),
       barrierDismissible: true,
-      pageBuilder: (BuildContext context, _, __) {
+      pageBuilder: (BuildContext context, _, _) {
         return Center(
           child: Hero(
             tag: 'user_qr',
