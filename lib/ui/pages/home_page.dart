@@ -11,10 +11,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<InternetCubit, InternetState>(
+    return BlocListener<LeaderboardCubit, LeaderboardState>(
       listener: (context, state) {
-        if (state is InternetConnected) {
-          navigationShell.goBranch(0, initialLocation: true);
+        if (state.status == LeaderboardStatus.fetchSuccess) {
+          context.read<AuthenticationCubit>().updatePosition(
+            state.currentUser.position,
+            state.currentGroup.position,
+          );
         }
       },
       child: BlocBuilder<AuthenticationCubit, AuthenticationState>(

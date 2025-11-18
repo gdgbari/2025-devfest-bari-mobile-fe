@@ -15,6 +15,7 @@ class AppListener extends StatelessWidget {
     return MultiBlocListener(
       listeners: <BlocListener>[
         BlocListener<AuthenticationCubit, AuthenticationState>(
+          listenWhen: (previous, current) => previous.status != current.status,
           listener: _authListener,
         ),
         BlocListener<InternetCubit, InternetState>(

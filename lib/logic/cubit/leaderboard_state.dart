@@ -24,6 +24,10 @@ class LeaderboardState extends Equatable {
     this.groupMaxScore = 0,
   });
 
+  LeaderboardGroup get currentGroup => leaderboardGroups.firstWhere(
+    (group) => group.color == currentUser.groupColor,
+  );
+
   LeaderboardState copyWith({
     LeaderboardStatus? status,
     int? pageIndex,
