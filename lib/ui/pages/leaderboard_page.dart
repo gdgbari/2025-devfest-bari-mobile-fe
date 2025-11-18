@@ -2,6 +2,7 @@ import 'package:devfest_bari_2025/logic.dart';
 import 'package:devfest_bari_2025/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LeaderboardPage extends StatelessWidget {
   final pageController = PageController();
@@ -63,42 +64,63 @@ class LeaderboardPage extends StatelessWidget {
                                 ),
                               ],
                             )
-                          : Center(
-                              child: Text.rich(
-                                TextSpan(
-                                  text: '🏆 ANNOUNCEMENT 🏆\n\n',
-                                  style: PresetTextStyle.black23w700,
-                                  children: <InlineSpan>[
-                                    TextSpan(
-                                      text:
-                                          'The final leaderboard will be shown in ',
-                                      style: PresetTextStyle.black21w400,
-                                      children: <InlineSpan>[
-                                        TextSpan(
-                                          text: state.config.winnerRoom,
-                                          style: PresetTextStyle.black21w700,
-                                        ),
-                                        TextSpan(
-                                          text: ' at ',
-                                          style: PresetTextStyle.black21w400,
-                                        ),
-                                        TextSpan(
-                                          text: state.config.winnerTime,
-                                          style: PresetTextStyle.black21w700,
-                                        ),
-                                      ],
-                                    ),
-                                    TextSpan(text: '\n\n'),
-                                    TextSpan(
-                                      text:
-                                          'Join us to discover the winners and get amazing prizes! 🏅',
-                                      style: PresetTextStyle.black21w400,
-                                    ),
-                                  ],
+                          : CustomCard(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                  color: ColorPalette.black,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  height: 140,
+                                  child: SvgPicture.asset(
+                                    'assets/images/devfest_logo.svg',
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                            );
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        '🏆 ANNOUNCEMENT 🏆\n',
+                                        style: PresetTextStyle.black23w700,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          style: PresetTextStyle.black21w400,
+                                          children: <InlineSpan>[
+                                            TextSpan(
+                                              text: 'The final leaderboard will be shown in ',
+                                            ),
+                                            TextSpan(
+                                              text: state.config.winnerRoom,
+                                              style: PresetTextStyle.black21w700,
+                                            ),
+                                            TextSpan(
+                                              text: ' at ',
+                                            ),
+                                            TextSpan(
+                                              text: state.config.winnerTime,
+                                              style: PresetTextStyle.black21w700,
+                                            ),
+                                            const TextSpan(text: '\n\n'),
+                                            TextSpan(
+                                              text:
+                                                  'Join us to discover the winners and get amazing prizes! 🏅',
+                                            ),
+                                          ],
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                     },
                   );
               }
