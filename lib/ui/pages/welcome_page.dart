@@ -111,10 +111,13 @@ class _WelcomeButton extends StatelessWidget {
                       ? () => context.read<AuthenticationCubit>().checkIn()
                       : null,
                 ),
-                Text(
-                  'Check-in is still closed, but... get ready!',
-                  style: PresetTextStyle.white13w400.copyWith(
-                    color: ColorPalette.pastelYellow,
+                Visibility(
+                  visible: !checkInOpen,
+                  child: Text(
+                    'Check-in is still closed, but... get ready!',
+                    style: PresetTextStyle.white13w400.copyWith(
+                      color: ColorPalette.pastelYellow,
+                    ),
                   ),
                 ),
               ],

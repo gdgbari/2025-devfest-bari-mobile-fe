@@ -12,7 +12,7 @@ class GroupInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationCubit, AuthenticationState>(
       builder: (context, state) {
-        final group = state.isAuthenticated ? state.userProfile.group : Group();
+        final group = state.isAuthenticated ? state.userProfile.group : Group(name: 'null');
 
         return CustomCard(
           child: Column(
