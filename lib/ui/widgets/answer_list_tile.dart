@@ -1,43 +1,39 @@
 import 'package:devfest_bari_2025/ui/theme/color_palette.dart';
+import 'package:devfest_bari_2025/ui/theme/preset_text_style.dart';
+import 'package:devfest_bari_2025/ui/widgets.dart';
 import 'package:flutter/material.dart';
 
 class AnswerListTile extends StatelessWidget {
-  final String value;
-  final String? groupValue;
-  final void Function(String?)? onChanged;
   final String title;
+  final VoidCallback onTap;
   final Color color;
   final Color selectionColor;
+  final bool isSelected;
 
   const AnswerListTile({
     super.key,
-    required this.value,
-    required this.groupValue,
-    required this.onChanged,
     required this.title,
+    required this.onTap,
     this.color = ColorPalette.black,
-    this.selectionColor = ColorPalette.coreRed,
+    this.selectionColor = ColorPalette.coreYellow,
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(10),
-      onTap: () => onChanged?.call(value),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: color),
-          borderRadius: BorderRadius.circular(10),
-        ),
+    return CustomCard(
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: GestureDetector(
+        onTap: onTap,
         child: Row(
           children: <Widget>[
-            Radio<String?>(
-              value: value,
-              groupValue: groupValue,
-              onChanged: onChanged,
-              activeColor: selectionColor,
+            Icon(
+              isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+              size: 22,
+              color: ColorPalette.coreYellow,
             ),
-            Expanded(child: Text(title)),
+            SizedBox(width: 10),
+            Expanded(child: Text(title, style: PresetTextStyle.black15w400,)),
             SizedBox(width: 10),
           ],
         ),

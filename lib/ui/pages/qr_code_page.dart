@@ -35,7 +35,7 @@ class _QrCodePageState extends State<QrCodePage> {
                 break;
               case QrCodeStatus.validationSuccess:
                 context.loaderOverlay.hide();
-                context.read<QuizCubit>().getQuiz(state.value);
+                context.read<QuizCubit>().getQuiz(state.value.split(':').last);
                 break;
               case QrCodeStatus.validationFailure:
                 context.loaderOverlay.hide();
@@ -65,7 +65,7 @@ class _QrCodePageState extends State<QrCodePage> {
                 late String errorMessage;
                 switch (state.error) {
                   case QuizError.quizNotFound:
-                    errorMessage = 'Quiz not found.\nPlease try onother one.';
+                    errorMessage = 'Quiz not found.\nPlease try another one.';
                     break;
                   case QuizError.quizNotOpen:
                     errorMessage = 'Quiz not open.\nPlease scan the right one.';
@@ -74,7 +74,8 @@ class _QrCodePageState extends State<QrCodePage> {
                     errorMessage = 'Oops, you ran out of time.';
                     break;
                   case QuizError.quizAlreadySubmitted:
-                    errorMessage = 'You have already answered to this quiz.\n'
+                    errorMessage =
+                        'You have already answered to this quiz.\n'
                         'There are a lot of them, go and find another one!';
                     break;
                   case QuizError.unknown:
