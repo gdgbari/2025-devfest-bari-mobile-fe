@@ -17,24 +17,17 @@ class QuizPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: ColorPalette.black,
-            title: Text(
-              state.quiz.title,
-              style: PresetTextStyle.white21w500,
-            ),
+            title: Text(state.quiz.title, style: PresetTextStyle.black21w500),
             centerTitle: false,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              const Icon(
-                Icons.timer_outlined,
-                color: Colors.white,
-              ),
+              const Icon(Icons.timer_outlined, color: ColorPalette.black),
               const SizedBox(width: 5),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
                 child: Text(
                   _formatTimerDuration(state.quiz.timerDuration),
-                  style: PresetTextStyle.white17w400,
+                  style: PresetTextStyle.black17w400,
                 ),
               ),
             ],
@@ -60,16 +53,14 @@ class QuizPage extends StatelessWidget {
                                   final answer =
                                       question.answerList[answerIndex];
                                   return AnswerListTile(
-                                    value: answer.answerId,
-                                    groupValue:
-                                        state.selectedAnswers[questionIndex],
-                                    onChanged: (selectedAnswer) {
+                                    onTap: () {
                                       context.read<QuizCubit>().selectAnswer(
-                                            question.questionId,
-                                            selectedAnswer,
-                                          );
+                                        question.questionId,
+                                        answer.answerId,
+                                      );
                                     },
                                     title: answer.text,
+                                    isSelected: state.selectedAnswers.contains(answer.answerId),
                                   );
                                 },
                                 separatorBuilder: (context, index) =>
@@ -110,7 +101,7 @@ class QuizPage extends StatelessWidget {
                           ),
                           child: const Text(
                             'BACK',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: ColorPalette.white),
                           ),
                         ),
                       ),
@@ -129,12 +120,12 @@ class QuizPage extends StatelessWidget {
                             }
                           },
                           style: TextButton.styleFrom(
-                            backgroundColor: ColorPalette.coreRed,
+                            backgroundColor: ColorPalette.coreYellow,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: const Text(
                             'NEXT',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: ColorPalette.white),
                           ),
                         ),
                       ),
@@ -150,10 +141,7 @@ class QuizPage extends StatelessWidget {
   }
 }
 
-void _quizListener(
-  BuildContext context,
-  QuizState state,
-) async {
+void _quizListener(BuildContext context, QuizState state) async {
   switch (state.status) {
     case QuizStatus.submissionInProgress:
       context.loaderOverlay.show();
@@ -173,17 +161,19 @@ void _quizListener(
       late String errorMessage;
       switch (state.error) {
         case QuizError.quizNotFound:
-          errorMessage = 'Quiz not found.\nPlease try onother one.';
+          errorMessage = 'Quiz not found.\nPlease try another one.';
           break;
         case QuizError.quizNotOpen:
           errorMessage = 'Quiz not open.\nPlease scan the right one.';
           break;
         case QuizError.quizTimeIsUp:
-          errorMessage = 'Oops, you ran out of time.\n'
+          errorMessage =
+              'Oops, you ran out of time.\n'
               'We can\'t consider your answers.';
           break;
         case QuizError.quizAlreadySubmitted:
-          errorMessage = 'You have already answered to this quiz.\n'
+          errorMessage =
+              'You have already answered to this quiz.\n'
               'There are a lot of them, go and find another one!';
           break;
         case QuizError.unknown:
@@ -194,10 +184,10 @@ void _quizListener(
       }
       await showCustomErrorDialog(context, errorMessage);
       // ignore: use_build_context_synchronously
-      context.goNamed(RouteNames.leaderboardRoute.name);
+      context.goNamed(RouteNames.dashboardRoute.name);
       break;
     case QuizStatus.timerExpired:
-      context.read<QuizCubit>().submitQuiz();
+      // context.read<QuizCubit>().submitQuiz();
       break;
     default:
       break;
@@ -206,7 +196,10 @@ void _quizListener(
 
 String _formatTimerDuration(Duration duration) {
   final minutes = duration.inMinutes.remainder(60).abs().toString();
-  final seconds =
-      duration.inSeconds.remainder(60).abs().toString().padLeft(2, '0');
+  final seconds = duration.inSeconds
+      .remainder(60)
+      .abs()
+      .toString()
+      .padLeft(2, '0');
   return '$minutes:$seconds';
 }

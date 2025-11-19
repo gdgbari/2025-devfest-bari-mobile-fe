@@ -1,15 +1,17 @@
 import 'package:devfest_bari_2025/data/models.dart';
+import 'package:devfest_bari_2025/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'quiz.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Quiz extends Equatable {
   final String quizId;
   final String title;
   final String type;
   final List<Question> questionList;
+  @DurationMillisecondsConverter()
   final Duration timerDuration;
 
   const Quiz({

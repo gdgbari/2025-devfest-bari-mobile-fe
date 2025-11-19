@@ -63,16 +63,12 @@ final mockGroups = <String, dynamic>{
 
 class LeaderboardServiceMock implements LeaderboardService {
   @override
-  Stream<Map<String, dynamic>> get leaderboardStream async* {
-    while (true) {
-      await Future.delayed(Duration(seconds: 5));
-      mockUsers.forEach(
-        (key, value) => value.update('score', (oldValue) => (oldValue as int) + 10),
-      );
-      mockGroups.forEach(
-        (key, value) => value.update('score', (oldValue) => (oldValue as int) + 10),
-      );
-      yield {'users': mockUsers, 'groups': mockGroups};
-    }
+  Stream<Map<String, dynamic>> get userLeaderboardStream async* {
+    yield mockUsers;
+  }
+
+  @override
+  Stream<Map<String, dynamic>> get groupLeaderboardStream async* {
+    yield mockGroups;
   }
 }

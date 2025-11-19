@@ -15,6 +15,7 @@ class AppListener extends StatelessWidget {
     return MultiBlocListener(
       listeners: <BlocListener>[
         BlocListener<AuthenticationCubit, AuthenticationState>(
+          listenWhen: (previous, current) => previous.status != current.status,
           listener: _authListener,
         ),
         BlocListener<InternetCubit, InternetState>(
@@ -51,7 +52,7 @@ void _authListener(
       context.loaderOverlay.hide();
       context
           .read<LeaderboardCubit>()
-          .fetchLeaderboard(state.userProfile.userId);
+          .fetchLeaderboard(state.userProfile.nickname);
       appRouter.goNamed(RouteNames.dashboardRoute.name);
       FlutterNativeSplash.remove();
       break;

@@ -5,37 +5,51 @@ class LeaderboardRepository {
 
   const LeaderboardRepository(this._leaderboardService);
 
-  Stream<Leaderboard> leaderboardStream(String userId) async* {
-    await for (final leaderboard in _leaderboardService.leaderboardStream) {
-      final currentUser = LeaderboardUser.fromJson(
-        (leaderboard['users']['uid1'] as Map<String, dynamic>),
-      );
-
-      final users = (leaderboard['users'] as Map).values.toList();
-      final groups = (leaderboard['groups'] as Map).values.toList();
+  Stream<List<LeaderboardUser>> userLeaderboardStream() async* {
+    final source = _leaderboardService.userLeaderboardStream;
+    await for (final userLeaderboard in source) {
+      final users = userLeaderboard.values
+          .map((user) => LeaderboardUser.fromJson(user))
+          .toList();
 
       users.sort(
-        (a, b) => b['score'] != a['score']
-            ? b['score'].compareTo(a['score'])
-            : b['timestamp'] != a['timestamp']
-            ? a['timestamp'].compareTo(b['timestamp'])
-            : a['nickname'].toLowerCase().compareTo(
-                b['nickname'].toLowerCase(),
-              ),
+        (a, b) => b.score != a.score
+            ? b.score.compareTo(a.score)
+            : b.timestamp != a.timestamp
+            ? a.timestamp.compareTo(b.timestamp)
+            : a.nickname.toLowerCase().compareTo(b.nickname.toLowerCase()),
       );
+
+      for (var i = 0; i < users.length; i++) {
+        users[i] = users[i].copyWith(position: i + 1);
+      }
 
       final upperLimit = users.length < 20 ? users.length : 20;
 
-      yield Leaderboard(
-        currentUser: currentUser,
-        users: users
-            .sublist(0, upperLimit)
-            .map<LeaderboardUser>((user) => LeaderboardUser.fromJson(user))
-            .toList(),
-        groups: groups
-            .map<LeaderboardGroup>((group) => LeaderboardGroup.fromJson(group))
-            .toList(),
+      yield users.sublist(0, upperLimit);
+    }
+  }
+
+  Stream<List<LeaderboardGroup>> groupLeaderboardStream() async* {
+    final source = _leaderboardService.groupLeaderboardStream;
+    await for (final groupLeaderboard in source) {
+      final groups = groupLeaderboard.values
+          .map((group) => LeaderboardGroup.fromJson(group))
+          .toList();
+
+      groups.sort(
+        (a, b) => b.score != a.score
+            ? b.score.compareTo(a.score)
+            : b.timestamp != a.timestamp
+            ? a.timestamp.compareTo(b.timestamp)
+            : a.name.toLowerCase().compareTo(b.name.toLowerCase()),
       );
+
+      for (var i = 0; i < groups.length; i++) {
+        groups[i] = groups[i].copyWith(position: i + 1);
+      }
+
+      yield groups;
     }
   }
 }

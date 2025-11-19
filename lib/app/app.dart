@@ -15,7 +15,11 @@ class App extends StatelessWidget {
           routerConfig: appRouter,
           title: 'DevFest Bari 2025',
           theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
+            scaffoldBackgroundColor: ColorPalette.gray,
+            appBarTheme: AppBarTheme(
+              backgroundColor: ColorPalette.gray,
+              surfaceTintColor: Colors.transparent,
+            ),
           ),
           builder: (context, child) {
             return LoaderOverlay(

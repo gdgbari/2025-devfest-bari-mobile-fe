@@ -33,22 +33,21 @@ class _BackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = Colors.black.withValues(alpha: 0.7);
+    final bgRect = Rect.fromLTRB(0, 0, backgroundSize.width, backgroundSize.height);
+    final qrRect = Rect.fromLTRB(
+      backgroundSize.width / 2 - qrCodeSize.width / 2,
+      backgroundSize.height / 2 - qrCodeSize.height / 2,
+      backgroundSize.width / 2 + qrCodeSize.width / 2,
+      backgroundSize.height / 2 + qrCodeSize.height / 2,
+    );
+    final qrPath = Path()
+      ..addRRect(RRect.fromRectAndRadius(qrRect, Radius.circular(15.0)));
+
     canvas.drawPath(
       Path.combine(
         PathOperation.difference,
-        Path()
-          ..addRect(
-            Rect.fromLTRB(0, 0, backgroundSize.width, backgroundSize.height),
-          ),
-        Path()
-          ..addRect(
-            Rect.fromLTRB(
-              backgroundSize.width / 2 - qrCodeSize.width / 2,
-              backgroundSize.height / 2 - qrCodeSize.height / 2,
-              backgroundSize.width / 2 + qrCodeSize.width / 2,
-              backgroundSize.height / 2 + qrCodeSize.height / 2,
-            ),
-          ),
+        Path()..addRect(bgRect),
+        qrPath,
       ),
       paint,
     );

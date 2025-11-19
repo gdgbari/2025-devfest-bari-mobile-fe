@@ -10,7 +10,7 @@ class UserLeaderboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LeaderboardCubit, LeaderboardState>(
       builder: (context, state) {
-        final users = state.leaderboard.users;
+        final users = state.leaderboardUsers;
 
         return AnimatedContainer(
           duration: Duration(milliseconds: 100),
@@ -19,7 +19,7 @@ class UserLeaderboardView extends StatelessWidget {
             children: <Widget>[
               Text('Your score', style: PresetTextStyle.black21w500),
               SizedBox(height: 10),
-              UserTile(user: state.leaderboard.currentUser),
+              UserTile(user: state.currentUser),
               SizedBox(height: 20),
               Text('Top users', style: PresetTextStyle.black21w500),
               SizedBox(height: 10),

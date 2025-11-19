@@ -11,49 +11,71 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: ColorPalette.black, toolbarHeight: 0),
+      appBar: AppBar(
+        backgroundColor: ColorPalette.black,
+        toolbarHeight: 0,
+      ),
       backgroundColor: ColorPalette.black,
       body: SafeArea(
         bottom: false,
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 1,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: SvgPicture.asset(
-                  'assets/images/devfest_logo.svg',
-                  width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Column(
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      'assets/images/devfest_logo.svg',
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                            builder: (context, state) {
+                              late final String fileName;
+                              switch (state.status) {
+                                case AuthenticationStatus.checkInRequired:
+                                case AuthenticationStatus.checkInInProgress:
+                                case AuthenticationStatus.checkInFailure:
+                                  fileName = 'welcome_content_2';
+                                  break;
+                                default:
+                                  fileName = 'welcome_content_1';
+                                  break;
+                              }
+                              return SvgPicture.asset(
+                                'assets/images/$fileName.svg',
+                                height: 100,
+                              );
+                            },
+                          ),
+                          Expanded(child: SizedBox()),
+                          Divider(
+                            color: ColorPalette.coreYellow,
+                            thickness: 4,
+                            height: 0,
+                          ),
+                          Expanded(child: SizedBox()),
+                          _WelcomeButton(),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: Text(
-                  'Join the celebration of\n10 years of innovation!',
-                  style: PresetTextStyle.white23w500.copyWith(
-                    fontSize: 25,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Center(child: _WelcomeButton()),
-              ),
-            ),
-            SvgPicture.asset(
-              'assets/images/skyline_10_years.svg',
-              width: MediaQuery.of(context).size.width,
-            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Container(
-              color: ColorPalette.black,
-              height: 20 + MediaQuery.of(context).padding.bottom,
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 20,
+              ),
+              child: SvgPicture.asset(
+                'assets/images/skyline_10_years.svg',
+                width: MediaQuery.of(context).size.width,
+              ),
             ),
           ],
         ),
@@ -80,11 +102,25 @@ class _WelcomeButton extends StatelessWidget {
           case AuthenticationStatus.checkInRequired:
           case AuthenticationStatus.checkInInProgress:
           case AuthenticationStatus.checkInFailure:
-            return _CustomButton(
-              label: 'Check-in',
-              onPressed: checkInOpen
-                  ? () => context.read<AuthenticationCubit>().checkIn()
-                  : null,
+            return Column(
+              spacing: 5,
+              children: <Widget>[
+                _CustomButton(
+                  label: 'Check-in',
+                  onPressed: checkInOpen
+                      ? () => context.read<AuthenticationCubit>().checkIn()
+                      : null,
+                ),
+                Visibility(
+                  visible: !checkInOpen,
+                  child: Text(
+                    'Check-in is still closed, but... get ready!',
+                    style: PresetTextStyle.white13w400.copyWith(
+                      color: ColorPalette.pastelYellow,
+                    ),
+                  ),
+                ),
+              ],
             );
           default:
             return _CustomButton(

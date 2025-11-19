@@ -5,6 +5,7 @@ part 'answer.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Answer extends Equatable {
+  @JsonKey(name: 'id')
   final String answerId;
   final String text;
 

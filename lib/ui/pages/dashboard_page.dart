@@ -90,7 +90,7 @@ class DashboardPage extends StatelessWidget {
             mainAxisSpacing: 10,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            childAspectRatio: 1.6,
+            childAspectRatio: MediaQuery.widthOf(context) < 400 ? 1.4 : 1.6,
             children: List.generate(
               buttons.length,
               (index) => DashboardButton(
@@ -102,6 +102,7 @@ class DashboardPage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

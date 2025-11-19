@@ -14,16 +14,12 @@ class QuizServiceImpl implements QuizService {
       return await _dio.get('$_endpoint/$quizCode');
     } on DioException catch (e) {
       switch (e.response?.statusCode) {
-        case 400:
-          throw QuizInvalidCode();
+        case 403:
+          throw QuizNotOpenError();
         case 404:
           throw QuizNotFoundError();
-        case 409:
-          throw QuizAlreadySubmittedError();
         case 408:
           throw QuizTimeIsUpError();
-        case 423:
-          throw QuizNotOpenError();
         default:
           throw UnknownQuizError();
       }
@@ -34,8 +30,8 @@ class QuizServiceImpl implements QuizService {
   Future<Response> submitQuiz(String quizId, List<String?> answerList) async {
     try {
       return await _dio.post(
-        '$_endpoint/submit',
-        data: {'quiz_id': quizId, 'answer_list': answerList},
+        '$_endpoint/$quizId/submit',
+        data: {'answer_list': answerList},
       );
     } on DioException catch (e) {
       switch (e.response?.statusCode) {

@@ -194,4 +194,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     InputValidators.checkEmail(email);
     InputValidators.checkPassword(password);
   }
+
+  void updatePosition(int userPosition, int groupPosition) {
+    emit(
+      state.copyWith(
+        userProfile: state.userProfile.copyWith(
+          group: state.userProfile.group.copyWith(position: groupPosition),
+          position: userPosition,
+        ),
+      ),
+    );
+  }
 }

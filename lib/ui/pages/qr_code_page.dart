@@ -35,7 +35,7 @@ class _QrCodePageState extends State<QrCodePage> {
                 break;
               case QrCodeStatus.validationSuccess:
                 context.loaderOverlay.hide();
-                context.read<QuizCubit>().getQuiz(state.value);
+                context.read<QuizCubit>().getQuiz(state.value.split(':').last);
                 break;
               case QrCodeStatus.validationFailure:
                 context.loaderOverlay.hide();
@@ -65,7 +65,7 @@ class _QrCodePageState extends State<QrCodePage> {
                 late String errorMessage;
                 switch (state.error) {
                   case QuizError.quizNotFound:
-                    errorMessage = 'Quiz not found.\nPlease try onother one.';
+                    errorMessage = 'Quiz not found.\nPlease try another one.';
                     break;
                   case QuizError.quizNotOpen:
                     errorMessage = 'Quiz not open.\nPlease scan the right one.';
@@ -74,7 +74,8 @@ class _QrCodePageState extends State<QrCodePage> {
                     errorMessage = 'Oops, you ran out of time.';
                     break;
                   case QuizError.quizAlreadySubmitted:
-                    errorMessage = 'You have already answered to this quiz.\n'
+                    errorMessage =
+                        'You have already answered to this quiz.\n'
                         'There are a lot of them, go and find another one!';
                     break;
                   case QuizError.unknown:
@@ -94,12 +95,11 @@ class _QrCodePageState extends State<QrCodePage> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ColorPalette.black,
-          title: const Text('QR code', style: PresetTextStyle.white21w500),
+          title: const Text('QR code', style: PresetTextStyle.black21w500),
           centerTitle: true,
           leading: IconButton(
             onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: ColorPalette.black),
           ),
         ),
         body: SafeArea(
@@ -124,10 +124,10 @@ class _QrCodePageState extends State<QrCodePage> {
                 child: SvgPicture.asset(
                   'assets/images/qr_marker.svg',
                   width: MediaQuery.of(context).size.width / 1.75,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
+                  // colorFilter: const ColorFilter.mode(
+                  //   Colors.white,
+                  //   BlendMode.srcIn,
+                  // ),
                 ),
               ),
             ],
