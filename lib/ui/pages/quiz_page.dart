@@ -150,7 +150,7 @@ void _quizListener(BuildContext context, QuizState state) async {
       context.loaderOverlay.hide();
       showQuizResultsDialog(
         context: context,
-        onPressed: () => context.goNamed(RouteNames.leaderboardRoute.name),
+        onPressed: () => context.goNamed(RouteNames.dashboardRoute.name),
         score: state.results.score,
         maxScore: state.results.maxScore,
       );
