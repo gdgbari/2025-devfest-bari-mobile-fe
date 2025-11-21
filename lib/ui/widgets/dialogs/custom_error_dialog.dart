@@ -35,15 +35,12 @@ class CustomErrorDialog extends StatelessWidget {
           color: ColorPalette.coreRed,
         ),
       ),
-      content: Text(
-        errorMessage,
-        style: PresetTextStyle.black19w400,
-      ),
+      content: Text(errorMessage, style: PresetTextStyle.black19w400),
       actions: <Widget>[
         TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
-            backgroundColor: ColorPalette.black,
+            backgroundColor: ColorPalette.coreYellow,
             overlayColor: Colors.white,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
@@ -51,10 +48,7 @@ class CustomErrorDialog extends StatelessWidget {
             height: 40,
             width: double.maxFinite,
             child: Center(
-              child: Text(
-                'OK',
-                style: PresetTextStyle.white19w400,
-              ),
+              child: Text('OK', style: PresetTextStyle.white19w500),
             ),
           ),
         ),

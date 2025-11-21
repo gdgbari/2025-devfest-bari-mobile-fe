@@ -38,10 +38,7 @@ class AppInfoDialog extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       content: title.isEmpty && content.isEmpty
-          ? SizedBox(
-              height: 80,
-              child: Center(child: CustomLoader()),
-            )
+          ? SizedBox(height: 80, child: Center(child: CustomLoader()))
           : Text(
               content.replaceAll(r'\n', '\n').replaceAll(r'\t', '\t'),
               style: PresetTextStyle.black19w400,
@@ -50,7 +47,7 @@ class AppInfoDialog extends StatelessWidget {
         TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
-            backgroundColor: ColorPalette.black,
+            backgroundColor: ColorPalette.coreYellow,
             overlayColor: Colors.white,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
@@ -58,10 +55,7 @@ class AppInfoDialog extends StatelessWidget {
             height: 40,
             width: double.maxFinite,
             child: Center(
-              child: Text(
-                'OK',
-                style: PresetTextStyle.white19w400,
-              ),
+              child: Text('OK', style: PresetTextStyle.white19w500),
             ),
           ),
         ),

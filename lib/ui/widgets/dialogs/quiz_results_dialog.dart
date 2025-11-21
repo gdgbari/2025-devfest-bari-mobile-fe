@@ -40,16 +40,14 @@ class QuizResultsDialog extends StatelessWidget {
       ),
       content: Text(
         '$score/$maxScore',
-        style: PresetTextStyle.black23w400.copyWith(
-          fontSize: 40,
-        ),
+        style: PresetTextStyle.black23w400.copyWith(fontSize: 40),
         textAlign: TextAlign.center,
       ),
       actions: <Widget>[
         TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
-            backgroundColor: ColorPalette.black,
+            backgroundColor: ColorPalette.coreYellow,
             overlayColor: Colors.white,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
@@ -57,10 +55,7 @@ class QuizResultsDialog extends StatelessWidget {
             height: 40,
             width: double.maxFinite,
             child: Center(
-              child: Text(
-                'OK',
-                style: PresetTextStyle.white19w400,
-              ),
+              child: Text('OK', style: PresetTextStyle.white19w500),
             ),
           ),
         ),
