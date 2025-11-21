@@ -1,5 +1,6 @@
 import 'package:devfest_bari_2025/logic.dart';
 import 'package:devfest_bari_2025/ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -96,7 +97,7 @@ class _QrCodePageState extends State<QrCodePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('QR code', style: PresetTextStyle.black21w500),
-          centerTitle: true,
+          centerTitle: false,
           leading: IconButton(
             onPressed: () => context.pop(),
             icon: const Icon(Icons.arrow_back, color: ColorPalette.black),
@@ -119,7 +120,7 @@ class _QrCodePageState extends State<QrCodePage> {
                   }
                 },
               ),
-              const QRCodeBackground(),
+              if (!kIsWeb) const QRCodeBackground(),
               Center(
                 child: SvgPicture.asset(
                   'assets/images/qr_marker.svg',
