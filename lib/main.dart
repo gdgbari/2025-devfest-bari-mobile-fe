@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() async {
   runZonedGuarded(
@@ -40,19 +41,19 @@ Future<void> _initialization() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  await SystemChrome.setPreferredOrientations(
-    <DeviceOrientation>[
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ],
-  );
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await _precacheAllSvg();
 
   InternetCubit().monitorInternetConnection();
+
+  if (kIsWeb) {
+    usePathUrlStrategy();
+  }
 }
 
 Future<void> _precacheAllSvg() async {
