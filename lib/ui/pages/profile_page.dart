@@ -16,6 +16,12 @@ class ProfilePage extends StatelessWidget {
           UserInfo(),
           SizedBox(height: 15),
           SocialInfo(),
+          SizedBox(height: 15),
+          Text(
+            'Developed with ❤️ by GDG Bari dev team',
+            style: PresetTextStyle.black13w400,
+            textAlign: TextAlign.center,
+          ),
           SizedBox(height: 20),
         ],
       ),
