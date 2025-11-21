@@ -122,7 +122,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
       await _getUserProfile();
     } on Exception catch (e) {
-      await signOut();
+      // Sign out from Firebase but don't navigate away from auth page
+      await signOut(shouldNavigate: false);
 
       final error = switch (e) {
         UserNotFoundError _ => AuthenticationError.userNotFound,
@@ -154,16 +155,24 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     );
   }
 
-  Future<void> signOut() async {
-    emit(state.copyWith(status: AuthenticationStatus.signOutInProgress));
-    await _authRepo.signOut();
-    emit(
-      state.copyWith(
-        userProfile: const UserProfile(),
-        status: AuthenticationStatus.signOutSuccess,
-        isAuthenticated: false,
-      ),
-    );
+  Future<void> signOut({bool shouldNavigate = true}) async {
+    if (shouldNavigate) {
+      // Normal sign out - navigate to WelcomePage
+      emit(state.copyWith(status: AuthenticationStatus.signOutInProgress));
+      await _authRepo.signOut();
+      emit(
+        state.copyWith(
+          userProfile: const UserProfile(),
+          status: AuthenticationStatus.signOutSuccess,
+          isAuthenticated: false,
+        ),
+      );
+    } else {
+      // Sign out due to backend failure - stay on auth page
+      // Don't emit signOutInProgress or signOutSuccess to avoid navigation
+      await _authRepo.signOut();
+      // Don't emit any state here - the caller will emit authenticationFailure
+    }
   }
 
   void _validateSignUpData(
