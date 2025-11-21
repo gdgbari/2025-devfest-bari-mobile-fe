@@ -28,17 +28,17 @@ class DashboardPage extends StatelessWidget {
         'onTap': () => launchUrl(Uri.parse('https://bari.devfest.it/schedule')),
       },
       {
-        'icon': Icons.emoji_events_outlined,
+        'icon': Icons.rocket_launch_outlined,
         'iconColor': ColorPalette.coreRed,
-        'title': 'Final contest',
-        'subtitle': 'Win some gadgets',
+        'title': 'Activities',
+        'subtitle': 'Dive into the action',
         'onTap': () {},
       },
       {
-        'icon': Icons.workspace_premium_outlined,
+        'icon': Icons.emoji_events_outlined,
         'iconColor': ColorPalette.coreYellow,
-        'title': 'Achievements',
-        'subtitle': 'Earn your badges',
+        'title': 'Final contest',
+        'subtitle': 'Claim the glory',
         'onTap': () {},
       },
     ];
