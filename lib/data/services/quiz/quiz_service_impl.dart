@@ -20,6 +20,8 @@ class QuizServiceImpl implements QuizService {
           throw QuizNotFoundError();
         case 408:
           throw QuizTimeIsUpError();
+        case 409:
+          throw QuizAlreadySubmittedError();
         default:
           throw UnknownQuizError();
       }
