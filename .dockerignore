@@ -1,0 +1,25 @@
+# Build artifacts
+build/
+.dart_tool/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# macOS
+.DS_Store
+
+# Environment files (if they contain secrets)
+.env
+
+# FVM
+.fvm/
+
+# Other
+*.log
+.metadata
