@@ -5,6 +5,7 @@ enum RouteNames {
   signUpRoute(path: '/welcome/sign_up'),
   dashboardRoute(path: '/home/dashboard'),
   leaderboardRoute(path: '/home/leaderboard'),
+  activityListRoute(path: '/home/activity_list'),
   profileRoute(path: '/home/profile'),
   qrCodeRoute(path: '/home/qr_code'),
   quizRoute(path: '/home/qr_code/quiz');

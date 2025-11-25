@@ -25,21 +25,19 @@ class HomePage extends StatelessWidget {
           return ListenableBuilder(
             listenable: GoRouter.of(context).routerDelegate,
             builder: (context, _) {
-              // Check if we're on the leaderboard route
               final currentLocation = GoRouterState.of(context).uri.path;
-              final isOnLeaderboard = currentLocation.contains('/leaderboard');
-
-              final tabTitle = switch (navigationShell.currentIndex) {
-                0 => isOnLeaderboard ? 'Leaderboard' : 'Dashboard',
-                1 => '@${authState.userProfile.nickname}',
-                _ => 'DevFest Bari 2025',
-              };
+              final tabTitle = _getTabTitle(
+                navigationShell.currentIndex,
+                currentLocation,
+                authState.userProfile.nickname,
+              );
+              final showBackButton = _shouldShowBackButton(currentLocation);
 
               return Scaffold(
                 appBar: AppBar(
                   title: Text(tabTitle, style: PresetTextStyle.black23w500),
                   centerTitle: false,
-                  leading: isOnLeaderboard
+                  leading: showBackButton
                       ? BackButton(onPressed: () => context.pop())
                       : null,
                   actions: <Widget>[
@@ -122,5 +120,28 @@ class HomePage extends StatelessWidget {
       index,
       initialLocation: index == navigationShell.currentIndex,
     );
+  }
+
+  String _getTabTitle(int tabIndex, String currentPath, String nickname) {
+    if (tabIndex == 1) {
+      return '@$nickname';
+    }
+
+    if (tabIndex == 0) {
+      if (currentPath.contains(RouteNames.leaderboardRoute.path)) {
+        return 'Leaderboard';
+      }
+      if (currentPath.contains(RouteNames.activityListRoute.path)) {
+        return 'Activities';
+      }
+      return 'Dashboard';
+    }
+
+    return 'DevFest Bari 2025';
+  }
+
+  bool _shouldShowBackButton(String currentPath) {
+    return currentPath.contains(RouteNames.leaderboardRoute.path) ||
+        currentPath.contains(RouteNames.activityListRoute.path);
   }
 }

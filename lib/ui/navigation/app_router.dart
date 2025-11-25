@@ -50,6 +50,11 @@ final appRouter = GoRouter(
               path: RouteNames.leaderboardRoute.path,
               builder: (context, state) => LeaderboardPage(),
             ),
+            GoRoute(
+              name: RouteNames.activityListRoute.name,
+              path: RouteNames.activityListRoute.path,
+              builder: (context, state) => ActivityListPage(),
+            ),
           ],
         ),
         StatefulShellBranch(

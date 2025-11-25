@@ -32,7 +32,7 @@ class DashboardPage extends StatelessWidget {
         'iconColor': ColorPalette.coreRed,
         'title': 'Activities',
         'subtitle': 'Dive into the action',
-        'onTap': () {},
+        'onTap': () => context.pushNamed(RouteNames.activityListRoute.name),
       },
       {
         'icon': Icons.emoji_events_outlined,
