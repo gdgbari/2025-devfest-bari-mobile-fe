@@ -14,14 +14,14 @@ class LeaderboardGroup extends Equatable {
   final int position;
   @ColorConverter()
   final Color color;
-  final int timestamp;
+  final int updatedAt;
 
   const LeaderboardGroup({
     this.name = '',
     this.score = 0,
     this.position = 999,
     this.color = ColorPalette.black,
-    this.timestamp = 0,
+    this.updatedAt = 0,
   });
 
   LeaderboardGroup copyWith({
@@ -29,14 +29,14 @@ class LeaderboardGroup extends Equatable {
     int? score,
     int? position,
     Color? color,
-    int? timestamp,
+    int? updatedAt,
   }) {
     return LeaderboardGroup(
       name: name ?? this.name,
       score: score ?? this.score,
       position: position ?? this.position,
       color: color ?? this.color,
-      timestamp: timestamp ?? this.timestamp,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -46,5 +46,5 @@ class LeaderboardGroup extends Equatable {
   Map<String, dynamic> toJson() => _$LeaderboardGroupToJson(this);
 
   @override
-  List<Object> get props => [name, score, position, color, timestamp];
+  List<Object> get props => [name, score, position, color, updatedAt];
 }

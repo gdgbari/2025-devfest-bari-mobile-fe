@@ -15,8 +15,8 @@ class LeaderboardRepository {
       users.sort(
         (a, b) => b.score != a.score
             ? b.score.compareTo(a.score)
-            : b.timestamp != a.timestamp
-            ? a.timestamp.compareTo(b.timestamp)
+            : b.updatedAt != a.updatedAt
+            ? a.updatedAt.compareTo(b.updatedAt)
             : a.nickname.toLowerCase().compareTo(b.nickname.toLowerCase()),
       );
 
@@ -40,8 +40,8 @@ class LeaderboardRepository {
       groups.sort(
         (a, b) => b.score != a.score
             ? b.score.compareTo(a.score)
-            : b.timestamp != a.timestamp
-            ? a.timestamp.compareTo(b.timestamp)
+            : b.updatedAt != a.updatedAt
+            ? a.updatedAt.compareTo(b.updatedAt)
             : a.name.toLowerCase().compareTo(b.name.toLowerCase()),
       );
 
