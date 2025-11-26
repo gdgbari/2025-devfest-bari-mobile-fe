@@ -27,20 +27,20 @@ class DashboardPage extends StatelessWidget {
         'subtitle': 'See what\'s on',
         'onTap': () => launchUrl(Uri.parse('https://bari.devfest.it/schedule')),
       },
-      {
-        'icon': Icons.rocket_launch_outlined,
-        'iconColor': ColorPalette.coreRed,
-        'title': 'Activities',
-        'subtitle': 'Dive into the action',
-        'onTap': () => context.pushNamed(RouteNames.activityListRoute.name),
-      },
-      {
-        'icon': Icons.emoji_events_outlined,
-        'iconColor': ColorPalette.coreYellow,
-        'title': 'Final contest',
-        'subtitle': 'Claim the glory',
-        'onTap': () {},
-      },
+      // {
+      //   'icon': Icons.rocket_launch_outlined,
+      //   'iconColor': ColorPalette.coreRed,
+      //   'title': 'Activities',
+      //   'subtitle': 'Dive into the action',
+      //   'onTap': () => context.pushNamed(RouteNames.activityListRoute.name),
+      // },
+      // {
+      //   'icon': Icons.emoji_events_outlined,
+      //   'iconColor': ColorPalette.coreYellow,
+      //   'title': 'Final contest',
+      //   'subtitle': 'Claim the glory',
+      //   'onTap': () {},
+      // },
     ];
 
     return Container(
