@@ -12,13 +12,10 @@ class CustomQrView extends StatelessWidget {
     return PrettyQrView(
       qrImage: qrImage,
       decoration: const PrettyQrDecoration(
-        shape: PrettyQrSmoothSymbol(
-          color: ColorPalette.black,
-          roundFactor: 0,
-        ),
+        shape: PrettyQrSmoothSymbol(color: ColorPalette.black, roundFactor: 0),
         image: PrettyQrDecorationImage(
           image: AssetImage('assets/images/user.png'),
-          scale: 0.3,
+          scale: 0.2,
         ),
       ),
     );

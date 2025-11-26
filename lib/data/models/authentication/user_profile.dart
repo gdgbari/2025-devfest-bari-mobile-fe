@@ -6,6 +6,7 @@ part 'user_profile.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserProfile extends Equatable {
+  @JsonKey(name: 'uid')
   final String userId;
   final String nickname;
   final String name;
