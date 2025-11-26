@@ -189,7 +189,7 @@ void _quizListener(BuildContext context, QuizState state) async {
       context.goNamed(RouteNames.dashboardRoute.name);
       break;
     case QuizStatus.timerExpired:
-      // context.read<QuizCubit>().submitQuiz();
+      context.read<QuizCubit>().submitQuiz();
       break;
     default:
       break;
