@@ -1,3 +1,5 @@
+export 'services/activities/activity_service.dart';
+export 'services/activities/activity_service_impl.dart';
 export 'services/authentication/authentication_service.dart';
 export 'services/authentication/authentication_service_impl.dart';
 export 'services/authentication/user_service.dart';

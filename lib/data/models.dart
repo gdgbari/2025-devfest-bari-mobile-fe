@@ -1,6 +1,6 @@
+export 'models/activities/activity.dart';
 export 'models/authentication/group.dart';
 export 'models/authentication/user_profile.dart';
-export 'models/remote_config/remote_config.dart';
 export 'models/leaderboard/leaderboard.dart';
 export 'models/leaderboard/leaderboard_group.dart';
 export 'models/leaderboard/leaderboard_user.dart';
@@ -8,5 +8,6 @@ export 'models/quiz/answer.dart';
 export 'models/quiz/question.dart';
 export 'models/quiz/quiz.dart';
 export 'models/quiz/quiz_results.dart';
+export 'models/remote_config/remote_config.dart';
 export 'models/sponsor.dart';
 export 'models/talk.dart';
