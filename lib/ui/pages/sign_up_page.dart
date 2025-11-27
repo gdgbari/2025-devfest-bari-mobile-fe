@@ -2,6 +2,7 @@ import 'package:devfest_bari_2025/logic.dart';
 import 'package:devfest_bari_2025/ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,10 +28,7 @@ class SignUpPage extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: ColorPalette.black,
-          ),
+          icon: const Icon(Icons.arrow_back, color: ColorPalette.black),
         ),
       ),
       body: SafeArea(
@@ -40,21 +38,18 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  'Nickname',
-                  style: PresetTextStyle.black13w500,
-                ),
+                const Text('Nickname', style: PresetTextStyle.black13w500),
                 const SizedBox(height: 5),
                 CustomTextField(
                   hint: 'Nickname',
                   controller: nicknameController,
                   keyboardType: TextInputType.text,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                  ],
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Name',
-                  style: PresetTextStyle.black13w500,
-                ),
+                const Text('Name', style: PresetTextStyle.black13w500),
                 const SizedBox(height: 5),
                 CustomTextField(
                   hint: 'Name',
@@ -62,10 +57,7 @@ class SignUpPage extends StatelessWidget {
                   keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Surname',
-                  style: PresetTextStyle.black13w500,
-                ),
+                const Text('Surname', style: PresetTextStyle.black13w500),
                 const SizedBox(height: 5),
                 CustomTextField(
                   hint: 'Surname',
@@ -73,10 +65,7 @@ class SignUpPage extends StatelessWidget {
                   keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Email',
-                  style: PresetTextStyle.black13w500,
-                ),
+                const Text('Email', style: PresetTextStyle.black13w500),
                 const SizedBox(height: 5),
                 CustomTextField(
                   hint: 'Email',
@@ -84,10 +73,7 @@ class SignUpPage extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Password',
-                  style: PresetTextStyle.black13w500,
-                ),
+                const Text('Password', style: PresetTextStyle.black13w500),
                 const SizedBox(height: 5),
                 CustomTextField(
                   hint: 'Password',
@@ -109,14 +95,14 @@ class SignUpPage extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {
                       FocusManager.instance.primaryFocus?.unfocus();
-            
+
                       context.read<AuthenticationCubit>().signUp(
-                            nickname: nicknameController.text.trim(),
-                            name: nameController.text.trim(),
-                            surname: surnameController.text.trim(),
-                            email: emailTextController.text.trim(),
-                            password: passwordTextController.text,
-                          );
+                        nickname: nicknameController.text.trim(),
+                        name: nameController.text.trim(),
+                        surname: surnameController.text.trim(),
+                        email: emailTextController.text.trim(),
+                        password: passwordTextController.text,
+                      );
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: ColorPalette.coreYellow,
@@ -145,9 +131,8 @@ class SignUpPage extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.pushNamed(
-                                RouteNames.loginRoute.name,
-                              ),
+                          ..onTap = () =>
+                              context.pushNamed(RouteNames.loginRoute.name),
                       ),
                     ],
                   ),
