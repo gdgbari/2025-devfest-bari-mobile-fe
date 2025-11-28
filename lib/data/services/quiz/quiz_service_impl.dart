@@ -29,11 +29,20 @@ class QuizServiceImpl implements QuizService {
   }
 
   @override
-  Future<Response> submitQuiz(String quizId, List<String?> answerList) async {
+  Future<Response> submitQuiz(
+    String quizId,
+    Map<String, String?> selectedAnswers,
+  ) async {
     try {
+      // Build the answers array with question_id and answer_id pairs
+      final answers = selectedAnswers.entries
+          .where((entry) => entry.value != null)
+          .map((entry) => {'question_id': entry.key, 'answer_id': entry.value})
+          .toList();
+
       return await _dio.post(
         '$_endpoint/$quizId/submit',
-        data: {'answer_list': answerList},
+        data: {'answers': answers},
       );
     } on DioException catch (e) {
       switch (e.response?.statusCode) {

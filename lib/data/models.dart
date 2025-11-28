@@ -7,6 +7,7 @@ export 'models/leaderboard/leaderboard_user.dart';
 export 'models/quiz/answer.dart';
 export 'models/quiz/question.dart';
 export 'models/quiz/quiz.dart';
+export 'models/quiz/quiz_answer.dart';
 export 'models/quiz/quiz_results.dart';
 export 'models/remote_config/remote_config.dart';
 export 'models/sponsor.dart';

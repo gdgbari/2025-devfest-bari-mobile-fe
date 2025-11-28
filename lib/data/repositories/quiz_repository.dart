@@ -12,9 +12,14 @@ class QuizRepository {
 
   Future<QuizResults> submitQuiz(
     String quizId,
-    List<String?> answerList,
+    List<QuizAnswer> selectedAnswers,
   ) async {
-    final response = await _quizService.submitQuiz(quizId, answerList);
+    // Convert List<QuizAnswer> to Map<String, String?> for the service
+    final answersMap = {
+      for (var answer in selectedAnswers) answer.questionId: answer.answerId,
+    };
+
+    final response = await _quizService.submitQuiz(quizId, answersMap);
     return QuizResults.fromJson(response.data);
   }
 }

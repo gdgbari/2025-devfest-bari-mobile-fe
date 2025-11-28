@@ -28,7 +28,7 @@ class QuizState extends Equatable {
   final QuizStatus status;
   final QuizError error;
   final Quiz quiz;
-  final List<String?> selectedAnswers;
+  final List<QuizAnswer> selectedAnswers;
   final QuizResults results;
 
   const QuizState({
@@ -43,7 +43,7 @@ class QuizState extends Equatable {
     QuizStatus? status,
     QuizError? error,
     Quiz? quiz,
-    List<String?>? selectedAnswers,
+    List<QuizAnswer>? selectedAnswers,
     QuizResults? results,
   }) {
     return QuizState(

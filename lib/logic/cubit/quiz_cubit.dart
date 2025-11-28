@@ -21,24 +21,17 @@ class QuizCubit extends Cubit<QuizState> {
     emit(state.copyWith(status: QuizStatus.timerInProgress));
     stopTimer();
     Duration duration = state.quiz.timerDuration;
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) {
-        if (duration.inSeconds != 0) {
-          duration -= const Duration(seconds: 1);
-          emit(
-            state.copyWith(
-              quiz: state.quiz.copyWith(
-                timerDuration: duration,
-              ),
-            ),
-          );
-        } else {
-          stopTimer();
-          emit(state.copyWith(status: QuizStatus.timerExpired));
-        }
-      },
-    );
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (duration.inSeconds != 0) {
+        duration -= const Duration(seconds: 1);
+        emit(
+          state.copyWith(quiz: state.quiz.copyWith(timerDuration: duration)),
+        );
+      } else {
+        stopTimer();
+        emit(state.copyWith(status: QuizStatus.timerExpired));
+      }
+    });
   }
 
   void stopTimer() => _timer?.cancel();
@@ -52,10 +45,7 @@ class QuizCubit extends Cubit<QuizState> {
         state.copyWith(
           status: QuizStatus.fetchSuccess,
           quiz: quiz,
-          selectedAnswers: List<String?>.generate(
-            quiz.questionList.length,
-            (index) => null,
-          ),
+          selectedAnswers: [],
         ),
       );
       startTimer();
@@ -99,11 +89,19 @@ class QuizCubit extends Cubit<QuizState> {
 
   void selectAnswer(String questionId, String? answerId) {
     emit(state.copyWith(status: QuizStatus.selectionInProgress));
-    final index = state.quiz.questionList.indexWhere(
-      (question) => question.questionId == questionId,
-    );
-    final updatedAnswers = List<String?>.from(state.selectedAnswers)
-      ..[index] = answerId;
+
+    // Remove existing answer for this question if any
+    final updatedAnswers = state.selectedAnswers
+        .where((answer) => answer.questionId != questionId)
+        .toList();
+
+    // Add new answer if not null
+    if (answerId != null) {
+      updatedAnswers.add(
+        QuizAnswer(questionId: questionId, answerId: answerId),
+      );
+    }
+
     emit(
       state.copyWith(
         status: QuizStatus.selectionSuccess,
@@ -120,10 +118,7 @@ class QuizCubit extends Cubit<QuizState> {
         state.selectedAnswers,
       );
       emit(
-        state.copyWith(
-          status: QuizStatus.submissionSuccess,
-          results: results,
-        ),
+        state.copyWith(status: QuizStatus.submissionSuccess, results: results),
       );
     } on QuizNotFoundError {
       emit(

@@ -60,9 +60,12 @@ class QuizPage extends StatelessWidget {
                                       );
                                     },
                                     title: answer.text,
-                                    isSelected:
-                                        state.selectedAnswers[questionIndex] ==
-                                        answer.answerId,
+                                    isSelected: state.selectedAnswers.any(
+                                      (selected) =>
+                                          selected.questionId ==
+                                              question.questionId &&
+                                          selected.answerId == answer.answerId,
+                                    ),
                                   );
                                 },
                                 separatorBuilder: (context, index) =>

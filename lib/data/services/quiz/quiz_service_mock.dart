@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 class QuizServiceMock implements QuizService {
   QuizServiceMock();
-  
+
   @override
   Future<Response> getQuiz(String quizCode) async {
     await Future.delayed(const Duration(milliseconds: 1000));
@@ -56,7 +56,10 @@ class QuizServiceMock implements QuizService {
   }
 
   @override
-  Future<Response> submitQuiz(String quizId, List<String?> answerList) async {
+  Future<Response> submitQuiz(
+    String quizId,
+    Map<String, String?> selectedAnswers,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     return Response(
