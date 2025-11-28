@@ -13,29 +13,22 @@ class AppProvider extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: <RepositoryProvider>[
         RepositoryProvider<AuthenticationRepository>(
-          create: (_) => AuthenticationRepository(
-            AuthenticationServiceImpl(),
-          ),
+          create: (_) => AuthenticationRepository(AuthenticationServiceImpl()),
         ),
         RepositoryProvider<UserRepository>(
-          create: (_) => UserRepository(
-            UserServiceImpl(),
-          ),
+          create: (_) => UserRepository(UserServiceImpl()),
         ),
         RepositoryProvider<RemoteConfigRepository>(
-          create: (_) => RemoteConfigRepository(
-            RemoteConfigServiceImpl(),
-          ),
+          create: (_) => RemoteConfigRepository(RemoteConfigServiceImpl()),
         ),
         RepositoryProvider<QuizRepository>(
-          create: (_) => QuizRepository(
-            QuizServiceImpl(),
-          ),
+          create: (_) => QuizRepository(QuizServiceImpl()),
         ),
         RepositoryProvider<LeaderboardRepository>(
-          create: (_) => LeaderboardRepository(
-            LeaderboardServiceImpl(),
-          ),
+          create: (_) => LeaderboardRepository(LeaderboardServiceImpl()),
+        ),
+        RepositoryProvider<TagsRepository>(
+          create: (_) => TagsRepository(TagsServiceImpl()),
         ),
       ],
       child: Builder(
@@ -55,9 +48,8 @@ class AppProvider extends StatelessWidget {
               ),
               BlocProvider<RemoteConfigCubit>(
                 lazy: false,
-                create: (_) => RemoteConfigCubit(
-                  context.read<RemoteConfigRepository>(),
-                ),
+                create: (_) =>
+                    RemoteConfigCubit(context.read<RemoteConfigRepository>()),
               ),
               BlocProvider<QrCodeCubit>(
                 lazy: false,
@@ -65,20 +57,21 @@ class AppProvider extends StatelessWidget {
               ),
               BlocProvider<QuizCubit>(
                 lazy: false,
-                create: (context) => QuizCubit(
-                  context.read<QuizRepository>(),
-                ),
+                create: (context) => QuizCubit(context.read<QuizRepository>()),
               ),
               BlocProvider<LeaderboardCubit>(
                 lazy: false,
-                create: (context) => LeaderboardCubit(
-                  context.read<LeaderboardRepository>(),
-                ),
+                create: (context) =>
+                    LeaderboardCubit(context.read<LeaderboardRepository>()),
+              ),
+              BlocProvider<TagsCubit>(
+                lazy: false,
+                create: (context) => TagsCubit(context.read<TagsRepository>()),
               ),
             ],
             child: child,
           );
-        }
+        },
       ),
     );
   }

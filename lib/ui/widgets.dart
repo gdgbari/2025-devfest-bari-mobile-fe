@@ -7,6 +7,7 @@ export 'widgets/custom_segmented_button.dart';
 export 'widgets/custom_text_field.dart';
 export 'widgets/dialogs/app_info_dialog.dart';
 export 'widgets/dialogs/custom_error_dialog.dart';
+export 'widgets/dialogs/custom_success_dialog.dart';
 export 'widgets/dialogs/quiz_results_dialog.dart';
 export 'widgets/group_tile.dart';
 export 'widgets/leaderboard/group_leaderboard_view.dart';

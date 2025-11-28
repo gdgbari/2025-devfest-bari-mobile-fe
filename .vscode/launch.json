@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug Web",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-experimental-hot-reload",
+                "--web-port=3000"
+            ]
+        },
+        {
             "name": "Debug",
             "request": "launch",
             "type": "dart"

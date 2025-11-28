@@ -10,3 +10,5 @@ export 'services/quiz/quiz_service.dart';
 export 'services/quiz/quiz_service_impl.dart';
 export 'services/remote_config/remote_config_service.dart';
 export 'services/remote_config/remote_config_service_impl.dart';
+export 'services/tags/tags_service.dart';
+export 'services/tags/tags_service_impl.dart';

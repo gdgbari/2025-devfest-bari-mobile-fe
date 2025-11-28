@@ -36,7 +36,15 @@ class _QrCodePageState extends State<QrCodePage> {
                 break;
               case QrCodeStatus.validationSuccess:
                 context.loaderOverlay.hide();
-                context.read<QuizCubit>().getQuiz(state.value.split(':').last);
+                if (state.type == QrCodeType.quiz) {
+                  context.read<QuizCubit>().getQuiz(
+                    state.value.split(':').last,
+                  );
+                } else if (state.type == QrCodeType.tag) {
+                  context.read<TagsCubit>().assignTag(
+                    state.value.split(':').last,
+                  );
+                }
                 break;
               case QrCodeStatus.validationFailure:
                 context.loaderOverlay.hide();
@@ -93,6 +101,45 @@ class _QrCodePageState extends State<QrCodePage> {
             }
           },
         ),
+        BlocListener<TagsCubit, TagsState>(
+          listener: (context, state) async {
+            switch (state.status) {
+              case TagsStatus.loading:
+                context.loaderOverlay.show();
+                break;
+              case TagsStatus.success:
+                context.loaderOverlay.hide();
+                await showCustomSuccessDialog(
+                  context,
+                  'Tag assigned successfully!\nYou earned ${state.points} points.',
+                );
+                controller.start();
+                break;
+              case TagsStatus.failure:
+                context.loaderOverlay.hide();
+                late String errorMessage;
+                switch (state.error) {
+                  case TagsError.tagNotFound:
+                    errorMessage = 'Tag not found.\nPlease try another one.';
+                    break;
+                  case TagsError.tagAlreadyAssigned:
+                    errorMessage = 'Tag already assigned.\nFind another one!';
+                    break;
+                  case TagsError.unknown:
+                    errorMessage =
+                        'An unknown error occurred.\nPlease try again later.';
+                    break;
+                  default:
+                    errorMessage = 'An error occurred.';
+                }
+                await showCustomErrorDialog(context, errorMessage);
+                controller.start();
+                break;
+              default:
+                break;
+            }
+          },
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -115,7 +162,8 @@ class _QrCodePageState extends State<QrCodePage> {
                     controller.stop();
                     context.read<QrCodeCubit>().validateQrCode(
                       qrData.rawValue,
-                      QrCodeType.quiz,
+                      QrCodeType
+                          .tag, // Pass tag as expected type, logic handles both
                     );
                   }
                 },

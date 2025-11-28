@@ -31,6 +31,16 @@ class QrCodeCubit extends Cubit<QrCodeState> {
           ),
         );
       }
+
+      if (value.startsWith('tag:') && expectedType == QrCodeType.tag) {
+        return emit(
+          state.copyWith(
+            status: QrCodeStatus.validationSuccess,
+            type: QrCodeType.tag,
+            value: value,
+          ),
+        );
+      }
     }
 
     emit(state.copyWith(status: QrCodeStatus.validationFailure));
