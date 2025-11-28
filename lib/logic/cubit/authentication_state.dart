@@ -20,6 +20,7 @@ enum AuthenticationStatus {
 enum AuthenticationError {
   none,
   userAlreadyRegistered,
+  nicknameAlreadyTaken,
   userNotFound,
   invalidCredentials,
   unknown,

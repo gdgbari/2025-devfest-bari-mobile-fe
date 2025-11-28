@@ -18,19 +18,14 @@ class AppListener extends StatelessWidget {
           listenWhen: (previous, current) => previous.status != current.status,
           listener: _authListener,
         ),
-        BlocListener<InternetCubit, InternetState>(
-          listener: _internetListener,
-        ),
+        BlocListener<InternetCubit, InternetState>(listener: _internetListener),
       ],
       child: child,
     );
   }
 }
 
-void _authListener(
-  BuildContext context,
-  AuthenticationState state,
-) async {
+void _authListener(BuildContext context, AuthenticationState state) async {
   switch (state.status) {
     case AuthenticationStatus.initialAuthFailure:
       context.loaderOverlay.hide();
@@ -50,9 +45,9 @@ void _authListener(
     case AuthenticationStatus.checkInSuccess:
     case AuthenticationStatus.authenticationSuccess:
       context.loaderOverlay.hide();
-      context
-          .read<LeaderboardCubit>()
-          .fetchLeaderboard(state.userProfile.nickname);
+      context.read<LeaderboardCubit>().fetchLeaderboard(
+        state.userProfile.nickname,
+      );
       appRouter.goNamed(RouteNames.dashboardRoute.name);
       FlutterNativeSplash.remove();
       break;
@@ -63,6 +58,10 @@ void _authListener(
         case AuthenticationError.userAlreadyRegistered:
           errorMessage =
               'Email already registered.\nPlease use a different email or login.';
+          break;
+        case AuthenticationError.nicknameAlreadyTaken:
+          errorMessage =
+              'Nickname already taken.\nPlease choose a different nickname.';
           break;
         case AuthenticationError.invalidCredentials:
           errorMessage = 'Invalid data entered.\nPlease try again.';
@@ -109,10 +108,7 @@ void _authListener(
   }
 }
 
-void _internetListener(
-  BuildContext context,
-  InternetState state,
-) {
+void _internetListener(BuildContext context, InternetState state) {
   if (state is InternetDisconnected) {
     context.loaderOverlay.hide();
     appRouter.goNamed(RouteNames.noInternetRoute.name);

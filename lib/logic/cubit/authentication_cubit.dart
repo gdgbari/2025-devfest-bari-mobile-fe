@@ -59,6 +59,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       final error = switch (e) {
         UserAlreadyRegisteredError _ =>
           AuthenticationError.userAlreadyRegistered,
+        NicknameAlreadyTakenError _ => AuthenticationError.nicknameAlreadyTaken,
         InvalidDataError _ => AuthenticationError.invalidCredentials,
         _ => AuthenticationError.unknown,
       };

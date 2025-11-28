@@ -1,6 +1,9 @@
 /// Exception that occurs when the user is already registered
 class UserAlreadyRegisteredError implements Exception {}
 
+/// Exception that occurs when the nickname is already taken
+class NicknameAlreadyTakenError implements Exception {}
+
 /// Exception that occurs when the user scan an invalid check-in code
 class CheckInCodeNotFoundError implements Exception {}
 

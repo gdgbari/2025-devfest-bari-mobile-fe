@@ -29,7 +29,13 @@ class UserRepository {
           case 422:
             throw InvalidDataError();
           case 409:
-            throw UserAlreadyRegisteredError();
+            // Check the error detail message to distinguish between nickname and email conflicts
+            final errorDetail = e.response?.data['detail']?.toString() ?? '';
+            if (errorDetail.contains('Nickname')) {
+              throw NicknameAlreadyTakenError();
+            } else {
+              throw UserAlreadyRegisteredError();
+            }
           default:
             throw UnknownAuthenticationError();
         }
