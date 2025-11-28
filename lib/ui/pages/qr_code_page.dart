@@ -162,8 +162,6 @@ class _QrCodePageState extends State<QrCodePage> {
                     controller.stop();
                     context.read<QrCodeCubit>().validateQrCode(
                       qrData.rawValue,
-                      QrCodeType
-                          .tag, // Pass tag as expected type, logic handles both
                     );
                   }
                 },

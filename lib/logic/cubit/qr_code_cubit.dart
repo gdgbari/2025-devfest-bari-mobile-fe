@@ -8,11 +8,11 @@ class QrCodeCubit extends Cubit<QrCodeState> {
 
   void resetQrCode() => emit(QrCodeState());
 
-  void validateQrCode(String? value, QrCodeType expectedType) {
+  void validateQrCode(String? value) {
     emit(state.copyWith(status: QrCodeStatus.validationInProgress));
 
     if (value != null && value.isNotEmpty) {
-      if (value.startsWith('user:') && expectedType == QrCodeType.user) {
+      if (value.startsWith('user:')) {
         return emit(
           state.copyWith(
             status: QrCodeStatus.validationSuccess,
@@ -22,7 +22,7 @@ class QrCodeCubit extends Cubit<QrCodeState> {
         );
       }
 
-      if (value.startsWith('quiz:') && expectedType == QrCodeType.quiz) {
+      if (value.startsWith('quiz:')) {
         return emit(
           state.copyWith(
             status: QrCodeStatus.validationSuccess,
@@ -32,7 +32,7 @@ class QrCodeCubit extends Cubit<QrCodeState> {
         );
       }
 
-      if (value.startsWith('tag:') && expectedType == QrCodeType.tag) {
+      if (value.startsWith('tag:')) {
         return emit(
           state.copyWith(
             status: QrCodeStatus.validationSuccess,
