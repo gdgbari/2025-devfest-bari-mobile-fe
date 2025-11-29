@@ -4,10 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    final leaderboardState = context.read<LeaderboardCubit>().state;
+    if (leaderboardState.status == LeaderboardStatus.fetchSuccess) {
+      context.read<AuthenticationCubit>().updatePosition(
+        leaderboardState.currentUser.position,
+        leaderboardState.currentGroup.position,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +44,7 @@ class HomePage extends StatelessWidget {
             builder: (context, _) {
               final currentLocation = GoRouterState.of(context).uri.path;
               final tabTitle = _getTabTitle(
-                navigationShell.currentIndex,
+                widget.navigationShell.currentIndex,
                 currentLocation,
                 authState.userProfile.nickname,
               );
@@ -41,7 +58,7 @@ class HomePage extends StatelessWidget {
                       ? BackButton(onPressed: () => context.pop())
                       : null,
                   actions: <Widget>[
-                    if (navigationShell.currentIndex != 1)
+                    if (widget.navigationShell.currentIndex != 1)
                       BlocBuilder<RemoteConfigCubit, RemoteConfigState>(
                         builder: (context, state) => IconButton(
                           onPressed: () => showAppInfoDialog(
@@ -55,7 +72,7 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    if (navigationShell.currentIndex == 1)
+                    if (widget.navigationShell.currentIndex == 1)
                       IconButton(
                         onPressed: () =>
                             context.read<AuthenticationCubit>().signOut(),
@@ -67,7 +84,7 @@ class HomePage extends StatelessWidget {
                     SizedBox(width: 4),
                   ],
                 ),
-                body: navigationShell,
+                body: widget.navigationShell,
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
                     context.read<QrCodeCubit>().resetQrCode();
@@ -104,7 +121,7 @@ class HomePage extends StatelessWidget {
                       label: 'Profile',
                     ),
                   ],
-                  currentIndex: navigationShell.currentIndex,
+                  currentIndex: widget.navigationShell.currentIndex,
                   onTap: (int index) => _onTap(context, index),
                 ),
               );
@@ -116,9 +133,9 @@ class HomePage extends StatelessWidget {
   }
 
   void _onTap(BuildContext context, int index) {
-    navigationShell.goBranch(
+    widget.navigationShell.goBranch(
       index,
-      initialLocation: index == navigationShell.currentIndex,
+      initialLocation: index == widget.navigationShell.currentIndex,
     );
   }
 

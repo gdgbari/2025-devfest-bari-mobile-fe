@@ -35,10 +35,13 @@ class LeaderboardCubit extends Cubit<LeaderboardState> {
             orElse: () => LeaderboardUser(nickname: currentUserNickname),
           );
 
+          final upperLimit = users.length < 20 ? users.length : 20;
+          final topUsers = users.sublist(0, upperLimit);
+
           emit(
             state.copyWith(
               status: LeaderboardStatus.fetchSuccess,
-              leaderboardUsers: users,
+              leaderboardUsers: topUsers,
               currentUser: currentUser,
             ),
           );

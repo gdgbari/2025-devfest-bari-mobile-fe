@@ -24,9 +24,7 @@ class LeaderboardRepository {
         users[i] = users[i].copyWith(position: i + 1);
       }
 
-      final upperLimit = users.length < 20 ? users.length : 20;
-
-      yield users.sublist(0, upperLimit);
+      yield users;
     }
   }
 
