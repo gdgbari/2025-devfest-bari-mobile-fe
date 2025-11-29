@@ -77,6 +77,13 @@ class QuizCubit extends Cubit<QuizState> {
           error: QuizError.quizAlreadySubmitted,
         ),
       );
+    } on QuizAllSessionsCompletedError {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.quizAllSessionsCompleted,
+        ),
+      );
     } on Exception {
       emit(
         state.copyWith(

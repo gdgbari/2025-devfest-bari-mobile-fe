@@ -21,6 +21,7 @@ enum QuizError {
   quizNotOpen,
   quizTimeIsUp,
   quizAlreadySubmitted,
+  quizAllSessionsCompleted,
   unknown,
 }
 

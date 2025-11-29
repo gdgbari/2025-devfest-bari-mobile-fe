@@ -13,5 +13,8 @@ class QuizTimeIsUpError implements Exception {}
 /// Exception that occurs when the [Quiz] was already submitted
 class QuizAlreadySubmittedError implements Exception {}
 
+/// Exception that occurs when the user has already completed all sessions for the quiz
+class QuizAllSessionsCompletedError implements Exception {}
+
 /// Exception that occurs when the quiz response status code is 500
 class UnknownQuizError implements Exception {}

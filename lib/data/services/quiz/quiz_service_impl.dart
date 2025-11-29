@@ -3,9 +3,9 @@ import 'package:devfest_bari_2025/utils.dart';
 import 'package:dio/dio.dart';
 
 class QuizServiceImpl implements QuizService {
-  QuizServiceImpl();
+  QuizServiceImpl({Dio? dio}) : _dio = dio ?? HttpClient().dio;
 
-  final Dio _dio = HttpClient().dio;
+  final Dio _dio;
   final String _endpoint = '/quizzes';
 
   @override
@@ -15,6 +15,10 @@ class QuizServiceImpl implements QuizService {
     } on DioException catch (e) {
       switch (e.response?.statusCode) {
         case 403:
+          final detail = e.response?.data['detail'];
+          if (detail == "All quiz sessions already completed") {
+            throw QuizAllSessionsCompletedError();
+          }
           throw QuizNotOpenError();
         case 404:
           throw QuizNotFoundError();
