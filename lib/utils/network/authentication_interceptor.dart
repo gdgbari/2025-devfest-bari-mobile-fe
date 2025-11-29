@@ -14,7 +14,7 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     if (err.response?.statusCode == 401) {
       // Check if a retry has already been made for this request
       final retryCount = (err.requestOptions.extra[_retryKey] as int?) ?? 0;
-      
+
       if (retryCount >= _maxRetries) {
         // If we've already made the maximum number of retries, propagate the error
         return super.onError(err, handler);
@@ -23,10 +23,11 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
       // Attempt to update the token
       try {
         await _authenticationService.updateToken(forceRefresh: true);
-        
+
         // Verify that the token has actually been updated
         final currentToken = HttpClient().dio.options.headers['Authorization'];
-        if (currentToken == null || !currentToken.toString().startsWith('Bearer ')) {
+        if (currentToken == null ||
+            !currentToken.toString().startsWith('Bearer ')) {
           // If the token is not present after the update,
           // it means the user is no longer authenticated
           return super.onError(err, handler);
@@ -35,16 +36,25 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
         // If the refresh fails, propagate the original error
         return super.onError(err, handler);
       }
-      
+
       try {
         // Create a copy of the headers without Authorization to use the globally updated one
-        final updatedHeaders = Map<String, dynamic>.from(err.requestOptions.headers);
+        final updatedHeaders = Map<String, dynamic>.from(
+          err.requestOptions.headers,
+        );
+        // Remove old Authorization and set the refreshed token from HttpClient
         updatedHeaders.remove('Authorization');
-        
+        final newAuth = HttpClient().dio.options.headers['Authorization'];
+        if (newAuth != null) {
+          updatedHeaders['Authorization'] = newAuth;
+        }
+
         // Update the extra with the retry counter
-        final updatedExtra = Map<String, dynamic>.from(err.requestOptions.extra);
+        final updatedExtra = Map<String, dynamic>.from(
+          err.requestOptions.extra,
+        );
         updatedExtra[_retryKey] = retryCount + 1;
-        
+
         final response = await HttpClient().dio.request(
           err.requestOptions.path,
           options: Options(
