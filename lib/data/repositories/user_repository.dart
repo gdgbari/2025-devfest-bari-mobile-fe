@@ -63,10 +63,10 @@ class UserRepository {
     }
   }
 
-  Future<Group> checkIn() async {
+  Future<UserProfile> checkIn() async {
     try {
       final response = await _userService.checkIn();
-      return Group.fromJson(response.data['group']);
+      return UserProfile.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response != null) {
         switch (e.response?.statusCode) {

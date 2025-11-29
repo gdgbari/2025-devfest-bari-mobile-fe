@@ -16,8 +16,8 @@ class QuizServiceImpl implements QuizService {
       switch (e.response?.statusCode) {
         case 403:
           final detail = e.response?.data['detail'];
-          if (detail == "All quiz sessions already completed") {
-            throw QuizAllSessionsCompletedError();
+          if (detail != null) {
+            throw QuizForbiddenError(detail.toString());
           }
           throw QuizNotOpenError();
         case 404:

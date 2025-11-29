@@ -84,6 +84,14 @@ class QuizCubit extends Cubit<QuizState> {
           error: QuizError.quizAllSessionsCompleted,
         ),
       );
+    } on QuizForbiddenError catch (e) {
+      emit(
+        state.copyWith(
+          status: QuizStatus.fetchFailure,
+          error: QuizError.forbidden,
+          errorMessage: e.message,
+        ),
+      );
     } on Exception {
       emit(
         state.copyWith(
@@ -153,6 +161,14 @@ class QuizCubit extends Cubit<QuizState> {
         state.copyWith(
           status: QuizStatus.submissionFailure,
           error: QuizError.quizAlreadySubmitted,
+        ),
+      );
+    } on QuizForbiddenError catch (e) {
+      emit(
+        state.copyWith(
+          status: QuizStatus.submissionFailure,
+          error: QuizError.forbidden,
+          errorMessage: e.message,
         ),
       );
     } on Exception {

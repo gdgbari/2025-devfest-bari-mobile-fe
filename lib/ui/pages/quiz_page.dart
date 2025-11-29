@@ -161,6 +161,9 @@ void _quizListener(BuildContext context, QuizState state) async {
       );
       context.read<QuizCubit>().completeSubmission();
       break;
+      context.read<QuizCubit>().completeSubmission();
+      break;
+    case QuizStatus.fetchFailure:
     case QuizStatus.submissionFailure:
       context.loaderOverlay.hide();
       late String errorMessage;
@@ -180,6 +183,9 @@ void _quizListener(BuildContext context, QuizState state) async {
           errorMessage =
               'You have already answered to this quiz.\n'
               'There are a lot of them, go and find another one!';
+          break;
+        case QuizError.forbidden:
+          errorMessage = state.errorMessage ?? 'Access denied.';
           break;
         case QuizError.unknown:
           errorMessage = 'An unknown error occurred.\nPlease try again later.';

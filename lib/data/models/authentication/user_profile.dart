@@ -15,6 +15,8 @@ class UserProfile extends Equatable {
   final Group group;
   final int score;
   final int position;
+  final bool checkedIn;
+  final String role;
 
   const UserProfile({
     this.userId = '',
@@ -25,6 +27,8 @@ class UserProfile extends Equatable {
     this.group = const Group(),
     this.score = 0,
     this.position = 0,
+    this.checkedIn = false,
+    this.role = 'attendee',
   });
 
   UserProfile copyWith({
@@ -36,6 +40,8 @@ class UserProfile extends Equatable {
     Group? group,
     int? score,
     int? position,
+    bool? checkedIn,
+    String? role,
   }) {
     return UserProfile(
       userId: userId ?? this.userId,
@@ -46,6 +52,8 @@ class UserProfile extends Equatable {
       group: group ?? this.group,
       score: score ?? this.score,
       position: position ?? this.position,
+      checkedIn: checkedIn ?? this.checkedIn,
+      role: role ?? this.role,
     );
   }
 
@@ -56,6 +64,6 @@ class UserProfile extends Equatable {
 
   @override
   List<Object> get props {
-    return [userId, nickname, name, surname, email, group, score, position];
+    return [userId, nickname, name, surname, email, group, score, position, checkedIn, role];
   }
 }

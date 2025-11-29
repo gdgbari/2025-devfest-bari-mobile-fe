@@ -22,6 +22,7 @@ enum QuizError {
   quizTimeIsUp,
   quizAlreadySubmitted,
   quizAllSessionsCompleted,
+  forbidden,
   unknown,
 }
 
@@ -31,6 +32,7 @@ class QuizState extends Equatable {
   final Quiz quiz;
   final List<QuizAnswer> selectedAnswers;
   final QuizResults results;
+  final String? errorMessage;
 
   const QuizState({
     this.status = QuizStatus.initial,
@@ -38,6 +40,7 @@ class QuizState extends Equatable {
     this.quiz = const Quiz(),
     this.selectedAnswers = const [],
     this.results = const QuizResults(),
+    this.errorMessage,
   });
 
   QuizState copyWith({
@@ -46,6 +49,7 @@ class QuizState extends Equatable {
     Quiz? quiz,
     List<QuizAnswer>? selectedAnswers,
     QuizResults? results,
+    String? errorMessage,
   }) {
     return QuizState(
       status: status ?? this.status,
@@ -53,9 +57,10 @@ class QuizState extends Equatable {
       quiz: quiz ?? this.quiz,
       selectedAnswers: selectedAnswers ?? this.selectedAnswers,
       results: results ?? this.results,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props => [status, error, quiz, selectedAnswers, results];
+  List<Object?> get props => [status, error, quiz, selectedAnswers, results, errorMessage];
 }

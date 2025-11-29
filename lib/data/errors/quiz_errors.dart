@@ -16,5 +16,11 @@ class QuizAlreadySubmittedError implements Exception {}
 /// Exception that occurs when the user has already completed all sessions for the quiz
 class QuizAllSessionsCompletedError implements Exception {}
 
+/// Exception that occurs when the user is forbidden from accessing the quiz
+class QuizForbiddenError implements Exception {
+  final String message;
+  QuizForbiddenError(this.message);
+}
+
 /// Exception that occurs when the quiz response status code is 500
 class UnknownQuizError implements Exception {}

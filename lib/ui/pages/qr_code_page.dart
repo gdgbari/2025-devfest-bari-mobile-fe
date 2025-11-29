@@ -87,11 +87,15 @@ class _QrCodePageState extends State<QrCodePage> {
                         'You have already answered to this quiz.\n'
                         'There are a lot of them, go and find another one!';
                     break;
+                  case QuizError.forbidden:
+                    errorMessage = state.errorMessage ?? 'Access denied.';
+                    break;
                   case QuizError.unknown:
                     errorMessage =
                         'An unknown error occurred.\nPlease try again later.';
                     break;
                   default:
+                    errorMessage = 'An error occurred.';
                     break;
                 }
                 await showCustomErrorDialog(context, errorMessage);
